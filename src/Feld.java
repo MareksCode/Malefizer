@@ -19,7 +19,7 @@ public class Feld {
         this.spielerSpawn = spielerSpawn;
     }
     public boolean istSpielerSpawn() {
-        return spielerSpawn;
+        return this.spielerSpawn;
     }
 
     public void setBesetzung(Stein besetzung) {
