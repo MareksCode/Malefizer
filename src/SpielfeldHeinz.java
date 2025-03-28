@@ -7,6 +7,7 @@ public class SpielfeldHeinz {
     static int[][] richtungen = {{-1,0},{1,0},{0,1},{0,-1}};
     static Map<String, Feld> feldMap = new HashMap<>();
     static int walkingId = 0;
+    static int walkingIdKrown = 0;
     private static Runde runde;
 
     public SpielfeldHeinz(Runde runde) {
@@ -20,7 +21,7 @@ public class SpielfeldHeinz {
 
         for (int i = 0; i < gameFileArray.length; i++) {
             for (int j = 0; j < gameFileArray[i].length; j++) {
-                if((gameFileArray[i][j] == '0' ) || (gameFileArray[i][j] == 'S') || (gameFileArray[i][j] == 'T') && !feldMap.containsKey(gameFileArray[i][j])) {
+                if((gameFileArray[i][j] != 'x' ) && !feldMap.containsKey(gameFileArray[i][j])) {
                     erstelleFeld(gameFileArray, j, i);
                     key = i + "." + j;
                 }
@@ -44,6 +45,10 @@ public class SpielfeldHeinz {
 
         if(datei[posX][posY] == 'T') {
             feld.setSpielerSpawn(true);
+        }
+
+        if(datei[posX][posY] == 'K') {
+            feld.setBesetzung(new Krone(walkingIdKrown++, runde));
         }
 
 
