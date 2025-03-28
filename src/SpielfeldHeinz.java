@@ -6,9 +6,14 @@ import java.util.Map;
 public class SpielfeldHeinz {
     static int[][] richtungen = {{-1,0},{1,0},{0,1},{0,-1}};
     static Map<String, Feld> feldMap = new HashMap<>();
+    static int walkingId = 0;
+    private static Runde runde;
 
+    public SpielfeldHeinz(Runde runde) {
+        SpielfeldHeinz.runde = runde;
+    }
 
-    public static Feld createSpielfeld() throws FileNotFoundException {
+    public Feld createSpielfeld() throws FileNotFoundException {
         char[][] gameFileArray = getFileContent.getFileAsArray();
 
         String key = "";
@@ -33,6 +38,7 @@ public class SpielfeldHeinz {
 
         Feld feld = new Feld(new ArrayList<>());
         if (datei[posX][posY] == 'S') {
+            feld.setBesetzung(new Sperrstein(walkingId++, runde));
             System.out.println("hier muss noch ein sperrstein erstellt werden! hier spielfeld heinz mit feld " + posX + " " + posY);
         }
         feldMap.put(key, feld);

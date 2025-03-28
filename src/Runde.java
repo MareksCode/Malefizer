@@ -20,7 +20,9 @@ public class Runde {
     public void start() throws FileNotFoundException {
         Wuerfel wuerfel = new Wuerfel(); //neuen würfel kreieren
 
-        Feld startFeld = SpielfeldHeinz.createSpielfeld();
+        SpielfeldHeinz heinz = new SpielfeldHeinz(this);
+
+        Feld startFeld = heinz.createSpielfeld();
 
         SpielerObjekt[] spielerListe; //spielerliste erstellen
         spielerListe = new SpielerObjekt[this.spielerAnzahl];
