@@ -20,7 +20,7 @@ public class SpielfeldHeinz {
 
         for (int i = 0; i < gameFileArray.length; i++) {
             for (int j = 0; j < gameFileArray[i].length; j++) {
-                if((gameFileArray[i][j] == '0' ) || (gameFileArray[i][j] == 'S') && !feldMap.containsKey(gameFileArray[i][j])) {
+                if((gameFileArray[i][j] == '0' ) || (gameFileArray[i][j] == 'S') || (gameFileArray[i][j] == 'T') && !feldMap.containsKey(gameFileArray[i][j])) {
                     erstelleFeld(gameFileArray, j, i);
                     key = i + "." + j;
                 }
@@ -41,6 +41,12 @@ public class SpielfeldHeinz {
             feld.setBesetzung(new Sperrstein(walkingId++, runde));
             System.out.println("hier muss noch ein sperrstein erstellt werden! hier spielfeld heinz mit feld " + posX + " " + posY);
         }
+
+        if(datei[posX][posY] == 'T') {
+            feld.setSpielerSpawn(true);
+        }
+
+
         feldMap.put(key, feld);
 
         for (int[] richtung: richtungen) {
