@@ -6,11 +6,20 @@ public class Feld {
     private ArrayList<Feld> nachbarn;
     private Stein besetzung;
     private int id;
+    private boolean spielerSpawn;
 
     public Feld(ArrayList<Feld> nachbarn) {
         //this.faerbung = faerbung;
         this.nachbarn = nachbarn;
+        this.spielerSpawn = false;
         //this.besetzung = besetzung;
+    }
+
+    public void setSpielerSpawn(boolean spielerSpawn) {
+        this.spielerSpawn = spielerSpawn;
+    }
+    public boolean istSpielerSpawn() {
+        return spielerSpawn;
     }
 
     public void setBesetzung(Stein besetzung) {

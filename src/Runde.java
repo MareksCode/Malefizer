@@ -11,6 +11,8 @@ public class Runde {
         this.spielerAnzahl = spieler;
     }
 
+    private void
+
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {
         ArrayList<Feld> ergebnis = new ArrayList<>();
 
