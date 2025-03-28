@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Runde {
@@ -16,8 +17,10 @@ public class Runde {
         return ergebnis;
     }
 
-    public void start() {
+    public void start() throws FileNotFoundException {
         Wuerfel wuerfel = new Wuerfel(); //neuen würfel kreieren
+
+        Feld startFeld = SpielfeldHeinz.createSpielfeld();
 
         SpielerObjekt[] spielerListe; //spielerliste erstellen
         spielerListe = new SpielerObjekt[this.spielerAnzahl];

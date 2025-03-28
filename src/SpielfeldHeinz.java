@@ -8,7 +8,7 @@ public class SpielfeldHeinz {
     static Map<String, Feld> feldMap = new HashMap<>();
 
 
-    public Feld createSpielfeld() throws FileNotFoundException {
+    public static Feld createSpielfeld() throws FileNotFoundException {
         char[][] gameFileArray = getFileContent.getFileAsArray();
 
         String key = "";
@@ -27,7 +27,7 @@ public class SpielfeldHeinz {
         return feldMap.get(key);
     }
 
-    private Feld erstelleFeld(char[][] datei, int posX, int posY) {
+    private static Feld erstelleFeld(char[][] datei, int posX, int posY) {
         String key = posX + "." + posY;
         if(feldMap.containsKey(key)) return feldMap.get(key);
 
