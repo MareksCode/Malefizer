@@ -8,11 +8,35 @@ public class Feld {
     private int id;
     private boolean spielerSpawn;
 
+    private boolean tempGefaerbt;
+    private int tiefe;
+
     public Feld(ArrayList<Feld> nachbarn) {
         //this.faerbung = faerbung;
         this.nachbarn = nachbarn;
         this.spielerSpawn = false;
+        this.tempGefaerbt = false;
+        this.tiefe = 0;
         //this.besetzung = besetzung;
+    }
+
+    public void resetTempVars() {
+        this.tempGefaerbt = false;
+        this.tiefe = 0;
+    }
+
+    public int getTiefe() {
+        return this.tiefe;
+    }
+    public void setTiefe(int tiefe) {
+        this.tiefe = tiefe;
+    }
+
+    public boolean getGefaerbt() {
+        return this.tempGefaerbt;
+    }
+    public void setGefaerbt(boolean tempGefaerbt) {
+        this.tempGefaerbt = tempGefaerbt;
     }
 
     public void setSpielerSpawn(boolean spielerSpawn) {

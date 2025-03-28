@@ -11,10 +11,37 @@ public class Runde {
         this.spielerAnzahl = spieler;
     }
 
-    private void
-
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {
         ArrayList<Feld> ergebnis = new ArrayList<>();
+        ArrayList<Feld> angeschauteFelder = new ArrayList<>();
+        ArrayList<Feld> queue = new ArrayList<>();
+        queue.add(startFeld);
+
+        while (!queue.isEmpty()) {
+            Feld currentFeld = queue.removeFirst();
+            angeschauteFelder.add(currentFeld);
+
+            int tiefe = currentFeld.getTiefe();
+
+            if (tiefe == laufLaenge) {
+                ergebnis.add(currentFeld);
+            }
+
+            if (!currentFeld.kannDrueber()) {continue;} //wenn man nicht drüber kann, nicht zu den nachbarn schauen
+
+            ArrayList<Feld> nachbarn = currentFeld.getNachbarn();
+            for (Feld nachbar : nachbarn) {
+                if (tiefe+1 > laufLaenge) {continue;} //wenn zu tief
+                if (nachbar.getGefaerbt()) {continue;} //wenn schon drübergegangen
+
+                nachbar.setGefaerbt(true);
+                nachbar.setTiefe(tiefe+1);
+            }
+        }
+
+        for (Feld angeschautesFeld : angeschauteFelder) { //garbage cleaning
+            angeschautesFeld.resetTempVars();
+        }
 
         return ergebnis;
     }
@@ -43,7 +70,7 @@ public class Runde {
             int wuerfelErgebnis = wuerfel.Roll(); // spieler würfelt
 
             Spielstein figur = spieler.getFigur(figurNummer);
-            ArrayList<Feld> moeglicheFelder = findeMoegicheFelder();
+            ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(figur.getCurrentFeld(), wuerfelErgebnis);
 
             if (!moeglicheFelder.isEmpty()) {
                 Feld chosenFeld = moeglicheFelder.getFirst();
