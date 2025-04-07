@@ -80,4 +80,9 @@ public class Feld {
 
         this.besetzung.schlagen();
     }
+
+    @Override
+    public String toString() {
+        return getPosition().toString();
+    }
 }
