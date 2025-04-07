@@ -7,6 +7,7 @@ public class Feld {
     private Stein besetzung;
     private int id;
     private boolean spielerSpawn;
+    private Position position;
 
     private boolean tempGefaerbt;
     private int tiefe;
@@ -17,6 +18,7 @@ public class Feld {
         this.spielerSpawn = false;
         this.tempGefaerbt = false;
         this.tiefe = 0;
+        this.position = new Position(-1,-1);
         //this.besetzung = besetzung;
     }
 
@@ -24,6 +26,9 @@ public class Feld {
         this.tempGefaerbt = false;
         this.tiefe = 0;
     }
+
+    public Position getPosition() {return this.position;}
+    public void setPosition(Position position) {this.position = position;}
 
     public int getTiefe() {
         return this.tiefe;

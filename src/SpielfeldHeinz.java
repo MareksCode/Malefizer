@@ -38,6 +38,7 @@ public class SpielfeldHeinz {
         if(feldMap.containsKey(key)) return feldMap.get(key);
 
         Feld feld = new Feld(new ArrayList<>());
+        feld.setPosition(new Position(posX, posY));
         if (datei[posX][posY] == 'S') {
             feld.setBesetzung(new Sperrstein(walkingId++, runde));
             System.out.println("hier muss noch ein sperrstein erstellt werden! hier spielfeld heinz mit feld " + posX + " " + posY);
