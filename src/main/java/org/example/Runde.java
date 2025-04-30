@@ -27,18 +27,15 @@ public class Runde {
         ArrayList<Feld> angeschauteFelder = new ArrayList<>();
         ArrayList<Feld> queue = new ArrayList<>();
         queue.add(startFeld);
-        System.out.println("init: "+startFeld.getId());
 
         while (!queue.isEmpty()) {
             Feld currentFeld = queue.removeFirst();
             angeschauteFelder.add(currentFeld);
-            System.out.println("added to stack: "+currentFeld.getId());
 
             int tiefe = currentFeld.getTiefe();
 
             if (tiefe == laufLaenge) {
                 ergebnis.add(currentFeld);
-                System.out.println("found: "+currentFeld.getId());
             }
 
             if (!currentFeld.kannDrueber()) {continue;} //wenn man nicht drüber kann, nicht zu den nachbarn schauen
@@ -51,7 +48,13 @@ public class Runde {
                 nachbar.setGefaerbt(true);
                 nachbar.setTiefe(tiefe+1);
             }
+
         }
+        System.out.print("Mögliche Felder: ");
+        for (Feld feld : ergebnis) {
+            System.out.print(feld.getId() + " ");
+        }
+        System.out.println();
 
         for (Feld angeschautesFeld : angeschauteFelder) { //garbage cleaning
             angeschautesFeld.resetTempVars();
@@ -145,8 +148,10 @@ public class Runde {
         while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);
+
             this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
+            System.out.println("Spieler " + this.amZug + " ist am Zug");
 
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
             int figurNummer = spielerZug();
@@ -157,24 +162,22 @@ public class Runde {
             Spielstein figur = spieler.getFigur(figurNummer);
             Feld currentFeld = figur.getCurrentFeld();
             if (currentFeld == null) {
-                System.out.println("currentFeld is null");
                 currentFeld = spieler.getSpawnFeld();
             }
-            System.out.println("currentFeld: " + currentFeld.getId());
             ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(currentFeld, wuerfelErgebnis);
 
             if (!moeglicheFelder.isEmpty()) {
                 Feld chosenFeld = spielerZiehe(moeglicheFelder, figur);
                 figur.setFeld(chosenFeld);
                 chosenFeld.setBesetzung(figur);
+                currentFeld.setBesetzung(null);
+                testgui.update(startFeld);
                 gui.update(chosenFeld);
             } else {
                 System.out.println("you can't move with this figure.");
             }
-
-
-
         }
+        System.out.println("spiel gewonnen von spieler " + this.amZug);
     }
 
     public void end() {

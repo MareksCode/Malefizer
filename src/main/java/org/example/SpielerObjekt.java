@@ -21,7 +21,6 @@ public class SpielerObjekt {
     }
 
     public Feld getSpawnFeld() {
-        System.out.println("returning: "+this.spawnFeld.getId());
         return this.spawnFeld;
     }
 }

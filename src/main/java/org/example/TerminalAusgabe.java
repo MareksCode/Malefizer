@@ -46,15 +46,27 @@ public class TerminalAusgabe implements GUIface {
 
 
             switch (split[0]) {
-                case "Krone" -> spielfeld[1][1] = "K   ";
-                case "Sperrstein" -> spielfeld[1][1] = "S   ";
+                case "Krone" -> spielfeld[1][1] = " K  ";
+                case "Sperrstein" -> spielfeld[1][1] = " S  ";
                 case "Spielstein" -> {
                     spielfeld[1][1] = "P" + ((Spielstein) feld.getBesetzung()).getSpielerId() + "." + split[1];
                 }
                 default -> spielfeld[1][1] = "    ";
             }
 
+            String zahl;
+            String zahlInt = String.valueOf(feld.getId());
 
+            switch (zahlInt.length()) {
+                case 1 -> zahl = "═══" + zahlInt;
+                case 2 -> zahl = "══" + zahlInt;
+                case 3 -> zahl = "═" + zahlInt;
+                default -> zahl = zahlInt;
+            }
+            if (feld.istSpielerSpawn()) {
+                spielfeld[1][0] = "SPWN";
+                System.out.println("SPWN@"+feld.getId());
+            }
 
             // Dynamisches Schreiben ins große Ausgabearray
             for (int i = 0; i < 3; i++) {
@@ -75,12 +87,13 @@ public class TerminalAusgabe implements GUIface {
                     row.set(colIndex, String.valueOf(spielfeld[i][j]));
                 }
             }
+            spielfeld[1][0] = "════";
 
+            spielArray.get(ynew + 2).set(xnew + 1, zahl);
             if(!abgelatscht.contains(nachbar.getId())){
                 abgelatscht.add(feld.getId());
                 searchNachbar(feld.getPosition().x, feld.getPosition().y, nachbar);
             }
-
         }
     }
 
