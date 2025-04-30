@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.stein.Spielstein;
+
 import java.util.*;
 
 public class TerminalAusgabe implements GUIface {
@@ -41,12 +43,14 @@ public class TerminalAusgabe implements GUIface {
             String data = feld.getBesetzung() != null ? feld.getBesetzung().toString() : "null";
 
             String[] split = data.split(":");
-            System.out.println(split[0]);
+
 
             switch (split[0]) {
                 case "Krone" -> spielfeld[1][1] = "K   ";
                 case "Sperrstein" -> spielfeld[1][1] = "S   ";
-                case "Spielstein" -> spielfeld[1][1] = "P   ";
+                case "Spielstein" -> {
+                    spielfeld[1][1] = "P" + ((Spielstein) feld.getBesetzung()).getSpielerId() + "." + split[1];
+                }
                 default -> spielfeld[1][1] = "    ";
             }
 

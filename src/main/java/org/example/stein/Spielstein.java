@@ -15,25 +15,31 @@ public class Spielstein extends Stein {
     public boolean kannDrueber() {
         return true; //figuren können übersprungen werden
     }
-
+    public int getSpielerId() {
+        return spielerId;
+    }
     public Feld getCurrentFeld() {
         return this.feld;
     }
 
-    public void setFeld(Feld neuesFeld) {
+    public void setFeld(Feld neuesFeld) throws Exception {
         if (this.feld != null) {
             this.feld.removeBesetzung();
         }
 
         this.feld = neuesFeld;
-        neuesFeld.setBesetzung(this);
-
         this.feld.schlagen();
+
+        neuesFeld.setBesetzung(this);
     }
 
-    public void schlagen() {
-
+    public void schlagen() throws Exception {
+        if (this.feld != null) {
+            this.feld.removeBesetzung();
+            this.feld = null;
+        }
     }
+
     @Override
     public String toString() {
         return "Spielstein:"+id;

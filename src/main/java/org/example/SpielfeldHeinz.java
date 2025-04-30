@@ -23,6 +23,7 @@ public class SpielfeldHeinz {
     @Deprecated
     static int walkingIdFeld = 0;
     private static Runde runde;
+    static Map<Integer, Feld> spawnFelder = new HashMap<>();
 
 
     public SpielfeldHeinz(Runde runde) {
@@ -51,9 +52,11 @@ public class SpielfeldHeinz {
 
         // create spawnfelds
         for (int i = 0; i < spawnList.getLength(); i++) {
+
             Element e = (Element) spawnList.item(i);
             Feld feld = feldMap.get(e.getAttribute("feldId"));
             feld.setSpielerSpawn(true);
+            spawnFelder.put(Integer.valueOf(i), feld);
             spawnMap.put(Integer.valueOf(e.getAttribute("id")), feldMap.get(String.valueOf(i)));
         }
 
@@ -95,6 +98,8 @@ public class SpielfeldHeinz {
     public static Feld getStartfeld() {
         return feldMap.get("0");
     }
+
+    public static Map<Integer, Feld> getSpawnFelder() { return spawnFelder; }
 
     public static Map<Integer, Feld> getSpawnMap() {
         return spawnMap;

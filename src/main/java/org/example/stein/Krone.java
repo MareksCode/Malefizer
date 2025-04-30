@@ -11,7 +11,7 @@ public class Krone extends Stein {
         return false;
     }
 
-    public void schlagen() {
+    public void schlagen() throws Exception {
         this.dazugehoerendeRunde.end();
     }
 

@@ -80,7 +80,7 @@ public class Feld {
         return this.besetzung.kannDrueber();
     }
 
-    public void schlagen() {
+    public void schlagen() throws Exception {
         if (this.besetzung == null) {return;}
 
         this.besetzung.schlagen();

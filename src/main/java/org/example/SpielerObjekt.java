@@ -19,4 +19,9 @@ public class SpielerObjekt {
     public Spielstein getFigur(int figurNummer) {
         return this.Figuren[figurNummer];
     }
+
+    public Feld getSpawnFeld() {
+        System.out.println("returning: "+this.spawnFeld.getId());
+        return this.spawnFeld;
+    }
 }

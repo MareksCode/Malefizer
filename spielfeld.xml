@@ -7,7 +7,7 @@
         <spawn feldId="108" id="3"/>
     </spawns>
     <felder>
-        <feld data="" id="0" posX="15" posY="0"/>
+        <feld data="Krone:0" id="0" posX="15" posY="0"/>
         <feld data="Sperrstein:0" id="1" posX="15" posY="1"/>
         <feld data="" id="2" posX="16" posY="1"/>
         <feld data="" id="3" posX="17" posY="1"/>

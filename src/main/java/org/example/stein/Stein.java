@@ -9,5 +9,6 @@ public abstract class Stein {
         this.dazugehoerendeRunde = dazugehoerendeRunde;
     }
     public abstract boolean kannDrueber();
-    public abstract void schlagen();
+    public abstract void schlagen() throws Exception;
+
 }
