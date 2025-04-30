@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+<<<<<<< HEAD
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -11,6 +12,12 @@ target/
 *.iws
 *.iml
 *.ipr
+=======
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+/.idea/workspace.xml
+>>>>>>> 5a154f4e40b38c9127a87fd5cc83c091429b4a1e
 
 ### Eclipse ###
 .apt_generated
