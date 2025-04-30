@@ -80,11 +80,12 @@ public class SpielfeldHeinz {
 
         if(!data.isEmpty()){
             var dataSplit = data.split(":");
-            if(dataSplit[0].equals("stein.Krone")){
+            System.out.println(dataSplit[0]);
+            if(dataSplit[0].equals("Krone")){
                 feld.setBesetzung(new Krone(Integer.parseInt(dataSplit[1]), runde));
-            }else if(dataSplit[0].equals("stein.Sperrstein")){
+            }else if(dataSplit[0].equals("Sperrstein")){
                 feld.setBesetzung(new Sperrstein(Integer.parseInt(dataSplit[1]), runde));
-            }else if(dataSplit[0].equals("stein.Spielstein")){
+            }else if(dataSplit[0].equals("Spielstein")){
                 feld.setBesetzung(new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1));
             }
         }

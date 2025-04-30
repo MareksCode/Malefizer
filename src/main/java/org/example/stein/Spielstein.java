@@ -36,6 +36,6 @@ public class Spielstein extends Stein {
     }
     @Override
     public String toString() {
-        return "stein.Spielstein:"+id;
+        return "Spielstein:"+id;
     }
 }

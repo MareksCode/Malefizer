@@ -17,6 +17,6 @@ public class Krone extends Stein {
 
     @Override
     public String toString() {
-        return "stein.Krone:"+id;
+        return "Krone:"+id;
     }
 }

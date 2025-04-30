@@ -15,6 +15,6 @@ public class Sperrstein extends Stein {
     }
     @Override
     public String toString() {
-        return "stein.Sperrstein:"+id;
+        return "Sperrstein:"+id;
     }
 }
