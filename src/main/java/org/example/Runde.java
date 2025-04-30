@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 public class Runde {
     private boolean spielGewonnen;
     private int amZug;
-    FeldGUI gui = null;
+    TerminalAusgabe gui = null;
     private int spielerAnzahl;
     public Runde(int spieler) {
         this.spielGewonnen = false;
@@ -90,7 +90,10 @@ public class Runde {
 
         Feld startFeld = SpielfeldHeinz.getStartfeld();
 
-        gui = new FeldGUI(startFeld);
+        //gui = new FeldGUI(startFeld);
+        gui = new TerminalAusgabe();
+
+        gui.update(startFeld);
 
         //todo: spieler auf spawn zuweisen
 
@@ -105,6 +108,7 @@ public class Runde {
         }
 
         while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
+            gui.update(startFeld);
             this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
 

@@ -1,15 +1,19 @@
 package org.example;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TerminalAusgabe implements GUIface {
     Feld stfld;
     Set<Integer> abgelatscht = new HashSet<>();
+    ArrayList<ArrayList<String>> spielArray = new ArrayList<>();
+
+
+    String[][] spielfeld={{"╔","║", "╚"},{"════", "XXXX", "════"},{"╗", "║", "╝"}};
 
     public void update(Feld startFeld){
+
         stfld = startFeld;
+        repaint();
     }
 
     public void showMessage(String message){}
@@ -19,24 +23,61 @@ public class TerminalAusgabe implements GUIface {
         int y=0;
         searchNachbar(x,y,stfld);
 
-        char[][] spielArray;
-        char[][] speilfeld={{'╔','═', '╗'},{'║', 'X', '║'},{'╚', '═', '╝'}};
+        for(int i = 0; i < spielArray.size(); i++) {
+            for(int j = 0; j < spielArray.get(i).size(); j++) {
+                System.out.print(spielArray.get(i).get(j));
+            }
+            System.out.println(" ");
+        }
     }
 
     private void searchNachbar(int x, int y, Feld feld){
         for(Feld nachbar: feld.getNachbarn()){
-            if(!abgelatscht.contains(feld.getId())){
-                int xnew = x*4;
-                int ynew = y*4;
-                abgelatscht.add(feld.getId());
-                if(x<feld.getPosition().x) x=feld.getPosition().x;
-                if(y<feld.getPosition().y) y=feld.getPosition().y;
 
-                searchNachbar(x,y,nachbar);
+            int xnew = feld.getPosition().x * 4;
+            int ynew = feld.getPosition().y * 4;
+
+
+            String data = feld.getBesetzung() != null ? feld.getBesetzung().toString() : "null";
+
+            String[] split = data.split(":");
+            System.out.println(split[0]);
+
+            switch (split[0]) {
+                case "Krone" -> spielfeld[1][1] = "K   ";
+                case "Sperrstein" -> spielfeld[1][1] = "S   ";
+                case "Spielstein" -> spielfeld[1][1] = "P   ";
+                default -> spielfeld[1][1] = "    ";
             }
+
+
+
+            // Dynamisches Schreiben ins große Ausgabearray
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    int colIndex = xnew + i;
+                    int rowIndex = ynew + j;
+
+                    while (spielArray.size() <= rowIndex) {
+                        spielArray.add(new ArrayList<>());
+                    }
+
+                    List<String> row = spielArray.get(rowIndex);
+
+                    while (row.size() <= colIndex) {
+                        row.add("  ");
+                    }
+
+                    row.set(colIndex, String.valueOf(spielfeld[i][j]));
+                }
+            }
+
+            if(!abgelatscht.contains(nachbar.getId())){
+                abgelatscht.add(feld.getId());
+                searchNachbar(feld.getPosition().x, feld.getPosition().y, nachbar);
+            }
+
         }
-
-
     }
 
 }
