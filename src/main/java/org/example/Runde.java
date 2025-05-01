@@ -74,7 +74,7 @@ public class Runde {
         int chosenNumber;
         try {
             chosenNumber = Integer.parseInt(s);
-            if(chosenNumber<1 || chosenNumber>5) {// kein Spielabbruch bei falscher Zahleingabe
+            if(chosenNumber<1 || chosenNumber>5) { //kein Spielabbruch bei falscher Zahleingabe
                 return spielerZug();
             }
         }
