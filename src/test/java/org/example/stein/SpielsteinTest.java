@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SpielsteinTest {
 
     @Test
-    void getCurrentFeld() {
+    void getCurrentFeld() throws Exception {
         Spielstein spielstein=new Spielstein(1,new Runde(4),1);// Erstellen eines neuen Spielstein-Objekts mit ID 1, einer neuen Runde mit 4 Spielern und Spieler-ID 1
         Feld feld=new Feld(new ArrayList<>());
         spielstein.setFeld(feld);// Setzen des Feldes für den Spielstein
@@ -20,7 +20,7 @@ class SpielsteinTest {
     }
 
     @Test
-    void setFeld() {
+    void setFeld() throws Exception {
         Spielstein spielstein=new Spielstein(1,new Runde(4),1);
         Feld feld1= new Feld(new ArrayList<>());
         Feld feld2= new Feld(new ArrayList<>());
