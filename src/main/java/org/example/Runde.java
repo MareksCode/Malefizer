@@ -103,7 +103,20 @@ public class Runde {
                 new InputStreamReader(System.in));
 
         String s = r.readLine();
-        int chosenID = Integer.parseInt(s);
+
+        int chosenID;
+
+        try {
+            chosenID = Integer.parseInt(s);
+
+            if(chosenID<0 || chosenID>111) { //kein Spielabbruch bei falsche ID
+                return spielerZiehe(moeglicheFelder, figur);
+            }
+        }
+        catch (NumberFormatException e) {
+            return spielerZiehe(moeglicheFelder, figur); //wenn eingabe falsch ist, neu prompten
+        }
+
         System.out.println("You have chosen: "+chosenID);
         Feld chosenFeld = null;
 
