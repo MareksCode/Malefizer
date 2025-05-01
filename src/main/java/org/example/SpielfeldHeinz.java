@@ -105,25 +105,9 @@ public class SpielfeldHeinz {
         return spawnMap;
     }
 
-    @Deprecated
+    @Deprecated //remove n future update whenis secured never used again
     public Feld createSpielfeld() throws FileNotFoundException {
-        char[][] gameFileArray = getFileContent.getFileAsArray();
-
-        String key = "";
-
-        for (int i = 0; i < gameFileArray.length; i++) {
-            for (int j = 0; j < gameFileArray[i].length; j++) {
-                key = j + "." + i;
-                if((gameFileArray[i][j] != 'x') && !feldMap.containsKey(key)) {
-                    erstelleFeld(gameFileArray, j, i);
-                    key = i + "." + j;
-                }
-            }
-        }
-        for (Feld feld : feldMap.values()) {
-            System.out.println(feld + " -> " + feld.getNachbarn());
-        }
-        return feldMap.get(key);
+        return null;
     }
 
     private static Feld erstelleFeld(char[][] datei, int posX, int posY) {

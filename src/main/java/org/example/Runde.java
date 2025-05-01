@@ -142,14 +142,10 @@ public class Runde {
         Feld startFeld = SpielfeldHeinz.getStartfeld();
         this.startFeld = startFeld;
 
+        //todo: remove graphics used for testing and is not terminal
+
         testgui = new FeldGUI(startFeld);
         gui = new TerminalAusgabe();
-
-        //gui.update(startFeld); // unnötig
-
-        //todo: spieler auf spawn zuweisen
-
-        //XMLWorker.toXML(startFeld, "./out.xml");
 
         SpielerObjekt[] spielerListe; //spielerliste erstellen
         spielerListe = new SpielerObjekt[this.spielerAnzahl];
