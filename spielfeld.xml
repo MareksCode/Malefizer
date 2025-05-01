@@ -1,129 +1,129 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graph>
     <spawns>
-        <spawn feldId="95" id="0"/>
-        <spawn feldId="99" id="1"/>
-        <spawn feldId="103" id="2"/>
-        <spawn feldId="108" id="3"/>
+        <spawn feldId="75" id="0"/>
+        <spawn feldId="79" id="1"/>
+        <spawn feldId="83" id="2"/>
+        <spawn feldId="87" id="3"/>
     </spawns>
     <felder>
-        <feld data="Krone:0" id="0" posX="15" posY="0"/>
-        <feld data="Sperrstein:0" id="1" posX="15" posY="1"/>
-        <feld data="" id="2" posX="16" posY="1"/>
-        <feld data="" id="3" posX="17" posY="1"/>
-        <feld data="" id="4" posX="18" posY="1"/>
-        <feld data="" id="5" posX="19" posY="1"/>
-        <feld data="" id="6" posX="20" posY="1"/>
-        <feld data="" id="7" posX="21" posY="1"/>
-        <feld data="" id="8" posX="22" posY="1"/>
-        <feld data="" id="9" posX="23" posY="1"/>
-        <feld data="" id="10" posX="14" posY="1"/>
-        <feld data="" id="11" posX="13" posY="1"/>
-        <feld data="" id="12" posX="12" posY="1"/>
-        <feld data="" id="13" posX="11" posY="1"/>
-        <feld data="" id="14" posX="10" posY="1"/>
-        <feld data="" id="15" posX="9" posY="1"/>
-        <feld data="" id="16" posX="8" posY="1"/>
-        <feld data="" id="17" posX="7" posY="1"/>
-        <feld data="" id="18" posX="7" posY="2"/>
-        <feld data="Sperrstein:1" id="19" posX="7" posY="3"/>
-        <feld data="" id="20" posX="23" posY="2"/>
-        <feld data="Sperrstein:2" id="21" posX="23" posY="3"/>
-        <feld data="Sperrstein:3" id="22" posX="15" posY="3"/>
-        <feld data="" id="23" posX="14" posY="3"/>
-        <feld data="" id="24" posX="13" posY="3"/>
-        <feld data="" id="25" posX="12" posY="3"/>
-        <feld data="" id="26" posX="11" posY="3"/>
-        <feld data="" id="27" posX="10" posY="3"/>
-        <feld data="" id="28" posX="9" posY="3"/>
-        <feld data="" id="29" posX="8" posY="3"/>
-        <feld data="" id="30" posX="16" posY="3"/>
-        <feld data="" id="31" posX="17" posY="3"/>
-        <feld data="" id="32" posX="18" posY="3"/>
-        <feld data="" id="33" posX="19" posY="3"/>
-        <feld data="" id="34" posX="20" posY="3"/>
-        <feld data="" id="35" posX="21" posY="3"/>
-        <feld data="" id="36" posX="22" posY="3"/>
-        <feld data="Sperrstein:4" id="37" posX="15" posY="4"/>
-        <feld data="Sperrstein:5" id="38" posX="15" posY="5"/>
-        <feld data="" id="39" posX="16" posY="5"/>
-        <feld data="" id="40" posX="17" posY="5"/>
-        <feld data="" id="41" posX="14" posY="5"/>
-        <feld data="" id="42" posX="13" posY="5"/>
-        <feld data="" id="43" posX="13" posY="6"/>
-        <feld data="" id="44" posX="13" posY="7"/>
-        <feld data="" id="45" posX="14" posY="7"/>
-        <feld data="" id="46" posX="15" posY="7"/>
-        <feld data="" id="47" posX="16" posY="7"/>
-        <feld data="" id="48" posX="17" posY="7"/>
-        <feld data="" id="49" posX="17" posY="6"/>
-        <feld data="" id="50" posX="12" posY="7"/>
-        <feld data="" id="51" posX="11" posY="7"/>
-        <feld data="" id="52" posX="18" posY="7"/>
-        <feld data="" id="53" posX="19" posY="7"/>
-        <feld data="" id="54" posX="11" posY="8"/>
-        <feld data="" id="55" posX="19" posY="8"/>
-        <feld data="" id="56" posX="11" posY="9"/>
-        <feld data="" id="57" posX="10" posY="9"/>
+        <feld data="" id="0" posX="0" posY="1"/>
+        <feld data="" id="1" posX="1" posY="1"/>
+        <feld data="" id="2" posX="2" posY="1"/>
+        <feld data="" id="3" posX="3" posY="1"/>
+        <feld data="" id="4" posX="4" posY="1"/>
+        <feld data="" id="5" posX="5" posY="1"/>
+        <feld data="" id="6" posX="6" posY="1"/>
+        <feld data="" id="7" posX="7" posY="1"/>
+        <feld data="Sperrstein:0" id="8" posX="8" posY="1"/>
+        <feld data="Krone:0" id="9" posX="8" posY="0"/>
+        <feld data="" id="10" posX="9" posY="1"/>
+        <feld data="" id="11" posX="10" posY="1"/>
+        <feld data="" id="12" posX="11" posY="1"/>
+        <feld data="" id="13" posX="12" posY="1"/>
+        <feld data="" id="14" posX="13" posY="1"/>
+        <feld data="" id="15" posX="14" posY="1"/>
+        <feld data="" id="16" posX="15" posY="1"/>
+        <feld data="" id="17" posX="16" posY="1"/>
+        <feld data="" id="18" posX="16" posY="2"/>
+        <feld data="" id="19" posX="16" posY="3"/>
+        <feld data="" id="20" posX="0" posY="2"/>
+        <feld data="" id="21" posX="0" posY="3"/>
+        <feld data="" id="22" posX="1" posY="3"/>
+        <feld data="" id="23" posX="2" posY="3"/>
+        <feld data="" id="24" posX="3" posY="3"/>
+        <feld data="" id="25" posX="4" posY="3"/>
+        <feld data="" id="26" posX="5" posY="3"/>
+        <feld data="" id="27" posX="6" posY="3"/>
+        <feld data="" id="28" posX="7" posY="3"/>
+        <feld data="Sperrstein:1" id="29" posX="8" posY="3"/>
+        <feld data="" id="30" posX="9" posY="3"/>
+        <feld data="" id="31" posX="10" posY="3"/>
+        <feld data="" id="32" posX="11" posY="3"/>
+        <feld data="" id="33" posX="12" posY="3"/>
+        <feld data="" id="34" posX="13" posY="3"/>
+        <feld data="" id="35" posX="14" posY="3"/>
+        <feld data="" id="36" posX="15" posY="3"/>
+        <feld data="Sperrstein:2" id="37" posX="8" posY="4"/>
+        <feld data="Sperrstein:3" id="38" posX="8" posY="5"/>
+        <feld data="" id="39" posX="7" posY="5"/>
+        <feld data="" id="40" posX="6" posY="5"/>
+        <feld data="" id="41" posX="9" posY="5"/>
+        <feld data="" id="42" posX="10" posY="5"/>
+        <feld data="" id="43" posX="10" posY="6"/>
+        <feld data="" id="44" posX="6" posY="6"/>
+        <feld data="" id="45" posX="4" posY="7"/>
+        <feld data="" id="46" posX="5" posY="7"/>
+        <feld data="Sperrstein:4" id="47" posX="6" posY="7"/>
+        <feld data="" id="48" posX="7" posY="7"/>
+        <feld data="" id="49" posX="8" posY="7"/>
+        <feld data="" id="50" posX="9" posY="7"/>
+        <feld data="Sperrstein:5" id="51" posX="10" posY="7"/>
+        <feld data="" id="52" posX="11" posY="7"/>
+        <feld data="" id="53" posX="12" posY="7"/>
+        <feld data="" id="54" posX="12" posY="8"/>
+        <feld data="" id="55" posX="4" posY="8"/>
+        <feld data="" id="56" posX="2" posY="9"/>
+        <feld data="" id="57" posX="3" posY="9"/>
         <feld data="" id="58" posX="12" posY="9"/>
-        <feld data="" id="59" posX="13" posY="9"/>
-        <feld data="" id="60" posX="14" posY="9"/>
-        <feld data="" id="61" posX="15" posY="9"/>
-        <feld data="" id="62" posX="16" posY="9"/>
-        <feld data="" id="63" posX="17" posY="9"/>
-        <feld data="" id="64" posX="18" posY="9"/>
-        <feld data="" id="65" posX="19" posY="9"/>
-        <feld data="" id="66" posX="20" posY="9"/>
-        <feld data="Sperrstein:6" id="67" posX="21" posY="9"/>
-        <feld data="Sperrstein:7" id="68" posX="9" posY="9"/>
-        <feld data="" id="69" posX="9" posY="10"/>
-        <feld data="" id="70" posX="21" posY="10"/>
-        <feld data="Sperrstein:8" id="71" posX="21" posY="11"/>
-        <feld data="Sperrstein:9" id="72" posX="9" posY="11"/>
-        <feld data="" id="73" posX="10" posY="11"/>
-        <feld data="" id="74" posX="11" posY="11"/>
-        <feld data="" id="75" posX="12" posY="11"/>
-        <feld data="" id="76" posX="13" posY="11"/>
-        <feld data="" id="77" posX="14" posY="11"/>
-        <feld data="" id="78" posX="15" posY="11"/>
-        <feld data="" id="79" posX="16" posY="11"/>
-        <feld data="" id="80" posX="17" posY="11"/>
-        <feld data="" id="81" posX="18" posY="11"/>
-        <feld data="" id="82" posX="19" posY="11"/>
-        <feld data="" id="83" posX="20" posY="11"/>
-        <feld data="" id="84" posX="13" posY="10"/>
-        <feld data="" id="85" posX="17" posY="10"/>
-        <feld data="" id="86" posX="8" posY="11"/>
-        <feld data="" id="87" posX="7" posY="11"/>
-        <feld data="" id="88" posX="22" posY="11"/>
-        <feld data="" id="89" posX="23" posY="11"/>
-        <feld data="" id="90" posX="23" posY="13"/>
-        <feld data="" id="91" posX="23" posY="12"/>
-        <feld data="" id="92" posX="7" posY="12"/>
-        <feld data="" id="93" posX="7" posY="13"/>
-        <feld data="" id="94" posX="8" posY="13"/>
-        <feld data="" id="95" posX="9" posY="13"/>
-        <feld data="" id="96" posX="10" posY="13"/>
-        <feld data="" id="97" posX="11" posY="13"/>
-        <feld data="" id="98" posX="12" posY="13"/>
-        <feld data="" id="99" posX="13" posY="13"/>
-        <feld data="" id="100" posX="14" posY="13"/>
-        <feld data="" id="101" posX="15" posY="13"/>
-        <feld data="" id="102" posX="16" posY="13"/>
-        <feld data="" id="103" posX="17" posY="13"/>
-        <feld data="" id="104" posX="18" posY="13"/>
-        <feld data="" id="105" posX="19" posY="13"/>
-        <feld data="" id="106" posX="20" posY="13"/>
-        <feld data="" id="107" posX="22" posY="13"/>
-        <feld data="" id="108" posX="21" posY="13"/>
-        <feld data="" id="109" posX="11" posY="12"/>
-        <feld data="" id="110" posX="15" posY="12"/>
-        <feld data="" id="111" posX="19" posY="12"/>
+        <feld data="" id="59" posX="4" posY="9"/>
+        <feld data="" id="60" posX="5" posY="9"/>
+        <feld data="" id="61" posX="6" posY="9"/>
+        <feld data="" id="62" posX="7" posY="9"/>
+        <feld data="" id="63" posX="8" posY="9"/>
+        <feld data="" id="64" posX="9" posY="9"/>
+        <feld data="" id="65" posX="10" posY="9"/>
+        <feld data="" id="66" posX="11" posY="9"/>
+        <feld data="" id="67" posX="2" posY="10"/>
+        <feld data="" id="68" posX="2" posY="11"/>
+        <feld data="" id="69" posX="1" posY="11"/>
+        <feld data="Sperrstein:6" id="70" posX="0" posY="11"/>
+        <feld data="" id="71" posX="14" posY="11"/>
+        <feld data="" id="72" posX="13" posY="9"/>
+        <feld data="" id="73" posX="14" posY="9"/>
+        <feld data="" id="74" posX="14" posY="10"/>
+        <feld data="" id="75" posX="14" posY="13"/>
+        <feld data="" id="76" posX="13" posY="13"/>
+        <feld data="" id="77" posX="12" posY="13"/>
+        <feld data="" id="78" posX="11" posY="13"/>
+        <feld data="" id="79" posX="10" posY="13"/>
+        <feld data="" id="80" posX="9" posY="13"/>
+        <feld data="" id="81" posX="8" posY="13"/>
+        <feld data="" id="82" posX="7" posY="13"/>
+        <feld data="" id="83" posX="6" posY="13"/>
+        <feld data="" id="84" posX="5" posY="13"/>
+        <feld data="" id="85" posX="4" posY="13"/>
+        <feld data="" id="86" posX="3" posY="13"/>
+        <feld data="" id="87" posX="2" posY="13"/>
+        <feld data="" id="88" posX="1" posY="13"/>
+        <feld data="" id="89" posX="0" posY="13"/>
+        <feld data="" id="90" posX="0" posY="12"/>
+        <feld data="" id="91" posX="3" posY="11"/>
+        <feld data="Sperrstein:7" id="92" posX="4" posY="11"/>
+        <feld data="" id="93" posX="5" posY="11"/>
+        <feld data="" id="94" posX="6" posY="11"/>
+        <feld data="" id="95" posX="7" posY="11"/>
+        <feld data="Sperrstein:8" id="96" posX="8" posY="11"/>
+        <feld data="" id="97" posX="9" posY="11"/>
+        <feld data="" id="98" posX="10" posY="11"/>
+        <feld data="" id="99" posX="11" posY="11"/>
+        <feld data="Sperrstein:9" id="100" posX="12" posY="11"/>
+        <feld data="" id="101" posX="13" posY="11"/>
+        <feld data="" id="102" posX="6" posY="10"/>
+        <feld data="" id="103" posX="10" posY="10"/>
+        <feld data="" id="104" posX="4" posY="12"/>
+        <feld data="" id="105" posX="8" posY="12"/>
+        <feld data="" id="106" posX="15" posY="11"/>
+        <feld data="Sperrstein:10" id="107" posX="16" posY="11"/>
+        <feld data="" id="108" posX="16" posY="12"/>
+        <feld data="" id="109" posX="16" posY="13"/>
+        <feld data="" id="110" posX="15" posY="13"/>
+        <feld data="" id="111" posX="12" posY="12"/>
     </felder>
     <kanten>
         <kante from="0" to="1"/>
+        <kante from="0" to="20"/>
         <kante from="1" to="2"/>
-        <kante from="1" to="10"/>
         <kante from="2" to="3"/>
         <kante from="3" to="4"/>
         <kante from="4" to="5"/>
@@ -131,7 +131,7 @@
         <kante from="6" to="7"/>
         <kante from="7" to="8"/>
         <kante from="8" to="9"/>
-        <kante from="9" to="20"/>
+        <kante from="8" to="10"/>
         <kante from="10" to="11"/>
         <kante from="11" to="12"/>
         <kante from="12" to="13"/>
@@ -141,18 +141,18 @@
         <kante from="16" to="17"/>
         <kante from="17" to="18"/>
         <kante from="18" to="19"/>
-        <kante from="19" to="29"/>
+        <kante from="19" to="36"/>
         <kante from="20" to="21"/>
-        <kante from="21" to="36"/>
+        <kante from="21" to="22"/>
         <kante from="22" to="23"/>
-        <kante from="22" to="30"/>
-        <kante from="22" to="37"/>
         <kante from="23" to="24"/>
         <kante from="24" to="25"/>
         <kante from="25" to="26"/>
         <kante from="26" to="27"/>
         <kante from="27" to="28"/>
         <kante from="28" to="29"/>
+        <kante from="29" to="30"/>
+        <kante from="29" to="37"/>
         <kante from="30" to="31"/>
         <kante from="31" to="32"/>
         <kante from="32" to="33"/>
@@ -163,84 +163,84 @@
         <kante from="38" to="39"/>
         <kante from="38" to="41"/>
         <kante from="39" to="40"/>
-        <kante from="40" to="49"/>
+        <kante from="40" to="44"/>
         <kante from="41" to="42"/>
         <kante from="42" to="43"/>
-        <kante from="43" to="44"/>
-        <kante from="44" to="45"/>
-        <kante from="44" to="50"/>
+        <kante from="43" to="51"/>
+        <kante from="44" to="47"/>
         <kante from="45" to="46"/>
+        <kante from="45" to="55"/>
         <kante from="46" to="47"/>
         <kante from="47" to="48"/>
         <kante from="48" to="49"/>
-        <kante from="48" to="52"/>
+        <kante from="49" to="50"/>
         <kante from="50" to="51"/>
-        <kante from="51" to="54"/>
+        <kante from="51" to="52"/>
         <kante from="52" to="53"/>
-        <kante from="53" to="55"/>
-        <kante from="54" to="56"/>
-        <kante from="55" to="65"/>
+        <kante from="53" to="54"/>
+        <kante from="54" to="58"/>
+        <kante from="55" to="59"/>
         <kante from="56" to="57"/>
-        <kante from="56" to="58"/>
-        <kante from="57" to="68"/>
-        <kante from="58" to="59"/>
+        <kante from="56" to="67"/>
+        <kante from="57" to="59"/>
+        <kante from="58" to="66"/>
+        <kante from="58" to="72"/>
         <kante from="59" to="60"/>
-        <kante from="59" to="84"/>
         <kante from="60" to="61"/>
         <kante from="61" to="62"/>
+        <kante from="61" to="102"/>
         <kante from="62" to="63"/>
         <kante from="63" to="64"/>
-        <kante from="63" to="85"/>
         <kante from="64" to="65"/>
         <kante from="65" to="66"/>
-        <kante from="66" to="67"/>
-        <kante from="67" to="70"/>
+        <kante from="65" to="103"/>
+        <kante from="67" to="68"/>
         <kante from="68" to="69"/>
-        <kante from="69" to="72"/>
-        <kante from="70" to="71"/>
-        <kante from="71" to="83"/>
-        <kante from="71" to="88"/>
+        <kante from="68" to="91"/>
+        <kante from="69" to="70"/>
+        <kante from="70" to="90"/>
+        <kante from="71" to="74"/>
+        <kante from="71" to="101"/>
+        <kante from="71" to="106"/>
         <kante from="72" to="73"/>
-        <kante from="72" to="86"/>
         <kante from="73" to="74"/>
-        <kante from="74" to="75"/>
-        <kante from="74" to="109"/>
         <kante from="75" to="76"/>
+        <kante from="75" to="110"/>
         <kante from="76" to="77"/>
-        <kante from="76" to="84"/>
         <kante from="77" to="78"/>
+        <kante from="77" to="111"/>
         <kante from="78" to="79"/>
-        <kante from="78" to="110"/>
         <kante from="79" to="80"/>
         <kante from="80" to="81"/>
-        <kante from="80" to="85"/>
         <kante from="81" to="82"/>
+        <kante from="81" to="105"/>
         <kante from="82" to="83"/>
-        <kante from="82" to="111"/>
+        <kante from="83" to="84"/>
+        <kante from="84" to="85"/>
+        <kante from="85" to="86"/>
+        <kante from="85" to="104"/>
         <kante from="86" to="87"/>
-        <kante from="87" to="92"/>
+        <kante from="87" to="88"/>
         <kante from="88" to="89"/>
-        <kante from="89" to="91"/>
-        <kante from="90" to="91"/>
-        <kante from="90" to="107"/>
+        <kante from="89" to="90"/>
+        <kante from="91" to="92"/>
         <kante from="92" to="93"/>
+        <kante from="92" to="104"/>
         <kante from="93" to="94"/>
         <kante from="94" to="95"/>
+        <kante from="94" to="102"/>
         <kante from="95" to="96"/>
         <kante from="96" to="97"/>
+        <kante from="96" to="105"/>
         <kante from="97" to="98"/>
-        <kante from="97" to="109"/>
         <kante from="98" to="99"/>
+        <kante from="98" to="103"/>
         <kante from="99" to="100"/>
         <kante from="100" to="101"/>
-        <kante from="101" to="102"/>
-        <kante from="101" to="110"/>
-        <kante from="102" to="103"/>
-        <kante from="103" to="104"/>
-        <kante from="104" to="105"/>
-        <kante from="105" to="106"/>
-        <kante from="105" to="111"/>
-        <kante from="106" to="108"/>
+        <kante from="100" to="111"/>
+        <kante from="106" to="107"/>
         <kante from="107" to="108"/>
+        <kante from="108" to="109"/>
+        <kante from="109" to="110"/>
     </kanten>
 </graph>
