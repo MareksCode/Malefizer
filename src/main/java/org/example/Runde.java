@@ -144,7 +144,7 @@ public class Runde {
 
         //todo: remove graphics used for testing and is not terminal
 
-        testgui = new FeldGUI(startFeld);
+        //testgui = new FeldGUI(startFeld);
         gui = new TerminalAusgabe();
 
         SpielerObjekt[] spielerListe; //spielerliste erstellen
@@ -184,7 +184,7 @@ public class Runde {
                 figur.setFeld(chosenFeld);
                 chosenFeld.setBesetzung(figur);
                 currentFeld.setBesetzung(null);
-                testgui.update(startFeld);
+                //testgui.update(startFeld);
                 gui.update(chosenFeld);
             } else {
                 System.out.println("you can't move with this figure.");
