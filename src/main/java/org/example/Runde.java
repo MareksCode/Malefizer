@@ -70,9 +70,13 @@ public class Runde {
 
         String s = r.readLine();
 
+
         int chosenNumber;
         try {
             chosenNumber = Integer.parseInt(s);
+            if(chosenNumber<1 || chosenNumber>5) {// kein Spielabbruch bei falscher Zahleingabe
+                return spielerZug();
+            }
         }
         catch (NumberFormatException e) {
             return spielerZug(); //wenn eingabe falsch ist, neu prompten
@@ -128,7 +132,7 @@ public class Runde {
         testgui = new FeldGUI(startFeld);
         gui = new TerminalAusgabe();
 
-        gui.update(startFeld);
+        //gui.update(startFeld); // unnötig
 
         //todo: spieler auf spawn zuweisen
 
