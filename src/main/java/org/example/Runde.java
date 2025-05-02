@@ -14,7 +14,7 @@ public class Runde {
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     TerminalAusgabe gui = null;
-    FeldGUI testgui = null;
+    //FeldGUI testgui = null;
     private int spielerAnzahl;
     public Runde(int spieler) {
         this.spielGewonnen = false;
