@@ -181,9 +181,12 @@ public class Runde {
 
             if (!moeglicheFelder.isEmpty()) {
                 Feld chosenFeld = spielerZiehe(moeglicheFelder, figur);
+                // 1) remove figur
+                currentFeld.removeBesetzung();
+
+                // figur schlage
                 figur.setFeld(chosenFeld);
-                chosenFeld.setBesetzung(figur);
-                currentFeld.setBesetzung(null);
+
                 //testgui.update(startFeld);
                 gui.update(chosenFeld);
             } else {

@@ -56,7 +56,7 @@ public class Feld {
 
     public void setBesetzung(Stein besetzung) {
         this.besetzung = besetzung;
-    }
+    } // Kann das NULL sein????
     public void removeBesetzung() {
         this.besetzung = null;
     }
