@@ -9,12 +9,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Sperrstein extends Stein {
+    private Feld feld;
     public Sperrstein(int id, Runde dazugehoerendeRunde) {
         super(id, dazugehoerendeRunde);
     }
 
     public void setFeld(Feld neuesFeld) throws Exception {
-        neuesFeld.schlagen();
+        if (this.feld != null) {
+            this.feld.removeBesetzung();
+        }
+
+        this.feld = neuesFeld;
+
         neuesFeld.setBesetzung(this);
     }
     public boolean kannDrueber() {
@@ -71,9 +77,11 @@ public class Sperrstein extends Stein {
         return chosenFeld;
     }
     public void schlagen() throws Exception {
+        this.feld.removeBesetzung();
+
         Feld newFeld = steinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
         this.setFeld(newFeld);
-        newFeld.setBesetzung(this);
+        System.out.println("setFeld bei sperrstein hat geklappt");
     }
     @Override
     public String toString() {

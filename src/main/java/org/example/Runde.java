@@ -14,7 +14,7 @@ public class Runde {
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     TerminalAusgabe gui = null;
-    FeldGUI testgui = null;
+    //FeldGUI testgui = null;
     private int spielerAnzahl;
     public Runde(int spieler) {
         this.spielGewonnen = false;
@@ -181,9 +181,12 @@ public class Runde {
 
             if (!moeglicheFelder.isEmpty()) {
                 Feld chosenFeld = spielerZiehe(moeglicheFelder, figur);
+                // 1) remove figur
+                currentFeld.removeBesetzung();
+
+                // figur schlage
                 figur.setFeld(chosenFeld);
-                chosenFeld.setBesetzung(figur);
-                currentFeld.setBesetzung(null);
+
                 //testgui.update(startFeld);
                 gui.update(chosenFeld);
             } else {
