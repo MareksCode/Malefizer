@@ -46,14 +46,12 @@ public class TerminalAusgabe implements GUIface {
             String data = feld.getBesetzung() != null ? feld.getBesetzung().toString() : "null";
 
             String[] split = data.split(":");
-            System.out.println(data);
-
 
             switch (split[0]) {
                 case "Krone" -> spielfeld[1][1] = " K  ";
                 case "Sperrstein" -> spielfeld[1][1] = " S  ";
                 case "Spielstein" -> {
-                    spielfeld[1][1] = "P" + ((Spielstein) feld.getBesetzung()).getSpielerId() + "." + split[1];
+                    spielfeld[1][1] = "P" + (((Spielstein) feld.getBesetzung()).getSpielerId()+1) + "." + (Integer.parseInt(split[1])+1);
                 }
                 default -> spielfeld[1][1] = "    ";
             }
@@ -69,7 +67,6 @@ public class TerminalAusgabe implements GUIface {
             }
             if (feld.istSpielerSpawn()) {
                 spielfeld[1][0] = "SPWN";
-                System.out.println("SPWN@"+feld.getId());
             }
 
             // Dynamisches Schreiben ins große Ausgabearray

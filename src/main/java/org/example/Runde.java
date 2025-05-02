@@ -142,9 +142,6 @@ public class Runde {
         Feld startFeld = SpielfeldHeinz.getStartfeld();
         this.startFeld = startFeld;
 
-        //todo: remove graphics used for testing and is not terminal
-
-        //testgui = new FeldGUI(startFeld);
         gui = new TerminalAusgabe();
 
         SpielerObjekt[] spielerListe; //spielerliste erstellen
@@ -164,7 +161,7 @@ public class Runde {
 
             this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
-            System.out.println("Spieler " + this.amZug + " ist am Zug");
+            System.out.println("Spieler " + (this.amZug+1) + " ist am Zug");
 
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
             int figurNummer = spielerZug();
@@ -184,16 +181,16 @@ public class Runde {
                 // 1) remove figur
                 currentFeld.removeBesetzung();
 
-                // figur schlage
+                // 2) figur schlagen
                 figur.setFeld(chosenFeld);
 
-                //testgui.update(startFeld);
+                // 3) ui update
                 gui.update(chosenFeld);
             } else {
                 System.out.println("you can't move with this figure.");
             }
         }
-        System.out.println("spiel gewonnen von spieler " + this.amZug);
+        System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
     }
 
     public void end() {

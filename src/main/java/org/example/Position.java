@@ -1,5 +1,6 @@
 package org.example;
 
+// simple position klasse, hier wurden keine getter und setter verwendet für leichteres arbeiten..
 public class Position {
     public int x;
     public int y;
