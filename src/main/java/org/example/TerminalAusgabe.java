@@ -15,15 +15,18 @@ public class TerminalAusgabe implements GUIface {
     public void update(Feld startFeld){
 
         stfld = startFeld;
-        repaint();
+        repaint(startFeld);
     }
 
     public void showMessage(String message){}
 
-    private void repaint (){
+    private void repaint (Feld startFeld){
         int x =0;
         int y=0;
-        searchNachbar(x,y,stfld);
+        spielArray.clear();
+        abgelatscht.clear();
+
+        searchNachbar(x,y,startFeld);
 
         for(int i = 0; i < spielArray.size(); i++) {
             for(int j = 0; j < spielArray.get(i).size(); j++) {
@@ -43,6 +46,7 @@ public class TerminalAusgabe implements GUIface {
             String data = feld.getBesetzung() != null ? feld.getBesetzung().toString() : "null";
 
             String[] split = data.split(":");
+            System.out.println(data);
 
 
             switch (split[0]) {
