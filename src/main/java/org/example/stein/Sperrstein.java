@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class Sperrstein extends Stein {
     private Feld feld;
     public Sperrstein(int id, Runde dazugehoerendeRunde) {
+
+        //this.feld = neuesFeld;
         super(id, dazugehoerendeRunde);
     }
 

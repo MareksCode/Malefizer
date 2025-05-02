@@ -72,7 +72,7 @@ public class SpielfeldHeinz {
         return new SpielfeldHeinz(runde);
     }
 
-    private static Feld getFeld(Runde runde, Element field, String id) {
+    private static Feld getFeld(Runde runde, Element field, String id) throws Exception {
         String data = field.getAttribute("data");
 
         int posX = Integer.parseInt(field.getAttribute("posX"));
@@ -87,7 +87,9 @@ public class SpielfeldHeinz {
             if(dataSplit[0].equals("Krone")){
                 feld.setBesetzung(new Krone(Integer.parseInt(dataSplit[1]), runde));
             }else if(dataSplit[0].equals("Sperrstein")){
-                feld.setBesetzung(new Sperrstein(Integer.parseInt(dataSplit[1]), runde));
+                Sperrstein newSperrstein = new Sperrstein(Integer.parseInt(dataSplit[1]), runde);
+                feld.setBesetzung(newSperrstein);
+                newSperrstein.setFeld(feld);
             }else if(dataSplit[0].equals("Spielstein")){
                 feld.setBesetzung(new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1));
             }
@@ -110,7 +112,7 @@ public class SpielfeldHeinz {
         return null;
     }
 
-    private static Feld erstelleFeld(char[][] datei, int posX, int posY) {
+    private static Feld erstelleFeld(char[][] datei, int posX, int posY) throws Exception {
         String key = posX + "." + posY;
         if (feldMap.containsKey(key)) return feldMap.get(key);
 
@@ -121,7 +123,11 @@ public class SpielfeldHeinz {
         // <<< KORREKTER ZUGRIFF >>>
         switch (datei[posY][posX]) {
             case 'K' -> feld.setBesetzung(new Krone(walkingIdKrown++, runde));
-            case 'S' -> feld.setBesetzung(new Sperrstein(walkingId++, runde));
+            case 'S' -> {
+                Sperrstein newSperrstein = new Sperrstein(walkingId++, runde);
+                feld.setBesetzung(newSperrstein);
+                newSperrstein.setFeld(feld);
+            }
             case 'T' -> feld.setSpielerSpawn(true);
         }
 
