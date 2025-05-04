@@ -151,7 +151,7 @@ public class Runde {
 
         for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
 
-            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this); //todo: connect : new Feld & spawnfeldliste replacen
+            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this);
             spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
         }
 
