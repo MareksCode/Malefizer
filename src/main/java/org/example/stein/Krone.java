@@ -1,5 +1,6 @@
 package org.example.stein;
 
+import org.example.Feld;
 import org.example.Runde;
 
 public class Krone extends Stein {
@@ -13,6 +14,10 @@ public class Krone extends Stein {
 
     public void schlagen() throws Exception {
         this.dazugehoerendeRunde.end();
+    }
+
+    public void setFeld(Feld neuesFeld) {
+
     }
 
     @Override
