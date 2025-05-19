@@ -22,13 +22,17 @@ public class Spielstein extends Stein {
         return this.feld;
     }
 
-    public void setFeld(Feld neuesFeld) throws Exception {
+    public void setFeld(Feld neuesFeld) {
         if (this.feld != null) {
             this.feld.removeBesetzung();
         }
 
         this.feld = neuesFeld;
-        this.feld.schlagen();
+        try{
+            this.feld.schlagen();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         neuesFeld.setBesetzung(this);
     }

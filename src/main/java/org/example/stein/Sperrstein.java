@@ -16,7 +16,7 @@ public class Sperrstein extends Stein {
         super(id, dazugehoerendeRunde);
     }
 
-    public void setFeld(Feld neuesFeld) throws Exception {
+    public void setFeld(Feld neuesFeld) {
         if (this.feld != null) {
             this.feld.removeBesetzung();
         }

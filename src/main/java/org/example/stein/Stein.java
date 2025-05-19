@@ -1,4 +1,5 @@
 package org.example.stein;
+import org.example.Feld;
 import org.example.Runde;
 
 public abstract class Stein {
@@ -9,6 +10,7 @@ public abstract class Stein {
         this.dazugehoerendeRunde = dazugehoerendeRunde;
     }
     public abstract boolean kannDrueber();
+    public abstract void setFeld(Feld neuesFeld);
     public abstract void schlagen() throws Exception;
 
 }
