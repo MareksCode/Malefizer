@@ -1,6 +1,7 @@
 package org.example.client;
 
 import org.example.Feld;
+import org.example.RundeNeu;
 import org.example.SpielfeldHeinz;
 
 import javax.net.ssl.*;
@@ -22,6 +23,8 @@ public class SocketService {
     private BufferedReader in;
     private PrintWriter out;
     private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
+
+    private RundeNeu runde = new RundeNeu(this);
 
     public void connectAndListen(LoginResponse login) throws Exception {
         //socket = new Socket(login.getHost(), login.getPort());
@@ -59,11 +62,19 @@ public class SocketService {
                 // Optional: Automatische Antwortlogik
                 String args[] = serverMsg.split(":");
                 switch (args[0]) {
-                    case "MOVE":
+                    case "SETSPWN":
+                        runde.setSpieler(args[1]);
+                        break;
+                    case "MOV":
+                        runde.macheZug();
+                        break;
+                    case "TURN":
                         break;
                     case "FAIL":
+                        System.out.println("Fehler gesendet vom server: " + args[1]);
                         break;
                     case "ROLL":
+                        returnWuerfelErgebniss(args[1], args[2]);
                         break;
                     case "EXIT":
                         closeConnection();
@@ -87,8 +98,19 @@ public class SocketService {
         }
     }
 
-    public void spielerZiehe(Feld feld, int feldnummer) throws IOException ) {
 
+    /**feld von woher, feldnummer zu welchem
+     * source -> target
+    **/
+    public void spielerZiehe(Feld feld, int feldnummer) {
+        out.printf("MOV:%d:%d%n", feld.getId(), feldnummer);
+    }
+
+    private void returnWuerfelErgebniss(String correlationId, String id) {
+        CompletableFuture<String> future = pending.remove(id);
+        if (future != null) {
+            future.complete(correlationId); // Antwort dem wartenden Thread geben
+        }
     }
 
 

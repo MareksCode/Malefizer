@@ -20,14 +20,11 @@ public class RundeNeu{
 
     private SpielerObjekt spielerObjekt;
     TerminalAusgabe gui = null;
-    @Deprecated
-    private int spielerAnzahl;
 
     
-    public RundeNeu(int spieler, SocketService socket) {
+    public RundeNeu(SocketService socket) {
         this.spielGewonnen = false;
         this.amZug = -1;
-        this.spielerAnzahl = spieler;
         this.socket = socket;
     }
 
@@ -79,25 +76,42 @@ public class RundeNeu{
                 .thenAcceptAsync(wurf -> {                    // Callback sobald Ergebnis kommt
                     try {
                         verarbeiteWurf(0, wurf);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
     }
 
-    private void verarbeiteWurf(int spielerId, int wurf) throws IOException {
+    private void verarbeiteWurf(int spielerId, int wurf) throws Exception {
+        //dieser berecich muss angepasst werden, sobald die gui da ist.
+        //es werden inputs benötigt, die nachfolgend simuliert werden.
+        //es wird davon ausgegangen, das jeder spieler aktuell mindestens einen zug amchen kann, sonst crashen wir!
+
         int simulateInputFigurnummer = 1;
         ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(startFeld, wurf);
-        socket.spielerZiehe( ,moeglicheFelder.getFirst().getId());
+
+        //select feld aus den möglichen feldern
+        Spielstein sp = spielerObjekt.getFigur(simulateInputFigurnummer);
+        if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+        socket.spielerZiehe(sp.getCurrentFeld(), moeglicheFelder.getFirst().getId());
     }
-        //spielstein wählen
-        //spielstein ziehen
 
 
-    public void bewege(){}
+    public void bewege(String feldIdFrom, String feldIdTo){
+        Feld sourceField = SpielfeldHeinz.feldMap.get(feldIdFrom);
+        Feld destinatonField = SpielfeldHeinz.feldMap.get(feldIdFrom);
+        sourceField.getBesetzung().setFeld(destinatonField);
+    }
+
+    public void setSpieler(String feldid){
+        Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
+        spielerObjekt = new SpielerObjekt(spawn, 0, this);
+    }
 
 
 
+    //alte main auskommentiert für referenz
+    /*
     public void start() throws Exception {
         SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
 
@@ -108,7 +122,6 @@ public class RundeNeu{
 
 
         Map<Integer, Feld> spawns = SpielfeldHeinz.getSpawnFelder();
-
 
 
         while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
@@ -147,12 +160,12 @@ public class RundeNeu{
             }
         }
         System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
+
+        */
     }
 
-    public void end() {
-        this.spielGewonnen = true;
-    }
-}
+
+
 
 
 
