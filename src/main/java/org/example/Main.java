@@ -1,8 +1,19 @@
 package org.example;
 
+import org.example.client.AuthClient;
+import org.example.client.LoginResponse;
+import org.example.client.SocketService;
+
 public class Main {
     public static void main(String[] args) throws Exception {
-        org.example.Runde runde = new org.example.Runde(4);
-        runde.start();
+        try {
+            AuthClient loginService = new AuthClient();
+            LoginResponse loginResponse = loginService.logIntoServer("h", "h", "localhost", 8443);
+
+            SocketService socketService = new SocketService();
+            socketService.connectAndListen(loginResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

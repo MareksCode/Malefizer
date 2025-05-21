@@ -1,7 +1,7 @@
 package org.example.client;
 
 import org.example.Feld;
-import org.example.RundeNeu;
+import org.example.Runde;
 import org.example.SpielfeldHeinz;
 
 import javax.net.ssl.*;
@@ -24,7 +24,11 @@ public class SocketService {
     private PrintWriter out;
     private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
 
-    private RundeNeu runde = new RundeNeu(this);
+
+    private Runde runde = new Runde(this);
+
+    public SocketService() throws Exception {
+    }
 
     public void connectAndListen(LoginResponse login) throws Exception {
         //socket = new Socket(login.getHost(), login.getPort());
@@ -80,7 +84,7 @@ public class SocketService {
                         closeConnection();
                         break;
                     case "PING":
-                        out.println("PONG");
+                        out.println("PONG\n");
                         break;
                 }
 

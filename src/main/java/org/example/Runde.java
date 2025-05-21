@@ -1,24 +1,30 @@
 package org.example;
 
+import org.example.client.SocketService;
 import org.example.stein.*;
 
 import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Map;
 
-public class Runde {
+
+public class Runde{
     private boolean spielGewonnen;
-
-    public Feld startFeld; //ToDo: pfusch ändern
+    SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
+    public Feld startFeld = SpielfeldHeinz.getStartfeld(); //ToDo: pfusch ändern
     private int amZug;
+    private SocketService socket;
+
+    private SpielerObjekt spielerObjekt;
     TerminalAusgabe gui = null;
-    private int spielerAnzahl;
-    public Runde(int spieler) {
+
+    
+    public Runde(SocketService socket) throws Exception {
         this.spielGewonnen = false;
         this.amZug = -1;
-        this.spielerAnzahl = spieler;
+        this.socket = socket;
+    }
+
+    public void end(){
+        System.out.println("Spiel beendet.");
     }
 
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {
@@ -62,80 +68,50 @@ public class Runde {
         return ergebnis;
     }
 
-    private int spielerZug() throws IOException {
-        System.out.println("Please choose a Spielstein (Type 1-5)");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
-
-        String s = r.readLine();
-
-
-        int chosenNumber;
-        try {
-            chosenNumber = Integer.parseInt(s);
-            if(chosenNumber<1 || chosenNumber>5) { //kein Spielabbruch bei falscher Zahleingabe
-                return spielerZug();
-            }
-        }
-        catch (NumberFormatException e) {
-            return spielerZug(); //wenn eingabe falsch ist, neu prompten
-        }
-
-        chosenNumber -= 1; //von leslicher menschlicher 1 zur gigachad array 0 😎
-
-        return chosenNumber;
+    public void macheZug(){
+        //würfeln
+        // 1.  Würfel anfordern
+        socket.requestRoll(0)
+                .thenAcceptAsync(wurf -> {                    // Callback sobald Ergebnis kommt
+                    try {
+                        verarbeiteWurf(0, wurf);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
-    private int spielerWuerfel(Wuerfel wuerfel) throws IOException {
-        System.out.println("Press any key to würfel your würfel");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
+    private void verarbeiteWurf(int spielerId, int wurf) throws Exception {
+        //dieser berecich muss angepasst werden, sobald die gui da ist.
+        //es werden inputs benötigt, die nachfolgend simuliert werden.
+        //es wird davon ausgegangen, das jeder spieler aktuell mindestens einen zug amchen kann, sonst crashen wir!
 
-        r.readLine();
+        int simulateInputFigurnummer = 1;
+        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(startFeld, wurf);
 
-        return wuerfel.Roll();
+        //select feld aus den möglichen feldern
+        Spielstein sp = spielerObjekt.getFigur(simulateInputFigurnummer);
+        if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+        socket.spielerZiehe(sp.getCurrentFeld(), moeglicheFelder.getFirst().getId());
     }
 
-    private Feld spielerZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {
-        System.out.println("Please choose what Spielfeld you want to bewegen on (using the ID)");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
 
-        String s = r.readLine();
-
-        int chosenID;
-
-        try {
-            chosenID = Integer.parseInt(s);
-
-            if(chosenID<0 || chosenID>111) { //kein Spielabbruch bei falsche ID
-                return spielerZiehe(moeglicheFelder, figur);
-            }
-        }
-        catch (NumberFormatException e) {
-            return spielerZiehe(moeglicheFelder, figur); //wenn eingabe falsch ist, neu prompten
-        }
-
-        System.out.println("You have chosen: "+chosenID);
-        Feld chosenFeld = null;
-
-        for (Feld feld : moeglicheFelder) {
-            if (feld.getId() == chosenID) {
-                chosenFeld = feld;
-            }
-        }
-
-        if (chosenFeld == null) {
-            return spielerZiehe(moeglicheFelder, figur);
-        }
-
-        System.out.println("You have chosen: "+chosenFeld.getId());
-        return chosenFeld;
+    public void bewege(String feldIdFrom, String feldIdTo){
+        Feld sourceField = SpielfeldHeinz.feldMap.get(feldIdFrom);
+        Feld destinatonField = SpielfeldHeinz.feldMap.get(feldIdFrom);
+        sourceField.getBesetzung().setFeld(destinatonField);
     }
 
+    public void setSpieler(String feldid){
+        Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
+        spielerObjekt = new SpielerObjekt(spawn, 0, this);
+    }
+
+
+
+    //alte main auskommentiert für referenz
+    /*
     public void start() throws Exception {
-        Wuerfel wuerfel = new Wuerfel(); //neuen würfel kreieren
-
         SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
 
         Feld startFeld = SpielfeldHeinz.getStartfeld();
@@ -143,16 +119,9 @@ public class Runde {
 
         gui = new TerminalAusgabe();
 
-        SpielerObjekt[] spielerListe; //spielerliste erstellen
-        spielerListe = new SpielerObjekt[this.spielerAnzahl];
 
         Map<Integer, Feld> spawns = SpielfeldHeinz.getSpawnFelder();
 
-        for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
-
-            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this);
-            spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
-        }
 
         while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
@@ -190,9 +159,12 @@ public class Runde {
             }
         }
         System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
+
+        */
     }
 
-    public void end() {
-        this.spielGewonnen = true;
-    }
-}
+
+
+
+
+
