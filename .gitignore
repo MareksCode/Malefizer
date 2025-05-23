@@ -12,6 +12,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.class
 =======
 out/
 !**/src/main/**/out/
