@@ -1,8 +1,7 @@
 package org.example.client;
 
 import org.example.Feld;
-import org.example.RundeNeu;
-import org.example.SpielfeldHeinz;
+import org.example.Runde;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -24,7 +23,12 @@ public class SocketService {
     private PrintWriter out;
     private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
 
-    private RundeNeu runde = new RundeNeu(this);
+    private Runde runde = new Runde(this);
+
+    public void onExit(){
+        System.out.println("🟢 Verbindung beenden...");
+        out.println("EXIT");
+    }
 
     public void connectAndListen(LoginResponse login) throws Exception {
         //socket = new Socket(login.getHost(), login.getPort());
