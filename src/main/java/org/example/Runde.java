@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.stein.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -120,6 +122,14 @@ public class Runde implements Serializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+            if(chosenID == 2000){
+                try{
+                    XMLWorker.toXML(startFeld,this, "./test.xml");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
 
             if(chosenID<0 || chosenID>111) { //kein Spielabbruch bei falsche ID
