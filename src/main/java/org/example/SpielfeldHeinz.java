@@ -35,12 +35,12 @@ public class SpielfeldHeinz implements Serializable {
     }
 
     public static SpielfeldHeinz getInstance(Runde runde) throws Exception {
-        //Löschen
-        if (!feldMap.isEmpty()) {
-            return new SpielfeldHeinz(runde);
-        }
-        //Löschen
-        Document doc = XMLWorker.readXML("spielfeld.xml");
+        return getInstance(runde, "spielfeld.xml");
+    }
+
+    public static SpielfeldHeinz getInstance(Runde runde, String filename) throws Exception {
+
+        Document doc = XMLWorker.readXML(filename);
         Element root = doc.getDocumentElement();
         Element felder = (Element) root.getElementsByTagName("felder").item(0);
         Element kanten = (Element) root.getElementsByTagName("kanten").item(0);
@@ -49,6 +49,8 @@ public class SpielfeldHeinz implements Serializable {
         NodeList fields = felder.getElementsByTagName("feld");
         NodeList edges = kanten.getElementsByTagName("kante");
         NodeList spawnList = spawns.getElementsByTagName("spawn");
+
+
 
         // create fields
         for (int i = 0; i < fields.getLength(); i++) {
@@ -92,7 +94,6 @@ public class SpielfeldHeinz implements Serializable {
 
         if(!data.isEmpty()){
             var dataSplit = data.split(":");
-            System.out.println(dataSplit[0]);
             if(dataSplit[0].equals("Krone")){
                 feld.setBesetzung(new Krone(Integer.parseInt(dataSplit[1]), runde));
             }else if(dataSplit[0].equals("Sperrstein")){
@@ -101,7 +102,7 @@ public class SpielfeldHeinz implements Serializable {
                 newSperrstein.setFeld(feld);
                 //Neu
             }else if(dataSplit[0].equals("Spielstein")) {
-                Spielstein spielstein = new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1);
+                Spielstein spielstein = new Spielstein(Integer.parseInt(dataSplit[2]), runde, Integer.parseInt(dataSplit[1]));
                 feld.setBesetzung(spielstein);
                 spielstein.setFeld(feld); // <-- wichtig: damit die Referenz zum Feld korrekt ist
             }

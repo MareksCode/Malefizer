@@ -15,10 +15,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class XMLWorker {
     public static Document readXML(String filename) throws Exception {
@@ -51,7 +48,6 @@ public class XMLWorker {
         Map<Integer, Feld> felder = new HashMap<>();
         Set<String> kanten = new HashSet<>();
         collectToMap(startFeld, felder, kanten, new HashSet<>());
-
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.newDocument();
@@ -60,6 +56,8 @@ public class XMLWorker {
         doc.appendChild(graphElement);
         Element felderElement = doc.createElement("felder");
         Element kantenElement = doc.createElement("kanten");
+        Element spawnsElement = doc.createElement("spawns");
+        graphElement.appendChild(spawnsElement);
         graphElement.appendChild(felderElement);
         graphElement.appendChild(kantenElement);
 
@@ -74,13 +72,30 @@ public class XMLWorker {
         for (Feld feld : felder.values()) {
             Element feldElement = doc.createElement("feld");
             feldElement.setAttribute("id", Integer.toString(feld.getId()));
-            feldElement.setAttribute("data", feld.getBesetzung() != null ? feld.getBesetzung().toString() : "null");
+            String data;
+            if(feld.getBesetzung() == null) data = "null";
+            else data = feld.getBesetzung().toString();
+            if(data.contains("Spielstein")) {
+                String datan[] = data.split(":");
+                String spId = String.valueOf(((Spielstein) feld.getBesetzung()).getSpielerId());
+                data = datan[0] + ":" + spId + ":" + datan[1];
+            }
+            feldElement.setAttribute("data", data);
             feldElement.setAttribute("posX", String.valueOf(feld.getPosition().x));
             feldElement.setAttribute("posY", String.valueOf(feld.getPosition().y));
             felderElement.appendChild(feldElement);
         }
         Element playersElemets = doc.createElement("players");
         graphElement.appendChild(playersElemets);
+
+        int walkingIdSpawns = 0;
+        for(SpielerObjekt sp: runde.spielerListe){
+            Element e = doc.createElement("spawn");
+            e.setAttribute("id", String.valueOf(walkingIdSpawns++));
+            e.setAttribute("feldId", String.valueOf(sp.getSpawnFeld().getId()));
+            spawnsElement.appendChild(e);
+        }
+
         int playerid = 0;
         for(SpielerObjekt spieler: runde.spielerListe ){
             Element playerElement = doc.createElement("player");
@@ -97,6 +112,9 @@ public class XMLWorker {
             }
         }
 
+        Element amZugElement = doc.createElement("amZug");
+        amZugElement.setAttribute("zugCount", Integer.toString(runde.getAmZug()));
+        graphElement.appendChild(amZugElement);
 
         return doc;
     }

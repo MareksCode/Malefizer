@@ -27,6 +27,15 @@ public class SpielerObjekt implements Serializable {
 
     public Spielstein[] getSpielsteinListe(){return Figuren;}
 
+    public void setSpielstein(Spielstein sp){
+        for(int i = 0; i < 5; i++){
+            if(Figuren[i] != null){
+                Figuren[i] = sp;
+                return;
+            }
+        }
+    }
+
     public Feld getSpawnFeld() {
         return this.spawnFeld;
     }

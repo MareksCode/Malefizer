@@ -1,6 +1,10 @@
 package org.example;
 
 import org.example.stein.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -14,18 +18,64 @@ import java.util.Map;
 public class Runde implements Serializable {
     private static final long serialVersionUID = 1L;
     private boolean spielGewonnen;
-
-
+    Map<Integer, Feld> spawns;
+    private boolean isStartAllowed = true;
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     TerminalAusgabe gui = null;
     private int spielerAnzahl;
     SpielerObjekt[] spielerListe;
+
     public Runde(int spieler) {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.spielerAnzahl = spieler;
     }
+
+    public Runde (String dateiname){
+        isStartAllowed = false;
+        try {
+            SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this, dateiname);
+            Feld startFeld = SpielfeldHeinz.getStartfeld();
+            this.startFeld = startFeld;
+            spawns = SpielfeldHeinz.getSpawnFelder();
+            Map<String, Feld> feldMap = SpielfeldHeinz.feldMap;
+
+            Document doc = XMLWorker.readXML(dateiname);
+            Element root = doc.getDocumentElement();
+            Element currentPlayer = (Element) root.getElementsByTagName("amZug").item(0);
+            amZug = Integer.parseInt(currentPlayer.getAttribute("zugCount"));
+            System.out.println(amZug);
+
+            Element players = (Element) root.getElementsByTagName("players").item(0);
+            NodeList spielers =  players.getElementsByTagName("player");
+            spielerListe = new SpielerObjekt[spielers.getLength()];
+            for (int i = 0; i < spielers.getLength(); i++) {
+                spielerAnzahl++;
+                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this);
+                spielerListe[i] = sp;
+                System.out.println(spielerListe.length);
+                Element e = (Element) spielers.item(i);
+                NodeList childs = e.getElementsByTagName("spielstein");
+                for(int j = 0; j < childs.getLength(); j++){
+                    Element spielstein = (Element) childs.item(j);
+                    int id = Integer.parseInt(spielstein.getAttribute("feldId"));
+                    if (id == -1){
+                        sp.setSpielstein(new Spielstein(j,this, i));
+                    } else {sp.setSpielstein((Spielstein) feldMap.get(Integer.toString(id)).getBesetzung());}
+                }
+            }
+        } catch (Exception e){
+            isStartAllowed = true;
+            System.out.println(e);
+        }
+        gui = new TerminalAusgabe();
+        this.spielGewonnen = false ;
+    }
+    public int getAmZug() {
+        return amZug;
+    }
+
 
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {
         ArrayList<Feld> ergebnis = new ArrayList<>();
@@ -157,16 +207,13 @@ public class Runde implements Serializable {
         return chosenFeld;
     }
 
-    public void redrawAllAfterRestartTemp(){
-
-    }
 
     public void start() throws Exception {
         //neuen würfel kreieren
-
+        if(!isStartAllowed) return;
         SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
-
         Feld startFeld = SpielfeldHeinz.getStartfeld();
+
         this.startFeld = startFeld;
 
         gui = new TerminalAusgabe();
@@ -174,7 +221,6 @@ public class Runde implements Serializable {
          //spielerliste erstellen
         spielerListe = new SpielerObjekt[this.spielerAnzahl];
 
-        Map<Integer, Feld> spawns = SpielfeldHeinz.getSpawnFelder();
 
         for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
 

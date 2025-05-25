@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graph>
+    <spawns>
+        <spawn feldId="75" id="0"/>
+        <spawn feldId="79" id="1"/>
+        <spawn feldId="83" id="2"/>
+        <spawn feldId="87" id="3"/>
+    </spawns>
     <felder>
         <feld data="null" id="0" posX="0" posY="1"/>
         <feld data="null" id="1" posX="1" posY="1"/>
@@ -81,15 +87,15 @@
         <feld data="null" id="77" posX="12" posY="13"/>
         <feld data="null" id="78" posX="11" posY="13"/>
         <feld data="null" id="79" posX="10" posY="13"/>
-        <feld data="Spielstein:0" id="80" posX="9" posY="13"/>
+        <feld data="Spielstein:0:0" id="80" posX="9" posY="13"/>
         <feld data="null" id="81" posX="8" posY="13"/>
-        <feld data="Spielstein:1" id="82" posX="7" posY="13"/>
+        <feld data="Spielstein:3:1" id="82" posX="7" posY="13"/>
         <feld data="null" id="83" posX="6" posY="13"/>
         <feld data="null" id="84" posX="5" posY="13"/>
         <feld data="null" id="85" posX="4" posY="13"/>
         <feld data="null" id="86" posX="3" posY="13"/>
         <feld data="null" id="87" posX="2" posY="13"/>
-        <feld data="Spielstein:0" id="88" posX="1" posY="13"/>
+        <feld data="Spielstein:2:0" id="88" posX="1" posY="13"/>
         <feld data="null" id="89" posX="0" posY="13"/>
         <feld data="null" id="90" posX="0" posY="12"/>
         <feld data="null" id="91" posX="3" posY="11"/>
@@ -110,7 +116,7 @@
         <feld data="null" id="106" posX="15" posY="11"/>
         <feld data="Sperrstein:10" id="107" posX="16" posY="11"/>
         <feld data="null" id="108" posX="16" posY="12"/>
-        <feld data="Spielstein:1" id="109" posX="16" posY="13"/>
+        <feld data="Spielstein:1:1" id="109" posX="16" posY="13"/>
         <feld data="null" id="110" posX="15" posY="13"/>
         <feld data="null" id="111" posX="12" posY="12"/>
     </felder>
@@ -257,4 +263,5 @@
             <spielstein feldId="-1"/>
         </player>
     </players>
+    <amZug zugCount="1"/>
 </graph>
