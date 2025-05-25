@@ -8,11 +8,15 @@ import org.example.stein.Sperrstein;
 import org.example.stein.Spielstein;
 
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpielfeldHeinz {
+public class SpielfeldHeinz implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     static int[][] richtungen = {{-1,0},{1,0},{0,1},{0,-1}};
     static Map<String, Feld> feldMap = new HashMap<>();
     static Map<Integer, Feld> spawnMap = new HashMap<>(); // <id, spawnfeld>
@@ -31,6 +35,11 @@ public class SpielfeldHeinz {
     }
 
     public static SpielfeldHeinz getInstance(Runde runde) throws Exception {
+        //Löschen
+        if (!feldMap.isEmpty()) {
+            return new SpielfeldHeinz(runde);
+        }
+        //Löschen
         Document doc = XMLWorker.readXML("spielfeld.xml");
         Element root = doc.getDocumentElement();
         Element felder = (Element) root.getElementsByTagName("felder").item(0);
@@ -90,12 +99,27 @@ public class SpielfeldHeinz {
                 Sperrstein newSperrstein = new Sperrstein(Integer.parseInt(dataSplit[1]), runde);
                 feld.setBesetzung(newSperrstein);
                 newSperrstein.setFeld(feld);
-            }else if(dataSplit[0].equals("Spielstein")){
-                feld.setBesetzung(new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1));
+                //Neu
+            }else if(dataSplit[0].equals("Spielstein")) {
+                Spielstein spielstein = new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1);
+                feld.setBesetzung(spielstein);
+                spielstein.setFeld(feld); // <-- wichtig: damit die Referenz zum Feld korrekt ist
             }
+
+            //Neu
+
+            //}else if(dataSplit[0].equals("Spielstein")){
+                //feld.setBesetzung(new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1));
+           // }
         }
         return feld;
     }
+
+    // Neu
+    public static Collection<Feld> getAlleFelder() {
+        return feldMap.values();
+    }
+    //Neu
 
     public static Feld getStartfeld() {
         return feldMap.get("0");

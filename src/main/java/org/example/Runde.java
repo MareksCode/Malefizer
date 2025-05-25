@@ -2,19 +2,23 @@ package org.example;
 
 import org.example.stein.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-public class Runde {
+public class Runde implements Serializable {
+    private static final long serialVersionUID = 1L;
     private boolean spielGewonnen;
+
 
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     TerminalAusgabe gui = null;
     private int spielerAnzahl;
+    SpielerObjekt[] spielerListe;
     public Runde(int spieler) {
         this.spielGewonnen = false;
         this.amZug = -1;
@@ -96,6 +100,7 @@ public class Runde {
         return wuerfel.Roll();
     }
 
+
     private Feld spielerZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {
         System.out.println("Please choose what Spielfeld you want to bewegen on (using the ID)");
         BufferedReader r = new BufferedReader(
@@ -103,10 +108,19 @@ public class Runde {
 
         String s = r.readLine();
 
+
         int chosenID;
 
         try {
             chosenID = Integer.parseInt(s);
+            if (chosenID == 1000) {
+                try {
+                    SERWorker.speichern(this, "Test.ser");
+                    System.out.println("Spielstand gespeichert!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if(chosenID<0 || chosenID>111) { //kein Spielabbruch bei falsche ID
                 return spielerZiehe(moeglicheFelder, figur);
@@ -133,8 +147,12 @@ public class Runde {
         return chosenFeld;
     }
 
+    public void redrawAllAfterRestartTemp(){
+
+    }
+
     public void start() throws Exception {
-        Wuerfel wuerfel = new Wuerfel(); //neuen würfel kreieren
+        //neuen würfel kreieren
 
         SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
 
@@ -143,7 +161,7 @@ public class Runde {
 
         gui = new TerminalAusgabe();
 
-        SpielerObjekt[] spielerListe; //spielerliste erstellen
+         //spielerliste erstellen
         spielerListe = new SpielerObjekt[this.spielerAnzahl];
 
         Map<Integer, Feld> spawns = SpielfeldHeinz.getSpawnFelder();
@@ -153,7 +171,11 @@ public class Runde {
             SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this);
             spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
         }
+        spielloop();
+    }
 
+    public void spielloop() throws Exception {
+        Wuerfel wuerfel = new Wuerfel();
         while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);

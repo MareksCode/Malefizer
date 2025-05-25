@@ -2,9 +2,11 @@ package org.example;
 
 import org.example.stein.Stein;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Feld {
+public class Feld implements Serializable {
+    private static final long serialVersionUID = 1L;
     //private int faerbung;
     private ArrayList<Feld> nachbarn;
     private Stein besetzung;

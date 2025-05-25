@@ -1,7 +1,10 @@
 package org.example.stein;
 import org.example.Runde;
 
-public abstract class Stein {
+import java.io.Serializable;
+
+public abstract class Stein implements Serializable {
+    private static final long serialVersionUID = 1L;
     protected int id;
     protected Runde dazugehoerendeRunde;
     public Stein(int id, Runde dazugehoerendeRunde) {

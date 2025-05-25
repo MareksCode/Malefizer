@@ -6,9 +6,10 @@ import org.example.Runde;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Sperrstein extends Stein {
+public class Sperrstein extends Stein implements Serializable {
     private Feld feld;
     public Sperrstein(int id, Runde dazugehoerendeRunde) {
 

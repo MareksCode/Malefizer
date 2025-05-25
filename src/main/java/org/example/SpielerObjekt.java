@@ -2,7 +2,10 @@ package org.example;
 
 import org.example.stein.Spielstein;
 
-public class SpielerObjekt {
+import java.io.Serializable;
+
+public class SpielerObjekt implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Feld spawnFeld;
     private Spielstein[] Figuren;
 

@@ -3,7 +3,9 @@ package org.example.stein;
 import org.example.Feld;
 import org.example.Runde;
 
-public class Spielstein extends Stein {
+import java.io.Serializable;
+
+public class Spielstein extends Stein implements Serializable {
     private int spielerId;
     private Feld feld;
     public Spielstein(int id, Runde dazugehoerendeRunde, int spielerId) {

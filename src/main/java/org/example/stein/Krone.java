@@ -2,7 +2,9 @@ package org.example.stein;
 
 import org.example.Runde;
 
-public class Krone extends Stein {
+import java.io.Serializable;
+
+public class Krone extends Stein implements Serializable {
     public Krone(int id, Runde dazugehoerendeRunde) {
         super(id, dazugehoerendeRunde);
     }

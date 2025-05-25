@@ -1,8 +1,21 @@
 package org.example;
 
-public class Main {
+import java.io.IOException;
+
+public class Main  {
     public static void main(String[] args) throws Exception {
-        org.example.Runde runde = new org.example.Runde(4);
-        runde.start();
+       //org.example.Runde runde = new org.example.Runde(4);
+       //runde.start();
+
+        Runde geladeneRunde = SERWorker.readSER("Test.ser");
+
+
+        geladeneRunde.spielloop();
+
+            // Bestätigen, dass es geklappt hat:
+            //System.out.println("Spielstand geladen!");1
+            //geladeneRunde.start();
+
     }
+
 }

@@ -32,7 +32,7 @@ public class XMLWorker {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
         transformer.transform(new DOMSource(doc), new StreamResult(new File(filename)));
-        System.out.println("✅ XML gespeichert unter: " + filename);
+        System.out.println("XML gespeichert unter: " + filename);
     }
 
     public static String toXML(Feld startFeld) throws ParserConfigurationException, TransformerException {
