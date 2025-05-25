@@ -26,7 +26,7 @@ public class SocketService {
     private Runde runde = new Runde(this);
 
     public void onExit(){
-        System.out.println("🟢 Verbindung beenden...");
+        System.out.println("🟡 Verbindung beenden...");
         out.println("EXIT");
     }
 
