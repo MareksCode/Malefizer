@@ -6,7 +6,7 @@ import org.example.stein.*;
 import java.util.ArrayList;
 
 
-public class Runde{
+public class Runde {
     private boolean spielGewonnen;
     SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
     public Feld startFeld = SpielfeldHeinz.getStartfeld(); //ToDo: pfusch ändern
@@ -17,14 +17,10 @@ public class Runde{
     TerminalAusgabe gui = null;
 
     
-    public Runde(SocketService socket) throws Exception {
+    public Runde(SocketService socket) {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.socket = socket;
-    }
-
-    public void end(){
-        System.out.println("Spiel beendet.");
     }
 
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {
@@ -161,6 +157,9 @@ public class Runde{
         System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
 
         */
+    public void end(){
+        return;
+    }
     }
 
 

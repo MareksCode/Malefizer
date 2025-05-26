@@ -2,7 +2,6 @@ package org.example.client;
 
 import org.example.Feld;
 import org.example.Runde;
-import org.example.SpielfeldHeinz;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -24,10 +23,11 @@ public class SocketService {
     private PrintWriter out;
     private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
 
-
     private Runde runde = new Runde(this);
 
-    public SocketService() throws Exception {
+    public void onExit(){
+        System.out.println("🟡 Verbindung beenden...");
+        out.println("EXIT");
     }
 
     public void connectAndListen(LoginResponse login) throws Exception {
@@ -84,7 +84,7 @@ public class SocketService {
                         closeConnection();
                         break;
                     case "PING":
-                        out.println("PONG\n");
+                        out.println("PONG");
                         break;
                 }
 

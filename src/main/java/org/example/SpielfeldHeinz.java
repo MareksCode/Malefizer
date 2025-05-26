@@ -30,8 +30,13 @@ public class SpielfeldHeinz {
         SpielfeldHeinz.runde = runde;
     }
 
-    public static SpielfeldHeinz getInstance(Runde runde) throws Exception {
-        Document doc = XMLWorker.readXML("spielfeld.xml");
+    public static SpielfeldHeinz getInstance(Runde runde){
+        Document doc = null;
+        try {
+            doc = XMLWorker.readXML("spielfeld.xml");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         Element root = doc.getDocumentElement();
         Element felder = (Element) root.getElementsByTagName("felder").item(0);
         Element kanten = (Element) root.getElementsByTagName("kanten").item(0);
@@ -45,7 +50,12 @@ public class SpielfeldHeinz {
         for (int i = 0; i < fields.getLength(); i++) {
             Element field = (Element) fields.item(i);
             String id = field.getAttribute("id");
-            Feld feld = getFeld(runde, field, id);
+            Feld feld = null;
+            try{
+                feld = getFeld(runde, field, id);
+            } catch(Exception e){
+                throw new RuntimeException(e);
+            }
 
             feldMap.put(id, feld);
         }
