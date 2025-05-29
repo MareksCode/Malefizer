@@ -10,8 +10,7 @@ public class Main  {
     public static void main(String[] args) throws Exception {
 
 
-        System.out.println("new Game = 1\n" +
-                "load Game = 2");
+        System.out.println("new Game = 1\nload Game from xml = 2");
 
 
         int auswahl=0;
@@ -19,16 +18,13 @@ public class Main  {
         try{
             BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
             auswahl = Integer.parseInt(read.readLine());
-        }
-        catch (IOException e){
-            auswahl = 0;
+        } catch (IOException e){
             return;
         }
 
         switch (auswahl) {
             case 1:
-                // spawns null spiel kann nicht gestartet werden
-                org.example.Runde runde = new org.example.Runde(4);
+                Runde runde = new Runde(4);
                 runde.start();
                 break;
 
@@ -37,6 +33,8 @@ public class Main  {
                 rundeLoad.spielloop();
                 break;
 
+            default:
+                System.out.println("not an option");
         }
 
 

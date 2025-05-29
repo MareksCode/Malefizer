@@ -30,6 +30,7 @@ public class Runde implements Serializable {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.spielerAnzahl = spieler;
+
     }
 
     public Runde (String dateiname){
@@ -216,6 +217,8 @@ public class Runde implements Serializable {
 
         this.startFeld = startFeld;
 
+        spawns = SpielfeldHeinz.getSpawnFelder();
+
         gui = new TerminalAusgabe();
 
          //spielerliste erstellen
@@ -235,6 +238,8 @@ public class Runde implements Serializable {
         while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);
+
+            System.out.println(spielerAnzahl);
 
             this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
