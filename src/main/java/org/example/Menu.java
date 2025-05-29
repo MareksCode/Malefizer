@@ -11,13 +11,14 @@ public class Menu {
         System.out.println("How many players want to play? max. 4 players");
 
         BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-        spieleranzahl = Integer.parseInt(read.readLine());
+
 
         try{
+            spieleranzahl = Integer.parseInt(read.readLine());
             if(spieleranzahl<1 || spieleranzahl>4) { //kein Spielabbruch bei falscher Zahleingabe
                 return Menu(spieleranzahl);
             }
-        } catch (IOException e){
+        } catch (NumberFormatException e){
             return Menu(spieleranzahl);
         }
 
