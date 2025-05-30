@@ -2,7 +2,6 @@ package org.example;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
 import java.io.IOException;
 
 
@@ -13,7 +12,7 @@ public class Main  {
         System.out.println("new Game = 1\nload Game from xml = 2");
 
 
-        int auswahl=0;
+        int auswahl;
 
         try{
             BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
@@ -24,8 +23,10 @@ public class Main  {
 
         switch (auswahl) {
             case 1:
-                Runde runde = new Runde(4);
-                runde.start();
+                int spieleranzahl=0;
+                Menu menu = new Menu();
+                menu.Menu(spieleranzahl);
+
                 break;
 
             case 2:

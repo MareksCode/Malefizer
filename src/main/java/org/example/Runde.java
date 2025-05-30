@@ -23,14 +23,16 @@ public class Runde implements Serializable {
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     TerminalAusgabe gui = null;
+    private final int MAX_SPIELER=4;
     private int spielerAnzahl;
+    private int botAnzahl;
     SpielerObjekt[] spielerListe;
 
     public Runde(int spieler) {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.spielerAnzahl = spieler;
-
+        this.botAnzahl = MAX_SPIELER-spieler;
     }
 
     public Runde (String dateiname){
@@ -53,7 +55,7 @@ public class Runde implements Serializable {
             spielerListe = new SpielerObjekt[spielers.getLength()];
             for (int i = 0; i < spielers.getLength(); i++) {
                 spielerAnzahl++;
-                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this);
+                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this,false); //todo die behandlung mit bots fehlt
                 spielerListe[i] = sp;
                 System.out.println(spielerListe.length);
                 Element e = (Element) spielers.item(i);
@@ -227,7 +229,13 @@ public class Runde implements Serializable {
 
         for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
 
-            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this);
+            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, false);
+            spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
+        }
+
+        for (int spielerNum = 0; spielerNum < this.botAnzahl; spielerNum++) { //spielerspawns für Bots erstellen
+
+            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, true);
             spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
         }
         spielloop();
