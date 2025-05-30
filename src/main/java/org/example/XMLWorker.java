@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.stein.Spielstein;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -15,10 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class XMLWorker {
     public static Document readXML(String filename) throws Exception {
@@ -27,30 +25,27 @@ public class XMLWorker {
         return db.parse(new File(filename));
     }
 
-    public static void toXML(Feld startFeld, String filename) throws ParserConfigurationException, TransformerException {
-        Document doc = createDocument(startFeld);
+    public static void toXML(Feld startFeld, Runde runde, String filename ) throws ParserConfigurationException, TransformerException {
+        Document doc = createDocument(startFeld, runde);
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        System.out.println(System.getProperty("user.dir"));
 
-        transformer.transform(new DOMSource(doc), new StreamResult(new File(filename)));
-        System.out.println("✅ XML gespeichert unter: " + filename);
+        transformer.transform(new DOMSource(doc), new StreamResult(new File(System.getProperty("user.dir") + filename)));
+        System.out.println("XML gespeichert unter: " + filename);
     }
 
-    public static String toXML(Feld startFeld) throws ParserConfigurationException, TransformerException {
-        Document doc = createDocument(startFeld);
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
-        return writer.toString();
+    public static Document stringToDocument(String xmlStr) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new ByteArrayInputStream(xmlStr.getBytes()));
     }
 
-    private static Document createDocument(Feld startFeld) throws ParserConfigurationException {
+    private static Document createDocument(Feld startFeld,Runde runde) throws ParserConfigurationException {
         Map<Integer, Feld> felder = new HashMap<>();
         Set<String> kanten = new HashSet<>();
         collectToMap(startFeld, felder, kanten, new HashSet<>());
-
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.newDocument();
@@ -59,6 +54,8 @@ public class XMLWorker {
         doc.appendChild(graphElement);
         Element felderElement = doc.createElement("felder");
         Element kantenElement = doc.createElement("kanten");
+        Element spawnsElement = doc.createElement("spawns");
+        graphElement.appendChild(spawnsElement);
         graphElement.appendChild(felderElement);
         graphElement.appendChild(kantenElement);
 
@@ -73,20 +70,23 @@ public class XMLWorker {
         for (Feld feld : felder.values()) {
             Element feldElement = doc.createElement("feld");
             feldElement.setAttribute("id", Integer.toString(feld.getId()));
-            feldElement.setAttribute("data", feld.getBesetzung() != null ? feld.getBesetzung().toString() : "null");
+            String data;
+            if(feld.getBesetzung() == null) data = "null";
+            else data = feld.getBesetzung().toString();
+            if(data.contains("Spielstein")) {
+                String datan[] = data.split(":");
+                String spId = String.valueOf(((Spielstein) feld.getBesetzung()).getSpielerId());
+                data = datan[0] + ":" + spId + ":" + datan[1];
+            }
+            feldElement.setAttribute("data", data);
             feldElement.setAttribute("posX", String.valueOf(feld.getPosition().x));
             feldElement.setAttribute("posY", String.valueOf(feld.getPosition().y));
             felderElement.appendChild(feldElement);
         }
+        Element playersElemets = doc.createElement("players");
+        graphElement.appendChild(playersElemets);
 
         return doc;
-    }
-
-    public static Document stringToDocument(String xmlStr) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(new ByteArrayInputStream(xmlStr.getBytes()));
     }
 
     private static void collectToMap(Feld feld, Map<Integer, Feld> felder, Set<String> kanten, Set<Integer> marked) {
