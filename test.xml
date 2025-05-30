@@ -1,0 +1,18 @@
+<games>
+    <game>
+        <owner>h</owner>
+        <maxPlayers>5</maxPlayers>
+        <currentPlayers>1</currentPlayers>
+        <lastModified>1970-01-01T00:00</lastModified>
+        <status>open</status>
+        <id>6</id>
+    </game>
+    <game>
+        <owner>h</owner>
+        <maxPlayers>5</maxPlayers>
+        <currentPlayers>1</currentPlayers>
+        <lastModified>1970-01-01T00:00</lastModified>
+        <status>open</status>
+        <id>7</id>
+    </game>
+</games>

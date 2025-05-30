@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -79,6 +80,13 @@ public class XMLWorker {
         }
 
         return doc;
+    }
+
+    public static Document stringToDocument(String xmlStr) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new ByteArrayInputStream(xmlStr.getBytes()));
     }
 
     private static void collectToMap(Feld feld, Map<Integer, Feld> felder, Set<String> kanten, Set<Integer> marked) {

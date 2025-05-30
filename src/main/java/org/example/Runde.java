@@ -8,19 +8,21 @@ import java.util.ArrayList;
 
 public class Runde {
     private boolean spielGewonnen;
-    SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
-    public Feld startFeld = SpielfeldHeinz.getStartfeld(); //ToDo: pfusch ändern
+    SpielfeldHeinz heinz;
+    public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     private SocketService socket;
 
     private SpielerObjekt spielerObjekt;
     TerminalAusgabe gui = null;
 
-    
-    public Runde(SocketService socket) {
+
+    public Runde(SocketService socket, String xmlStr) {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.socket = socket;
+        heinz = SpielfeldHeinz.getInstance(this, xmlStr);
+        startFeld = SpielfeldHeinz.getStartfeld();
     }
 
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {
@@ -39,15 +41,21 @@ public class Runde {
                 ergebnis.add(currentFeld);
             }
 
-            if (!currentFeld.kannDrueber()) {continue;} //wenn man nicht drüber kann, nicht zu den nachbarn schauen
+            if (!currentFeld.kannDrueber()) {
+                continue;
+            } //wenn man nicht drüber kann, nicht zu den nachbarn schauen
 
             ArrayList<Feld> nachbarn = currentFeld.getNachbarn();
             for (Feld nachbar : nachbarn) {
-                if (tiefe+1 > laufLaenge) {continue;} //wenn zu tief
-                if (nachbar.getGefaerbt()) {continue;} //wenn schon drübergegangen
+                if (tiefe + 1 > laufLaenge) {
+                    continue;
+                } //wenn zu tief
+                if (nachbar.getGefaerbt()) {
+                    continue;
+                } //wenn schon drübergegangen
                 queue.add(nachbar);
                 nachbar.setGefaerbt(true);
-                nachbar.setTiefe(tiefe+1);
+                nachbar.setTiefe(tiefe + 1);
             }
 
         }
@@ -64,7 +72,7 @@ public class Runde {
         return ergebnis;
     }
 
-    public void macheZug(){
+    public void macheZug() {
         //würfeln
         // 1.  Würfel anfordern
         socket.requestRoll(0)
@@ -87,80 +95,26 @@ public class Runde {
 
         //select feld aus den möglichen feldern
         Spielstein sp = spielerObjekt.getFigur(simulateInputFigurnummer);
-        if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+        if (sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
         socket.spielerZiehe(sp.getCurrentFeld(), moeglicheFelder.getFirst().getId());
     }
 
 
-    public void bewege(String feldIdFrom, String feldIdTo){
+    public void bewege(String feldIdFrom, String feldIdTo) {
         Feld sourceField = SpielfeldHeinz.feldMap.get(feldIdFrom);
         Feld destinatonField = SpielfeldHeinz.feldMap.get(feldIdFrom);
         sourceField.getBesetzung().setFeld(destinatonField);
     }
 
-    public void setSpieler(String feldid){
+    public void setSpieler(String feldid) {
         Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
         spielerObjekt = new SpielerObjekt(spawn, 0, this);
     }
 
-
-
-    //alte main auskommentiert für referenz
-    /*
-    public void start() throws Exception {
-        SpielfeldHeinz heinz = SpielfeldHeinz.getInstance(this);
-
-        Feld startFeld = SpielfeldHeinz.getStartfeld();
-        this.startFeld = startFeld;
-
-        gui = new TerminalAusgabe();
-
-
-        Map<Integer, Feld> spawns = SpielfeldHeinz.getSpawnFelder();
-
-
-        while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
-            System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
-            gui.update(startFeld);
-
-            this.amZug = (this.amZug + 1) % this.spielerAnzahl;
-            SpielerObjekt spieler = spielerListe[this.amZug];
-            System.out.println("Spieler " + (this.amZug+1) + " ist am Zug");
-
-            //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
-            int figurNummer = spielerZug();
-            int wuerfelErgebnis = spielerWuerfel(wuerfel);
-
-            System.out.println("you würfeled: " + wuerfelErgebnis);
-
-            Spielstein figur = spieler.getFigur(figurNummer);
-            Feld currentFeld = figur.getCurrentFeld();
-            if (currentFeld == null) {
-                currentFeld = spieler.getSpawnFeld();
-            }
-            ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(currentFeld, wuerfelErgebnis);
-
-            if (!moeglicheFelder.isEmpty()) {
-                Feld chosenFeld = spielerZiehe(moeglicheFelder, figur);
-                // 1) remove figur
-                currentFeld.removeBesetzung();
-
-                // 2) figur schlagen
-                figur.setFeld(chosenFeld);
-
-                // 3) ui update
-                gui.update(chosenFeld);
-            } else {
-                System.out.println("you can't move with this figure.");
-            }
-        }
-        System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
-
-        */
-    public void end(){
+    public void end() {
         return;
     }
-    }
+}
 
 
 

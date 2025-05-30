@@ -30,13 +30,20 @@ public class SpielfeldHeinz {
         SpielfeldHeinz.runde = runde;
     }
 
-    public static SpielfeldHeinz getInstance(Runde runde){
+    public static SpielfeldHeinz getInstance(Runde runde, String xmlString){
         Document doc = null;
+//        try {
+//            doc = XMLWorker.readXML("spielfeld.xml");
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+
         try {
-            doc = XMLWorker.readXML("spielfeld.xml");
+            doc = XMLWorker.stringToDocument(xmlString);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         Element root = doc.getDocumentElement();
         Element felder = (Element) root.getElementsByTagName("felder").item(0);
         Element kanten = (Element) root.getElementsByTagName("kanten").item(0);

@@ -42,8 +42,13 @@ public class AuthClient {
         System.out.println(loginConn.getHeaderFields());
         Map<String, List<String>> headers = loginConn.getHeaderFields();
         String setCookieHeader = loginConn.getHeaderField("Set-Cookie");
+        String redirectLocation = loginConn.getHeaderField("Location");
 
-        return new LoginResponse("localhost", 31415, setCookieHeader);
+        LoginResponse lRep = new LoginResponse("localhost", 31415, setCookieHeader);
+
+        if (redirectLocation.contains("error")) lRep.authIsFailed();
+
+        return lRep;
     }
     static void disableSslVerification() {
         try {

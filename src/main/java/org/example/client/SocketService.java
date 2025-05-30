@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
@@ -21,9 +22,14 @@ public class SocketService {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private int rundenNummer;
     private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
 
-    private Runde runde = new Runde(this);
+    private Runde runde;
+
+    public SocketService(int rundenId){
+        this.rundenNummer = rundenId;
+    }
 
     public void onExit(){
         System.out.println("🟡 Verbindung beenden...");
@@ -42,6 +48,7 @@ public class SocketService {
 
         // Auth-Token senden
         out.println(login.getToken());
+        out.println("SETGAME:" + rundenNummer);
 
         // Server-Listener-Thread starten
         new Thread(this::listenToServer).start();
@@ -86,15 +93,15 @@ public class SocketService {
                     case "PING":
                         out.println("PONG");
                         break;
+                    case "SETMAP": //wichtig das erste element zu trennen aber nciht nur index 1 zu nehmen, da in der xml auch mit : gearbeitet wird
+                        String xmlStr = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                        runde = new Runde(this, xmlStr);
+                        break;
                 }
 
 
                 if (serverMsg.contains("EXIT")) {
                     closeConnection();
-                }
-
-                if (serverMsg.contains("PING")) {
-                    out.println("PONG");
                 }
             }
         } catch (IOException e) {
