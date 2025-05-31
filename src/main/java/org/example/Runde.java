@@ -23,6 +23,8 @@ public class Runde {
         this.socket = socket;
         heinz = SpielfeldHeinz.getInstance(this, xmlStr);
         startFeld = SpielfeldHeinz.getStartfeld();
+        gui = new TerminalAusgabe();
+        gui.update(startFeld);
     }
 
     private ArrayList<Feld> findeMoegicheFelder(Feld startFeld, int laufLaenge) {

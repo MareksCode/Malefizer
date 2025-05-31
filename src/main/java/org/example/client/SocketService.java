@@ -94,7 +94,7 @@ public class SocketService {
                         out.println("PONG");
                         break;
                     case "SETMAP": //wichtig das erste element zu trennen aber nciht nur index 1 zu nehmen, da in der xml auch mit : gearbeitet wird
-                        String xmlStr = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                        String xmlStr = String.join(":", Arrays.copyOfRange(args, 1, args.length));
                         runde = new Runde(this, xmlStr);
                         break;
                 }
