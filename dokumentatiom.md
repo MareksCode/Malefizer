@@ -1,9 +1,10 @@
-# Dokumentation des Built-tooling Prozesses !!!!!!!!!
+# Dokumentation des Built-tooling Prozesses !
 ## Ziel
 
 - Projekt wird automatisch über Build Tool Maven gesteuert 
 - Plugin-Verwaltung 
 - Kann ausführbare Datei des Spieles erzeugen 
+- Bibliotheken verwalten ????
 
 
 ## Werkzeuge 
