@@ -96,6 +96,7 @@ public class GameLauncher extends JFrame implements ActionListener {
             }*/
 
             try {
+                dispose();
                 SocketService socketService = new SocketService(1);
                 socketService.connectAndListen(loginResponse);
                 Runtime.getRuntime().addShutdownHook(new Thread(socketService::onExit));

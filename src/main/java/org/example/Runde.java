@@ -79,33 +79,48 @@ public class Runde {
         // 1.  Würfel anfordern
         socket.requestRoll(0)
                 .thenAcceptAsync(wurf -> {                    // Callback sobald Ergebnis kommt
+                    System.out.println(wurf);
                     try {
-                        verarbeiteWurf(0, wurf);
+                        System.out.println("Ergebnis: " + wurf);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    verarbeiteWurf(0, wurf);
+                })
+                .exceptionally(e -> {
+                    System.out.println("Fehler beim Würfeln: " + e.getMessage());
+                    return null;
                 });
     }
 
-    private void verarbeiteWurf(int spielerId, int wurf) throws Exception {
+    private void verarbeiteWurf(int spielerId, int wurf)  {
         //dieser berecich muss angepasst werden, sobald die gui da ist.
         //es werden inputs benötigt, die nachfolgend simuliert werden.
         //es wird davon ausgegangen, das jeder spieler aktuell mindestens einen zug amchen kann, sonst crashen wir!
 
         int simulateInputFigurnummer = 1;
-        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(startFeld, wurf);
+        //testen ob spielstein schon im feld sonst spawn
+        Spielstein sp = spielerObjekt.getFigur(simulateInputFigurnummer);
+        if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(sp.getCurrentFeld(), wurf);
 
         //select feld aus den möglichen feldern
-        Spielstein sp = spielerObjekt.getFigur(simulateInputFigurnummer);
         if (sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
         socket.spielerZiehe(sp.getCurrentFeld(), moeglicheFelder.getFirst().getId());
+    }
+
+    public void createNewSpielsteinOnFeld(String feld, int spielerNummer, int figurNummer) {
+        Feld feldObjekt = SpielfeldHeinz.feldMap.get(feld);
+        feldObjekt.setBesetzung(new Spielstein(spielerNummer, this, figurNummer));
     }
 
 
     public void bewege(String feldIdFrom, String feldIdTo) {
         Feld sourceField = SpielfeldHeinz.feldMap.get(feldIdFrom);
-        Feld destinatonField = SpielfeldHeinz.feldMap.get(feldIdFrom);
-        sourceField.getBesetzung().setFeld(destinatonField);
+        Feld destinatonField = SpielfeldHeinz.feldMap.get(feldIdTo);
+        if(sourceField.getBesetzung() != null) sourceField.getBesetzung().setFeld(destinatonField);
+        else
+        gui.update(startFeld);
     }
 
     public void setSpieler(String feldid) {

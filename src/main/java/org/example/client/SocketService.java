@@ -23,7 +23,7 @@ public class SocketService {
     private BufferedReader in;
     private PrintWriter out;
     private int rundenNummer;
-    private final Map<String, CompletableFuture<String>> pending = new ConcurrentHashMap<>();
+    private final Map<String, CompletableFuture<Integer>> pending = new ConcurrentHashMap<>();
 
     private Runde runde;
 
@@ -77,12 +77,13 @@ public class SocketService {
                         runde.setSpieler(args[1]);
                         break;
                     case "MOV":
-                        runde.macheZug();
+                        runde.bewege(args[1], args[2]);
                         break;
                     case "TURN":
+                        runde.macheZug();
                         break;
                     case "FAIL":
-                        System.out.println("Fehler gesendet vom server: " + args[1]);
+                        System.out.println("Fehler gesendet vom server: " + serverMsg);
                         break;
                     case "ROLL":
                         returnWuerfelErgebniss(args[1], args[2]);
@@ -92,6 +93,9 @@ public class SocketService {
                         break;
                     case "PING":
                         out.println("PONG");
+                        break;
+                    case "CRTSTN":
+                        runde.createNewSpielsteinOnFeld(args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
                         break;
                     case "SETMAP": //wichtig das erste element zu trennen aber nciht nur index 1 zu nehmen, da in der xml auch mit : gearbeitet wird
                         String xmlStr = String.join(":", Arrays.copyOfRange(args, 1, args.length));
@@ -117,10 +121,15 @@ public class SocketService {
         out.printf("MOV:%d:%d%n", feld.getId(), feldnummer);
     }
 
-    private void returnWuerfelErgebniss(String correlationId, String id) {
-        CompletableFuture<String> future = pending.remove(id);
+    private void returnWuerfelErgebniss(String correlationId, String wurfelzahl) {
+        int zahl = Integer.parseInt(wurfelzahl);
+        System.out.println("corrid " + correlationId + " wurfelzahl: " + wurfelzahl);
+        CompletableFuture<Integer> future = pending.remove(correlationId);
+
         if (future != null) {
-            future.complete(correlationId); // Antwort dem wartenden Thread geben
+            future.complete(zahl); // Antwort dem wartenden Thread geben
+        } else {
+            System.out.println("🔴 Unbekannter Wurfel-Request: " + correlationId);
         }
     }
 
@@ -128,8 +137,10 @@ public class SocketService {
     public CompletableFuture<Integer> requestRoll(int playerId) {
         String correlationId = UUID.randomUUID().toString();
         CompletableFuture<Integer> fut = new CompletableFuture<>();
-        pending.put(correlationId, (CompletableFuture) fut);      // ungeprüft cast ok
-        out.printf("ROLL:%s:%d%n", correlationId, playerId);      // z.B.  ROLL:<cid>:<player>
+
+        pending.put(correlationId, fut);      // ungeprüft cast ok
+
+        out.printf("WURFEL:%s:%d%n", correlationId, playerId);      // z.B.  ROLL:<cid>:<player>
         return fut;
     }
 
