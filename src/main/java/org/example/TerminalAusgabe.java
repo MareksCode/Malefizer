@@ -51,7 +51,7 @@ public class TerminalAusgabe implements GUIface {
                 case "Krone" -> spielfeld[1][1] = " K  ";
                 case "Sperrstein" -> spielfeld[1][1] = " S  ";
                 case "Spielstein" -> {
-                    spielfeld[1][1] = "P" + (((Spielstein) feld.getBesetzung()).getSpielerId()+1) + "." + (Integer.parseInt(split[1])+1);
+                    spielfeld[1][1] = "P" + (((Spielstein) feld.getBesetzung()).getSpielerId()) + "." + (Integer.parseInt(split[1]));
                 }
                 default -> spielfeld[1][1] = "    ";
             }

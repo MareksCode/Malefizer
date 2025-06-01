@@ -79,11 +79,14 @@ public class Sperrstein extends Stein {
         return chosenFeld;
     }
     public void schlagen() throws Exception {
-        this.feld.removeBesetzung();
+        if (this.feld != null) {
+            this.feld.removeBesetzung();
+            this.feld = null;
+        } // gleich behandeln wie einen spielstein, da das feld neu setzen vom handler übernommen wird
 
-        Feld newFeld = steinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
-        this.setFeld(newFeld);
-        System.out.println("setFeld bei sperrstein hat geklappt");
+        //Feld newFeld = steinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
+        //this.setFeld(newFeld);
+        //System.out.println("setFeld bei sperrstein hat geklappt");
     }
     @Override
     public String toString() {

@@ -3,6 +3,9 @@ package org.example;
 import org.example.client.SocketService;
 import org.example.stein.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -32,6 +35,7 @@ public class Runde {
         ArrayList<Feld> angeschauteFelder = new ArrayList<>();
         ArrayList<Feld> queue = new ArrayList<>();
         queue.add(startFeld);
+        startFeld.setGefaerbt(true);
 
         while (!queue.isEmpty()) {
             Feld currentFeld = queue.removeFirst();
@@ -74,10 +78,26 @@ public class Runde {
         return ergebnis;
     }
 
+    public int moveBlocker() {
+        // lese nutzerineingabe und gebe sie zurück
+        System.out.println("wohin u want to bewegen the spielstein?");
+        BufferedReader r = new BufferedReader(
+                new InputStreamReader(System.in));
+
+        String s;
+        try {
+            s = r.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return Integer.parseInt(s);
+    }
+
+
     public void macheZug() {
         //würfeln
         // 1.  Würfel anfordern
-        socket.requestRoll(0)
+        socket.requestRoll(spielerObjekt.getId())
                 .thenAcceptAsync(wurf -> {                    // Callback sobald Ergebnis kommt
                     System.out.println(wurf);
                     try {
@@ -85,7 +105,7 @@ public class Runde {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    verarbeiteWurf(0, wurf);
+                    verarbeiteWurf(spielerObjekt.getId(), wurf);
                 })
                 .exceptionally(e -> {
                     System.out.println("Fehler beim Würfeln: " + e.getMessage());
@@ -109,23 +129,30 @@ public class Runde {
         socket.spielerZiehe(sp.getCurrentFeld(), moeglicheFelder.getFirst().getId());
     }
 
-    public void createNewSpielsteinOnFeld(String feld, int spielerNummer, int figurNummer) {
-        Feld feldObjekt = SpielfeldHeinz.feldMap.get(feld);
-        feldObjekt.setBesetzung(new Spielstein(spielerNummer, this, figurNummer));
+    public void createNewSpielsteinOnFeld(int spielerNummer, int figurNummer, int feldId) {
+        Feld feldObjekt = SpielfeldHeinz.feldMap.get(String.valueOf(feldId));
+        if(feldObjekt.getBesetzung() != null) return;
+        feldObjekt.setBesetzung(new Spielstein(figurNummer, this, spielerNummer));
     }
 
 
     public void bewege(String feldIdFrom, String feldIdTo) {
         Feld sourceField = SpielfeldHeinz.feldMap.get(feldIdFrom);
         Feld destinatonField = SpielfeldHeinz.feldMap.get(feldIdTo);
-        if(sourceField.getBesetzung() != null) sourceField.getBesetzung().setFeld(destinatonField);
-        else
+        if(sourceField.getBesetzung() != null) {
+            sourceField.getBesetzung().setFeld(destinatonField);
+            sourceField.setBesetzung(null);
+        }
         gui.update(startFeld);
     }
 
-    public void setSpieler(String feldid) {
+    public void setSpieler(String feldid, String playerId) {
         Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
-        spielerObjekt = new SpielerObjekt(spawn, 0, this);
+        spielerObjekt = new SpielerObjekt(spawn, Integer.parseInt(playerId), this);
+    }
+
+    public void bewegeSperrstein(String feldToId) {
+        socket.bewegeSperrstein(feldToId);
     }
 
     public void end() {

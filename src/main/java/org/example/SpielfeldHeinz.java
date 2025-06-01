@@ -100,7 +100,6 @@ public class SpielfeldHeinz {
 
         if(!data.isEmpty()){
             var dataSplit = data.split(":");
-            System.out.println(dataSplit[0]);
             if(dataSplit[0].equals("Krone")){
                 feld.setBesetzung(new Krone(Integer.parseInt(dataSplit[1]), runde));
             }else if(dataSplit[0].equals("Sperrstein")){

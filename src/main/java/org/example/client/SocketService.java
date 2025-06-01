@@ -11,10 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,15 +48,16 @@ public class SocketService {
         out.println("SETGAME:" + rundenNummer);
 
         // Server-Listener-Thread starten
-        new Thread(this::listenToServer).start();
+        Thread listenerThread = new Thread(this::listenToServer);
+        listenerThread.start();
 
         // Client darf nach Bedarf schreiben (z.B. auf Anfrage)
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("EXIT")) break;
-            out.println(input); // WARNUNG: Nur wenn erlaubt senden!
-        }
+//        Scanner scanner = new Scanner(System.in);
+//        while (true) {
+//            String input = scanner.nextLine();
+//            if (input.equalsIgnoreCase("EXIT")) break;
+//            out.println(input); // WARNUNG: Nur wenn erlaubt senden!
+//        }
 
         closeConnection();
     }
@@ -74,7 +72,7 @@ public class SocketService {
                 String args[] = serverMsg.split(":");
                 switch (args[0]) {
                     case "SETSPWN":
-                        runde.setSpieler(args[1]);
+                        runde.setSpieler(args[1], args[2]);
                         break;
                     case "MOV":
                         runde.bewege(args[1], args[2]);
@@ -92,14 +90,19 @@ public class SocketService {
                         closeConnection();
                         break;
                     case "PING":
-                        out.println("PONG");
                         break;
                     case "CRTSTN":
-                        runde.createNewSpielsteinOnFeld(args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                        runde.createNewSpielsteinOnFeld(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
                         break;
                     case "SETMAP": //wichtig das erste element zu trennen aber nciht nur index 1 zu nehmen, da in der xml auch mit : gearbeitet wird
                         String xmlStr = String.join(":", Arrays.copyOfRange(args, 1, args.length));
                         runde = new Runde(this, xmlStr);
+                        break;
+                    case "WAIT":
+                        if(Objects.equals(args[1], "SPERR")) out.printf("BLOCKER_MOVE:" + runde.moveBlocker());
+                        break;
+                    default:
+                        System.out.println("🔴 Unbekannter Server-Befehl: " + serverMsg);
                         break;
                 }
 
@@ -123,7 +126,6 @@ public class SocketService {
 
     private void returnWuerfelErgebniss(String correlationId, String wurfelzahl) {
         int zahl = Integer.parseInt(wurfelzahl);
-        System.out.println("corrid " + correlationId + " wurfelzahl: " + wurfelzahl);
         CompletableFuture<Integer> future = pending.remove(correlationId);
 
         if (future != null) {
@@ -142,6 +144,10 @@ public class SocketService {
 
         out.printf("WURFEL:%s:%d%n", correlationId, playerId);      // z.B.  ROLL:<cid>:<player>
         return fut;
+    }
+
+    public void bewegeSperrstein(String feldIdTo){
+        out.printf("BLOCKER_MOVE:"+feldIdTo+"\n");
     }
 
     private void closeConnection() throws IOException {
