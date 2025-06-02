@@ -34,16 +34,6 @@ public class XMLWorker {
         System.out.println("XML gespeichert unter: " + filename);
     }
 
-    public static String toXML(Feld startFeld, Runde runde) throws ParserConfigurationException, TransformerException {
-        Document doc = createDocument(startFeld,runde);
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(doc), new StreamResult(writer));
-        return writer.toString();
-    }
-
     private static Document createDocument(Feld startFeld,Runde runde) throws ParserConfigurationException {
         Map<Integer, Feld> felder = new HashMap<>();
         Set<String> kanten = new HashSet<>();
