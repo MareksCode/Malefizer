@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 public class Menu {
 
+
     public int Menu(int spieleranzahl) throws Exception {
 
         System.out.println("How many players want to play? max. 4 players");

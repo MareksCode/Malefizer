@@ -11,25 +11,24 @@ public class Main  {
 
         System.out.println("new Game = 1\nload Game from xml = 2");
 
-
         int auswahl;
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
 
         try{
-            BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
             auswahl = Integer.parseInt(read.readLine());
-        } catch (IOException e){
+        } catch (NumberFormatException e){
             return;
         }
 
         switch (auswahl) {
-            case 1:
+            case 1:     //new game
                 int spieleranzahl=0;
                 Menu menu = new Menu();
                 menu.Menu(spieleranzahl);
 
                 break;
 
-            case 2:
+            case 2:     //load Game
                 Runde rundeLoad = new Runde("test.xml");
                 rundeLoad.spielloop();
                 break;

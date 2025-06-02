@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.example.SpielerObjekt;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -13,7 +14,11 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
+
+import static org.example.bot.Tiefensuche.findeKuerzestenPfad;
+
 
 public class Runde implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -123,11 +128,9 @@ public class Runde implements Serializable {
 
     private int spielerZug() throws IOException {
         System.out.println("Please choose a Spielstein (Type 1-5)");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
         String s = r.readLine();
-
 
         int chosenNumber;
         try {
@@ -235,8 +238,8 @@ public class Runde implements Serializable {
 
         for (int spielerNum = 0; spielerNum < this.botAnzahl; spielerNum++) { //spielerspawns für Bots erstellen
 
-            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, true);
-            spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
+            SpielerObjekt bot = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, true);
+            spielerListe[spielerNum] = bot; //in spawn array hinzufügen
         }
         spielloop();
     }
@@ -249,9 +252,11 @@ public class Runde implements Serializable {
 
             System.out.println(spielerAnzahl);
 
-            this.amZug = (this.amZug + 1) % this.spielerAnzahl;
+            this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
+            //this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
-            System.out.println("Spieler " + (this.amZug+1) + " ist am Zug");
+
+            System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
 
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
             int figurNummer = spielerZug();
@@ -264,7 +269,9 @@ public class Runde implements Serializable {
             if (currentFeld == null) {
                 currentFeld = spieler.getSpawnFeld();
             }
+
             ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(currentFeld, wuerfelErgebnis);
+            //
 
             if (!moeglicheFelder.isEmpty()) {
                 Feld chosenFeld = spielerZiehe(moeglicheFelder, figur);
