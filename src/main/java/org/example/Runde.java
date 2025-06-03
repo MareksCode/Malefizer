@@ -3,9 +3,6 @@ package org.example;
 import org.example.client.SocketService;
 import org.example.stein.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -81,17 +78,7 @@ public class Runde {
 
     public int moveBlocker() {
         // lese nutzerineingabe und gebe sie zurück
-        System.out.println("wohin u want to bewegen the spielstein?");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
-
-        String s;
-        try {
-            s = r.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return Integer.parseInt(s);
+        return IntInputDialog.show("Wohin soll der Sperrstein bewegt werden (feldId): ");
     }
 
 

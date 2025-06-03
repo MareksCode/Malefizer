@@ -1,6 +1,7 @@
 package org.example.client;
 
 import org.example.Feld;
+import org.example.IntInputDialog;
 import org.example.Runde;
 
 import javax.net.ssl.*;
@@ -14,6 +15,8 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.lang.Thread.sleep;
 
 public class SocketService {
     private Socket socket;
@@ -99,7 +102,21 @@ public class SocketService {
                         runde = new Runde(this, xmlStr);
                         break;
                     case "WAIT":
-                        if(Objects.equals(args[1], "SPERR")) out.printf("BLOCKER_MOVE:" + runde.moveBlocker());
+                        if(Objects.equals(args[1], "SPERR")) {
+                            System.out.println("bewege den blocker hierunter");
+                            try {
+                                sleep(300); //delay, da der thread erstellt werden muss und die rückgabe automatisch sit
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            out.printf("BLOCKER_MOVE:" + IntInputDialog.show("Wohin soll der Sperrstein bewegt werden (feldId): ") + "\n");
+                            System.out.println("blocker wurde gesendet?");
+                        }
+                        break;
+                    case "WIN":
+                        System.out.println("Spieler " + args[1] + " hat gewonnen");
+                        out.println("EXIT");
+                        closeConnection();
                         break;
                     default:
                         System.out.println("🔴 Unbekannter Server-Befehl: " + serverMsg);
