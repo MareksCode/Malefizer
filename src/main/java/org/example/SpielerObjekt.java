@@ -18,6 +18,7 @@ public class SpielerObjekt {
         }
     }
 
+    /**@figurNummer von 0 bis 4; 5 spielsteine*/
     public Spielstein getFigur(int figurNummer) {
         return this.Figuren[figurNummer];
     }

@@ -18,6 +18,7 @@ public class Runde {
 
     private SpielerObjekt spielerObjekt;
     TerminalAusgabe gui = null;
+    int figurInputNummer = 1;
 
 
     public Runde(SocketService socket, String xmlStr) {
@@ -118,9 +119,9 @@ public class Runde {
         //es werden inputs benötigt, die nachfolgend simuliert werden.
         //es wird davon ausgegangen, das jeder spieler aktuell mindestens einen zug amchen kann, sonst crashen wir!
 
-        int simulateInputFigurnummer = 1;
+        figurInputNummer = 1;
         //testen ob spielstein schon im feld sonst spawn
-        Spielstein sp = spielerObjekt.getFigur(simulateInputFigurnummer);
+        Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
         if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
         ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(sp.getCurrentFeld(), wurf);
 
@@ -131,8 +132,26 @@ public class Runde {
 
     public void createNewSpielsteinOnFeld(int spielerNummer, int figurNummer, int feldId) {
         Feld feldObjekt = SpielfeldHeinz.feldMap.get(String.valueOf(feldId));
-        if(feldObjekt.getBesetzung() != null) return;
-        feldObjekt.setBesetzung(new Spielstein(figurNummer, this, spielerNummer));
+        if(feldObjekt.getBesetzung() != null){
+            try {
+                feldObjekt.schlagen();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        System.out.println("sp obj nr: " + spielerObjekt.getId() + " create sp nr " + spielerNummer + " fig nr " + figurNummer + " feld nr " + feldId);
+
+        //wenn eigener spielstein, bewege stein aus dem spielerobjekt heraus mit eigener id, sonst übernheme id des servers auf neue figur
+        if(spielerObjekt.getId() == spielerNummer) {
+            Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
+            sp.setFeld(feldObjekt);
+            feldObjekt.setBesetzung(sp);
+
+        }
+        else feldObjekt.setBesetzung(new Spielstein(figurNummer, this, spielerNummer));
+
+        gui.update(startFeld);
     }
 
 
