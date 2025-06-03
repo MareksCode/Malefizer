@@ -1,5 +1,4 @@
 package org.example.bot;
-import org.*;
 
 import java.util.*;
 

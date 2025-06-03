@@ -252,8 +252,8 @@ public class Runde implements Serializable {
 
             System.out.println(spielerAnzahl);
 
-            this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
-            //this.amZug = (this.amZug + 1) % this.spielerAnzahl;
+            //this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
+            this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
 
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
