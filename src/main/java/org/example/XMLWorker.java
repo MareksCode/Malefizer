@@ -115,6 +115,7 @@ public class XMLWorker {
         felder.put(feld.getId(), feld);
 
         for (Feld nachbar : feld.getNachbarn()) {
+            if(kanten.contains(nachbar.getId() + "->" + feld.getId())) continue;
             kanten.add(feld.getId() + "->" + nachbar.getId());
             if (!marked.contains(nachbar.getId())) {
                 collectToMap(nachbar, felder, kanten, marked);

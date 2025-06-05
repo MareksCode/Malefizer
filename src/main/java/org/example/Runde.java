@@ -27,7 +27,7 @@ public class Runde implements Serializable {
     private boolean isStartAllowed = true;
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
-    TerminalAusgabe gui = null;
+    GUIface gui = null;
     private final int MAX_SPIELER=4;
     private int spielerAnzahl;
     private int botAnzahl;
