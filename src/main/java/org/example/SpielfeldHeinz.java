@@ -128,6 +128,7 @@ public class SpielfeldHeinz {
         return null;
     }
 
+    @Deprecated
     private static Feld erstelleFeld(char[][] datei, int posX, int posY) throws Exception {
         String key = posX + "." + posY;
         if (feldMap.containsKey(key)) return feldMap.get(key);

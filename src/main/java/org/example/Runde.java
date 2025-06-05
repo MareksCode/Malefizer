@@ -14,7 +14,7 @@ public class Runde {
     private SocketService socket;
 
     private SpielerObjekt spielerObjekt;
-    TerminalAusgabe gui = null;
+    GUIface gui = null;
     int figurInputNummer = 1;
 
 
@@ -24,7 +24,7 @@ public class Runde {
         this.socket = socket;
         heinz = SpielfeldHeinz.getInstance(this, xmlStr);
         startFeld = SpielfeldHeinz.getStartfeld();
-        gui = new TerminalAusgabe();
+        gui = new FeldGUI(startFeld);
         gui.update(startFeld);
     }
 
