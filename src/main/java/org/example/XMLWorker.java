@@ -114,10 +114,11 @@ public class XMLWorker {
         marked.add(feld.getId());
         felder.put(feld.getId(), feld);
 
-        for(Feld nachbar : feld.getNachbarn()) {
-            if (marked.contains(nachbar.getId())) continue;
+        for (Feld nachbar : feld.getNachbarn()) {
             kanten.add(feld.getId() + "->" + nachbar.getId());
-            collectToMap(nachbar, felder, kanten, marked);
+            if (!marked.contains(nachbar.getId())) {
+                collectToMap(nachbar, felder, kanten, marked);
+            }
         }
     }
 }
