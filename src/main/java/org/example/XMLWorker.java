@@ -75,6 +75,7 @@ public class XMLWorker {
             feldElement.setAttribute("posY", String.valueOf(feld.getPosition().y));
             felderElement.appendChild(feldElement);
         }
+
         Element playersElemets = doc.createElement("players");
         graphElement.appendChild(playersElemets);
 
@@ -85,6 +86,7 @@ public class XMLWorker {
             e.setAttribute("feldId", String.valueOf(sp.getSpawnFeld().getId()));
             spawnsElement.appendChild(e);
         }
+
 
         int playerid = 0;
         for(SpielerObjekt spieler: runde.spielerListe ){

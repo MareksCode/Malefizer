@@ -10,7 +10,7 @@ import org.example.*;
 import org.example.stein.Spielstein;
 import org.example.Runde;
 
-public abstract class Niki_Bot extends Bot{
+public class Niki_Bot extends Bot{
 
     public Feld startFeld;
     public static int pointer=0;
@@ -20,7 +20,7 @@ public abstract class Niki_Bot extends Bot{
     }
 
 
-    private int botZug() throws IOException {       //statt spielerZug
+    public int botZug() throws IOException {       //statt spielerZug
 
         int[] muster = {1, 1, 4, 3, 1, 2, 5, 2, 5, 2};
 
@@ -33,7 +33,7 @@ public abstract class Niki_Bot extends Bot{
     }
 
 
-    private Feld nikiBotZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {       //statt spielerZiehe
+    public Feld nikiBotZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {       //statt spielerZiehe
 
         int chosenID=0;
 
@@ -47,7 +47,6 @@ public abstract class Niki_Bot extends Bot{
             }
 
         }
-
 
         System.out.println("Bot has chosen: "+chosenID);
         Feld chosenFeld = null;

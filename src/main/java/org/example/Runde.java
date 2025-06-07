@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.bot.Bot;
+import org.example.bot.Fight_Bot;
+import org.example.bot.Niki_Bot;
+import org.example.bot.Smart_Bot;
 import org.example.stein.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,13 +35,15 @@ public class Runde implements Serializable {
     private final int MAX_SPIELER=4;
     private int spielerAnzahl;
     private int botAnzahl;
+    private int botSchwierigkeit;
     SpielerObjekt[] spielerListe;
 
-    public Runde(int spieler) {
+    public Runde(int spieler, int botSchwierigkeit) {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.spielerAnzahl = spieler;
         this.botAnzahl = MAX_SPIELER-spieler;
+        this.botSchwierigkeit=botSchwierigkeit;
     }
 
     public Runde (String dateiname){
@@ -58,9 +64,9 @@ public class Runde implements Serializable {
             Element players = (Element) root.getElementsByTagName("players").item(0);
             NodeList spielers =  players.getElementsByTagName("player");
             spielerListe = new SpielerObjekt[spielers.getLength()];
-            for (int i = 0; i < spielers.getLength(); i++) {
-                spielerAnzahl++;
-                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this,false); //todo die behandlung mit bots fehlt
+            for (int i = 0; i < spielerAnzahl; i++) {
+
+                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this,false);
                 spielerListe[i] = sp;
                 System.out.println(spielerListe.length);
                 Element e = (Element) spielers.item(i);
@@ -71,6 +77,20 @@ public class Runde implements Serializable {
                     if (id == -1){
                         sp.setSpielstein(new Spielstein(j,this, i));
                     } else {sp.setSpielstein((Spielstein) feldMap.get(Integer.toString(id)).getBesetzung());}
+                }
+            }
+            for ( int i = spielerAnzahl; i < MAX_SPIELER+1; i++){//todo bitte überprüfen ob logic sinnvoll vieleicht mit menü koillierent
+
+                SpielerObjekt spBot = new SpielerObjekt(spawns.get(i), i, this,true);
+                spielerListe[i] = spBot;
+                Element e = (Element) spielers.item(i);
+                NodeList childs = e.getElementsByTagName("spielstein");
+                for(int j = 0; j < childs.getLength(); j++){
+                    Element spielstein = (Element) childs.item(j);
+                    int id = Integer.parseInt(spielstein.getAttribute("feldId"));
+                    if (id == -1){
+                        spBot.setSpielstein(new Spielstein(j,this, i));
+                    } else {spBot.setSpielstein((Spielstein) feldMap.get(Integer.toString(id)).getBesetzung());}
                 }
             }
         } catch (Exception e){
@@ -227,42 +247,83 @@ public class Runde implements Serializable {
         gui = new TerminalAusgabe();
 
          //spielerliste erstellen
-        spielerListe = new SpielerObjekt[this.spielerAnzahl];
+        spielerListe = new SpielerObjekt[MAX_SPIELER];
 
 
-        for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
+            for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
+                //vielleicht in eine zeile packen
+                SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, false);
+                spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
+            }
 
-            SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, false);
-            spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
+        if(this.spielerAnzahl!=MAX_SPIELER) {
+            switch (botSchwierigkeit) {
+
+                case 1:
+                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) { //spielerspawns für Bots erstellen
+
+                        spielerListe[spielerNum] = new Niki_Bot(spawns.get(spielerNum), spielerNum, this);
+                    }
+                    break;
+
+                case 2:
+                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) { //spielerspawns für Bots erstellen
+
+                        spielerListe[spielerNum] = new Smart_Bot(spawns.get(spielerNum), spielerNum, this);
+                    }
+                    break;
+
+                case 3:
+                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) { //spielerspawns für Bots erstellen
+
+                        spielerListe[spielerNum] = new Fight_Bot(spawns.get(spielerNum), spielerNum, this);
+                    }
+                    break;
+            }
         }
 
-        for (int spielerNum = 0; spielerNum < this.botAnzahl; spielerNum++) { //spielerspawns für Bots erstellen
-
-            SpielerObjekt bot = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, true);
-            spielerListe[spielerNum] = bot; //in spawn array hinzufügen
-        }
         spielloop();
     }
 
     public void spielloop() throws Exception {
         Wuerfel wuerfel = new Wuerfel();
-        while (this.spielGewonnen == false) { //spiel loop, bis gewonnen wurde
+        while (!this.spielGewonnen) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);
 
-            System.out.println(spielerAnzahl);
+            //System.out.println(spielerAnzahl);
 
             this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
             //this.amZug = (this.amZug + 1) % this.spielerAnzahl;
-            SpielerObjekt spieler = spielerListe[this.amZug];
-
+            SpielerObjekt spieler = spielerListe[this.amZug];       //würft fehler für bots
+                                                                    //figuren ID bezeichnung ist jetzt player.Anzahlfiguren in der ausgabe
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
 
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
-            int figurNummer = spielerZug();
-            int wuerfelErgebnis = spielerWuerfel(wuerfel);
+            //ooooooder der ultimate bot zelegt ihn
 
-            System.out.println("you würfeled: " + wuerfelErgebnis);
+
+            int figurNummer=0;
+            int wuerfelErgebnis=0;
+            if(spieler instanceof Bot) {
+                if(spieler instanceof Niki_Bot) {
+                    wuerfelErgebnis = wuerfel.Roll();
+                    figurNummer = ((Niki_Bot)spieler).botZug();
+                } else if(spieler instanceof Smart_Bot) {
+                    wuerfelErgebnis = wuerfel.Roll();
+                    figurNummer = ((Smart_Bot)spieler).smartBotZug();
+                } else if(spieler instanceof Fight_Bot) {
+                    wuerfelErgebnis = wuerfel.Roll();
+                    figurNummer = ((Fight_Bot)spieler).fightBotZug();
+                }
+            } else {
+
+                wuerfelErgebnis = spielerWuerfel(wuerfel);
+                System.out.println("you würfeled: " + wuerfelErgebnis);
+                figurNummer = spielerZug();
+
+            }
+
 
             Spielstein figur = spieler.getFigur(figurNummer);
             Feld currentFeld = figur.getCurrentFeld();
@@ -274,7 +335,22 @@ public class Runde implements Serializable {
             //
 
             if (!moeglicheFelder.isEmpty()) {
-                Feld chosenFeld = spielerZiehe(moeglicheFelder, figur);
+                Feld chosenFeld;
+
+                if(spieler instanceof Bot) {
+                    if(spieler instanceof Niki_Bot) {
+                        chosenFeld = ((Niki_Bot)spieler).nikiBotZiehe(moeglicheFelder, figur);
+                    } else if(spieler instanceof Smart_Bot) {
+                        chosenFeld = ((Smart_Bot)spieler).smartBotZiehe(currentFeld.getId(), Krone.getKronenId(), moeglicheFelder, figur, wuerfel);
+                    } else if(spieler instanceof Fight_Bot) {
+                        chosenFeld = ((Fight_Bot)spieler).fightBotZiehe(currentFeld.getId(), Krone.getKronenId(), moeglicheFelder, figur, wuerfel);
+                    } else {
+                        chosenFeld = spielerZiehe(moeglicheFelder, figur);
+                    }
+                } else {
+                    chosenFeld = spielerZiehe(moeglicheFelder, figur);
+                }
+
                 // 1) remove figur
                 currentFeld.removeBesetzung();
 

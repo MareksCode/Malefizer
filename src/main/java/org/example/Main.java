@@ -22,9 +22,9 @@ public class Main  {
 
         switch (auswahl) {
             case 1:     //new game
-                int spieleranzahl=0;
+
                 Menu menu = new Menu();
-                menu.Menu(spieleranzahl);
+                menu.Menu();
 
                 break;
 

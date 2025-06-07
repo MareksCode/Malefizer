@@ -2,8 +2,10 @@ package org.example.bot;
 
 import org.example.Feld;
 import org.example.Runde;
+import org.example.Wuerfel;
 import org.example.stein.Spielstein;
 import org.example.bot.Tiefensuche;
+import org.example.SpielfeldHeinz;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,9 +24,9 @@ public class Smart_Bot extends Bot{
     }
 
 
-    private int botZug() throws IOException {       //statt spielerZug
+    public int smartBotZug() throws IOException {       //statt spielerZug
 
-        int[] muster = {1, 1, 4, 3, 1, 2, 5, 2, 5, 2};
+        int[] muster = {1};
 
         int chosenNumber = muster[pointer];
         pointer = (pointer + 1) % muster.length;
@@ -34,38 +36,45 @@ public class Smart_Bot extends Bot{
         return chosenNumber;
     }
 
-    private Feld smartBotZiehe(Map<Integer, List<Integer>> graph, int start, int ziel,ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {       //statt spielerZiehe
+    public Feld smartBotZiehe( int start, int ziel, ArrayList<Feld> moeglicheFelder, Spielstein figur, Wuerfel gewuerfelt) throws IOException {       //statt spielerZiehe
 
+
+        List<Integer> kuerzersterPfad = findeKuerzestenPfad(SpielfeldHeinz.feldMap,start,ziel);      //todo finde möglichen
+
+        if (kuerzersterPfad == null || kuerzersterPfad.isEmpty()) {
+            return fallbackFeldWahl(moeglicheFelder);
+        }
+
+        for (Feld moeglichesFeld : moeglicheFelder) {
+            for (Integer pfadPunkt : kuerzersterPfad) {
+                if (moeglichesFeld.getId() == pfadPunkt) {
+                    // Direkt auf dem Pfad - beste Option
+                    return moeglichesFeld;
+                }
+            }
+        }
+        // Wenn kein direkter Pfadpunkt gefunden, nimm das erste mögliche Feld
+        if (!moeglicheFelder.isEmpty()) {
+            return moeglicheFelder.get(0);
+        }
+        // Letzte Fallback-Option
+        return fallbackFeldWahl(moeglicheFelder);
+    }
+    private Feld fallbackFeldWahl(ArrayList<Feld> moeglicheFelder) {
         int chosenID = 0;
-
-        int anzahl = moeglicheFelder.size();
-
-        findeKuerzestenPfad(graph,start,ziel);      //todo finde möglichen 
-
         for (Feld feld : moeglicheFelder) {
             int temp = feld.getId();
-
             if(temp > chosenID){
-                chosenID=temp;
+                chosenID = temp;
             }
-
         }
-
-        System.out.println("Bot has chosen: "+chosenID);
-        Feld chosenFeld = null;
-
         for (Feld feld : moeglicheFelder) {
             if (feld.getId() == chosenID) {
-                chosenFeld = feld;
+                return feld;
             }
         }
 
-        if (chosenFeld == null) {
-            return smartBotZiehe(graph,start,ziel,moeglicheFelder, figur);
-        }
-
-        System.out.println("Bot has chosen: "+chosenFeld.getId());
-        return chosenFeld;
+        return moeglicheFelder.isEmpty() ? null : moeglicheFelder.get(0);
     }
 
 }

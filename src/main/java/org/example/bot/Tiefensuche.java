@@ -1,5 +1,7 @@
 package org.example.bot;
-import org.*;
+
+
+import org.example.Feld;
 
 import java.util.*;
 
@@ -7,7 +9,7 @@ import java.util.*;
 public class Tiefensuche {
 
 
-    public static List<Integer> findeKuerzestenPfad(Map<Integer, List<Integer>> graph, int start, int ziel) {
+    public static List<Integer> findeKuerzestenPfad(Map<String, Feld> graph, int start, int ziel) {
         List<List<Integer>> allePfade = new ArrayList<>();
         Set<Integer> besucht = new HashSet<>();
         List<Integer> aktuellerPfad = new ArrayList<>();
@@ -24,7 +26,7 @@ public class Tiefensuche {
     }
 
 
-    private static void dfs(Map<Integer, List<Integer>> graph, int aktueller, int ziel,
+    private static void dfs(Map<String, Feld> graph, int aktueller, int ziel,
                             Set<Integer> besucht, List<Integer> aktuellerPfad, List<List<Integer>> allePfade) {
         besucht.add(aktueller);
         aktuellerPfad.add(aktueller);
@@ -33,9 +35,12 @@ public class Tiefensuche {
             allePfade.add(new ArrayList<>(aktuellerPfad));          //wenn Ziel erreicht füge den Pfad zu allen hinzu
 
         } else {
-            for (int nachbar : graph.getOrDefault(aktueller, Collections.emptyList())) {
-                if (!besucht.contains(nachbar)) {
-                    dfs(graph, nachbar, ziel, besucht, aktuellerPfad, allePfade);
+            List<Feld> nachbarn = graph.get(String.valueOf(aktueller)) != null ?
+                    graph.get(String.valueOf(aktueller)).getNachbarn() :
+                    new ArrayList<>();
+            for (Feld nachbar : nachbarn) {
+                if (!besucht.contains(nachbar.getId())) {
+                    dfs(graph, nachbar.getId(), ziel, besucht, aktuellerPfad, allePfade);
                 }
             }
         }

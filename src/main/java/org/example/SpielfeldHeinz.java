@@ -18,7 +18,7 @@ public class SpielfeldHeinz implements Serializable {
     private static final long serialVersionUID = 1L;
 
     static int[][] richtungen = {{-1,0},{1,0},{0,1},{0,-1}};
-    static Map<String, Feld> feldMap = new HashMap<>();
+    public static Map<String, Feld> feldMap = new HashMap<>();
     static Map<Integer, Feld> spawnMap = new HashMap<>(); // <id, spawnfeld>
     @Deprecated
     static int walkingId = 0;

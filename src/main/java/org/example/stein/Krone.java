@@ -5,8 +5,14 @@ import org.example.Runde;
 import java.io.Serializable;
 
 public class Krone extends Stein implements Serializable {
+    public static int kronenId;
     public Krone(int id, Runde dazugehoerendeRunde) {
         super(id, dazugehoerendeRunde);
+        kronenId = this.id;
+    }
+
+    public static int getKronenId() {
+        return kronenId;
     }
 
     public boolean kannDrueber() {
