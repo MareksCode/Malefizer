@@ -5,6 +5,8 @@ import org.example.stein.*;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 
 public class Runde {
     private boolean spielGewonnen;
@@ -16,6 +18,8 @@ public class Runde {
     private SpielerObjekt spielerObjekt;
     GUIface gui = null;
     int figurInputNummer = 1;
+
+    private int tempCountOverflow = 0;
 
 
     public Runde(SocketService socket, String xmlStr) {
@@ -76,12 +80,6 @@ public class Runde {
         return ergebnis;
     }
 
-    public int moveBlocker() {
-        // lese nutzerineingabe und gebe sie zurück
-        return IntInputDialog.show("Wohin soll der Sperrstein bewegt werden (feldId): ");
-    }
-
-
     public void macheZug() {
         //würfeln
         // 1.  Würfel anfordern
@@ -90,6 +88,16 @@ public class Runde {
                     System.out.println(wurf);
                     try {
                         System.out.println("Ergebnis: " + wurf);
+                        if (wurf == -1 && tempCountOverflow < 3) {
+                            tempCountOverflow++;
+                            sleep(100); //buffer neue anfrage um 100ms
+                            macheZug();
+                        } else if (tempCountOverflow >= 3 && wurf == -1) {
+                            System.out.println("Zug abgelehnt, das sollte nciht mehr passieren das ist explizit nicht gut");
+                            gui.update(startFeld);
+                            tempCountOverflow = 0;
+                            return;
+                        }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
