@@ -31,7 +31,7 @@ public class Runde implements Serializable {
     private boolean isStartAllowed = true;
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
-    TerminalAusgabe gui = null;
+    GUIface gui = null;
     private final int MAX_SPIELER=4;
     private int spielerAnzahl;
     private int botAnzahl;
@@ -281,7 +281,6 @@ public class Runde implements Serializable {
                     break;
             }
         }
-
         spielloop();
     }
 
@@ -295,8 +294,8 @@ public class Runde implements Serializable {
 
             this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
             //this.amZug = (this.amZug + 1) % this.spielerAnzahl;
-            SpielerObjekt spieler = spielerListe[this.amZug];       //würft fehler für bots
-                                                                    //figuren ID bezeichnung ist jetzt player.Anzahlfiguren in der ausgabe
+            SpielerObjekt spieler = spielerListe[this.amZug];
+
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
 
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!

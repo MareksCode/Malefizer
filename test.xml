@@ -87,15 +87,15 @@
         <feld data="null" id="77" posX="12" posY="13"/>
         <feld data="null" id="78" posX="11" posY="13"/>
         <feld data="null" id="79" posX="10" posY="13"/>
-        <feld data="Spielstein:0:0" id="80" posX="9" posY="13"/>
-        <feld data="null" id="81" posX="8" posY="13"/>
-        <feld data="Spielstein:3:1" id="82" posX="7" posY="13"/>
+        <feld data="null" id="80" posX="9" posY="13"/>
+        <feld data="Spielstein:0:0" id="81" posX="8" posY="13"/>
+        <feld data="null" id="82" posX="7" posY="13"/>
         <feld data="null" id="83" posX="6" posY="13"/>
         <feld data="null" id="84" posX="5" posY="13"/>
         <feld data="null" id="85" posX="4" posY="13"/>
         <feld data="null" id="86" posX="3" posY="13"/>
         <feld data="null" id="87" posX="2" posY="13"/>
-        <feld data="Spielstein:2:0" id="88" posX="1" posY="13"/>
+        <feld data="null" id="88" posX="1" posY="13"/>
         <feld data="null" id="89" posX="0" posY="13"/>
         <feld data="null" id="90" posX="0" posY="12"/>
         <feld data="null" id="91" posX="3" posY="11"/>
@@ -116,7 +116,7 @@
         <feld data="null" id="106" posX="15" posY="11"/>
         <feld data="Sperrstein:10" id="107" posX="16" posY="11"/>
         <feld data="null" id="108" posX="16" posY="12"/>
-        <feld data="Spielstein:1:1" id="109" posX="16" posY="13"/>
+        <feld data="Spielstein:1:0" id="109" posX="16" posY="13"/>
         <feld data="null" id="110" posX="15" posY="13"/>
         <feld data="null" id="111" posX="12" posY="12"/>
     </felder>
@@ -128,6 +128,8 @@
         <kante from="92" to="104"/>
         <kante from="7" to="8"/>
         <kante from="49" to="48"/>
+        <kante from="104" to="85"/>
+        <kante from="60" to="59"/>
         <kante from="94" to="93"/>
         <kante from="62" to="61"/>
         <kante from="27" to="26"/>
@@ -158,11 +160,13 @@
         <kante from="87" to="86"/>
         <kante from="76" to="75"/>
         <kante from="12" to="13"/>
+        <kante from="91" to="68"/>
         <kante from="5" to="6"/>
         <kante from="34" to="33"/>
         <kante from="65" to="64"/>
         <kante from="54" to="53"/>
         <kante from="43" to="42"/>
+        <kante from="41" to="38"/>
         <kante from="30" to="29"/>
         <kante from="96" to="105"/>
         <kante from="98" to="99"/>
@@ -177,6 +181,7 @@
         <kante from="32" to="31"/>
         <kante from="21" to="20"/>
         <kante from="70" to="90"/>
+        <kante from="20" to="0"/>
         <kante from="96" to="97"/>
         <kante from="28" to="27"/>
         <kante from="3" to="4"/>
@@ -188,10 +193,13 @@
         <kante from="98" to="103"/>
         <kante from="51" to="50"/>
         <kante from="100" to="101"/>
+        <kante from="111" to="77"/>
         <kante from="83" to="82"/>
         <kante from="73" to="72"/>
         <kante from="16" to="17"/>
         <kante from="26" to="25"/>
+        <kante from="105" to="81"/>
+        <kante from="48" to="47"/>
         <kante from="99" to="100"/>
         <kante from="36" to="35"/>
         <kante from="68" to="69"/>
@@ -230,26 +238,28 @@
         <kante from="29" to="28"/>
         <kante from="90" to="89"/>
         <kante from="53" to="52"/>
+        <kante from="103" to="65"/>
         <kante from="64" to="63"/>
+        <kante from="101" to="71"/>
         <kante from="42" to="41"/>
     </kanten>
     <players>
         <player id="0">
-            <spielstein feldId="80"/>
+            <spielstein feldId="81"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
         </player>
         <player id="1">
-            <spielstein feldId="-1"/>
             <spielstein feldId="109"/>
+            <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
         </player>
         <player id="2">
-            <spielstein feldId="88"/>
+            <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
@@ -257,11 +267,11 @@
         </player>
         <player id="3">
             <spielstein feldId="-1"/>
-            <spielstein feldId="82"/>
+            <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
             <spielstein feldId="-1"/>
         </player>
     </players>
-    <amZug zugCount="1"/>
+    <amZug zugCount="2"/>
 </graph>
