@@ -7,21 +7,17 @@ import org.example.bot.Smart_Bot;
 import org.example.stein.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.example.SpielerObjekt;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 import java.util.Map;
 
-import static org.example.bot.Tiefensuche.findeKuerzestenPfad;
+
 
 
 public class Runde implements Serializable {
@@ -34,7 +30,6 @@ public class Runde implements Serializable {
     GUIface gui = null;
     private final int MAX_SPIELER=4;
     private int spielerAnzahl;
-    private int botAnzahl;
     private int botSchwierigkeit;
     SpielerObjekt[] spielerListe;
 
@@ -42,7 +37,6 @@ public class Runde implements Serializable {
         this.spielGewonnen = false;
         this.amZug = -1;
         this.spielerAnzahl = spieler;
-        this.botAnzahl = MAX_SPIELER-spieler;
         this.botSchwierigkeit=botSchwierigkeit;
     }
 
@@ -66,7 +60,7 @@ public class Runde implements Serializable {
             spielerListe = new SpielerObjekt[spielers.getLength()];
             for (int i = 0; i < spielerAnzahl; i++) {
 
-                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this,false);
+                SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this);
                 spielerListe[i] = sp;
                 System.out.println(spielerListe.length);
                 Element e = (Element) spielers.item(i);
@@ -81,7 +75,7 @@ public class Runde implements Serializable {
             }
             for ( int i = spielerAnzahl; i < MAX_SPIELER+1; i++){//todo bitte überprüfen ob logic sinnvoll vieleicht mit menü koillierent
 
-                SpielerObjekt spBot = new SpielerObjekt(spawns.get(i), i, this,true);
+                SpielerObjekt spBot = new SpielerObjekt(spawns.get(i), i, this);
                 spielerListe[i] = spBot;
                 Element e = (Element) spielers.item(i);
                 NodeList childs = e.getElementsByTagName("spielstein");
@@ -252,7 +246,7 @@ public class Runde implements Serializable {
 
             for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
                 //vielleicht in eine zeile packen
-                SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this, false);
+                SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this);
                 spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
             }
 

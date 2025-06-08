@@ -12,7 +12,7 @@ public abstract class Bot extends SpielerObjekt {
     private Spielstein[] Figuren;
 
     public Bot(Feld spawnFeld, int spielerId, Runde dazugehoerendeRunde) {
-        super(spawnFeld, spielerId, dazugehoerendeRunde, true);
+        super(spawnFeld, spielerId, dazugehoerendeRunde);
         this.botId = spielerId;
     }
 

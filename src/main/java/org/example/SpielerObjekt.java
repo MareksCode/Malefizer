@@ -8,13 +8,11 @@ public class SpielerObjekt implements Serializable {
     private static final long serialVersionUID = 1L;
     private Feld spawnFeld;
     private Spielstein[] Figuren;
-    public boolean bot;
 
-    public SpielerObjekt(Feld spawnFeld, int spielerId, Runde dazugehoerendeRunde, boolean bot) {
+
+    public SpielerObjekt(Feld spawnFeld, int spielerId, Runde dazugehoerendeRunde) {
         this.spawnFeld = spawnFeld;
         this.Figuren = new Spielstein[5];
-
-        this.bot = bot;
 
         for (int figurNummer = 0; figurNummer<5; figurNummer++) {
             Spielstein neueFigur = new Spielstein(figurNummer, dazugehoerendeRunde, spielerId);
