@@ -58,6 +58,7 @@ public class Sperrstein extends Stein implements Serializable {
 
         return ergebnis;
     }
+
     private Feld steinZiehe(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
         System.out.println("Please choose what Spielfeld you want to bewegen zhe Sperrstein on (using the ID)");
         BufferedReader r = new BufferedReader(
@@ -69,7 +70,8 @@ public class Sperrstein extends Stein implements Serializable {
 
         for (Feld feld : moeglicheFelder) {
             if (feld.getId() == chosenID) {
-                chosenFeld = feld;
+
+                    chosenFeld = feld;
             }
         }
 
@@ -79,9 +81,10 @@ public class Sperrstein extends Stein implements Serializable {
 
         return chosenFeld;
     }
+
     public void schlagen() throws Exception {
         this.feld.removeBesetzung();
-
+        // hier gui printen vielleicht
         Feld newFeld = steinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
         this.setFeld(newFeld);
         System.out.println("setFeld bei sperrstein hat geklappt");

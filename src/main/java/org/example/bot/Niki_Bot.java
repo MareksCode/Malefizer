@@ -42,7 +42,7 @@ public class Niki_Bot extends Bot{
         for (Feld feld : moeglicheFelder) {     //niki wählt immer die größte feldzahl aus
             int temp = feld.getId();
 
-            if(temp > chosenID){
+            if(temp < chosenID){
                 chosenID=temp;
             }
 

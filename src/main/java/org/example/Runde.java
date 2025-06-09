@@ -261,14 +261,14 @@ public class Runde implements Serializable {
                     break;
 
                 case 2:
-                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) { //spielerspawns für Bots erstellen
+                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) {
 
                         spielerListe[spielerNum] = new Smart_Bot(spawns.get(spielerNum), spielerNum, this);
                     }
                     break;
 
                 case 3:
-                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) { //spielerspawns für Bots erstellen
+                    for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) {
 
                         spielerListe[spielerNum] = new Fight_Bot(spawns.get(spielerNum), spielerNum, this);
                     }
@@ -287,7 +287,6 @@ public class Runde implements Serializable {
             //System.out.println(spielerAnzahl);
 
             this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
-            //this.amZug = (this.amZug + 1) % this.spielerAnzahl;
             SpielerObjekt spieler = spielerListe[this.amZug];
 
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
@@ -330,19 +329,14 @@ public class Runde implements Serializable {
             if (!moeglicheFelder.isEmpty()) {
                 Feld chosenFeld;
 
-                if(spieler instanceof Bot) {
-                    if(spieler instanceof Niki_Bot) {
-                        chosenFeld = ((Niki_Bot)spieler).nikiBotZiehe(moeglicheFelder, figur);
-                    } else if(spieler instanceof Smart_Bot) {
-                        chosenFeld = ((Smart_Bot)spieler).smartBotZiehe(currentFeld.getId(), Krone.getKronenId(), moeglicheFelder, figur, wuerfel);
-                    } else if(spieler instanceof Fight_Bot) {
-                        chosenFeld = ((Fight_Bot)spieler).fightBotZiehe(currentFeld.getId(), Krone.getKronenId(), moeglicheFelder, figur, wuerfel);
-                    } else {
-                        chosenFeld = spielerZiehe(moeglicheFelder, figur);
-                    }
-                } else {
-                    chosenFeld = spielerZiehe(moeglicheFelder, figur);
-                }
+                chosenFeld = switch (spieler) {
+                        case Niki_Bot nikiBot -> nikiBot.nikiBotZiehe(moeglicheFelder, figur);
+                        case Smart_Bot smartBot ->
+                                smartBot.smartBotZiehe(currentFeld.getId(), Krone.getKronenId(), moeglicheFelder, figur, wuerfel);
+                        case Fight_Bot fightBot ->
+                                fightBot.fightBotZiehe(currentFeld.getId(), Krone.getKronenId(), moeglicheFelder, figur, wuerfel);
+                        default -> spielerZiehe(moeglicheFelder, figur);
+                };
 
                 // 1) remove figur
                 currentFeld.removeBesetzung();
@@ -352,8 +346,6 @@ public class Runde implements Serializable {
 
                 // 3) ui update
                 gui.update(chosenFeld);
-            } else {
-                System.out.println("you can't move with this figure.");
             }
         }
         System.out.println("spiel gewonnen von spieler " + (this.amZug+1));

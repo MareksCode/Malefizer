@@ -23,7 +23,6 @@ public class Menu {
         try{
             spieleranzahl = Integer.parseInt(read.readLine());
             if(spieleranzahl>=1 && spieleranzahl<4) { //kein Spielabbruch bei falscher Zahleingabe
-                if(spieleranzahl<4){
                     System.out.println("what difficulty should the bots have?\n" +
                             "1      easy\n" +
                             "2      mid\n" +
@@ -56,9 +55,7 @@ public class Menu {
                             return Menu();
                     }
                     runde.start();
-                    return spieleranzahl;
-                }
-               return Menu();
+
             }
         } catch (NumberFormatException e){
 

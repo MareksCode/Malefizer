@@ -21,7 +21,7 @@ public class SpielfeldHeinz implements Serializable {
     public static Map<String, Feld> feldMap = new HashMap<>();
     static Map<Integer, Feld> spawnMap = new HashMap<>(); // <id, spawnfeld>
     @Deprecated
-    static int walkingId = 0;
+    public static int walkingId = 0;
     @Deprecated
     static int walkingIdKrown = 0;
     @Deprecated

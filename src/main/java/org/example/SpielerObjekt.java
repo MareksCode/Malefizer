@@ -39,3 +39,5 @@ public class SpielerObjekt implements Serializable {
         return this.spawnFeld;
     }
 }
+
+
