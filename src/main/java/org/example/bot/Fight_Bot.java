@@ -36,6 +36,21 @@ public class Fight_Bot extends Bot{
         return chosenNumber;
     }
 
+    public int fightBotZug(int figur) throws IOException {       //statt spielerZug
+
+        int[] muster = {1, 2, 3, 4, 5};
+        int chosenNumber = 0;
+        for(int i = figur; i < muster.length; i++){
+
+            if(muster[i] != figur) {
+                chosenNumber = muster[i];
+                break;
+            }
+        }
+        chosenNumber -= 1; //von leslicher menschlicher 1 zur gigachad array 0 😎
+        return chosenNumber;
+    }
+
     public Feld fightBotZiehe( int start, int ziel, ArrayList<Feld> moeglicheFelder, Spielstein figur, Wuerfel gewuerfelt) throws IOException {       //statt spielerZiehe
 
 

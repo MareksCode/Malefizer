@@ -32,6 +32,17 @@ public class Niki_Bot extends Bot{
         return chosenNumber;
     }
 
+    public int botZug(int figur) throws IOException {       //statt spielerZug
+
+        int[] muster = {1, 1, 4, 3, 1, 2, 5, 2, 5, 2};
+
+        int chosenNumber = muster[pointer];
+        pointer = (pointer + 1) % muster.length;
+
+        chosenNumber -= 1; //von leslicher menschlicher 1 zur gigachad array 0 😎
+
+        return chosenNumber;
+    }
 
     public Feld nikiBotZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {       //statt spielerZiehe
 

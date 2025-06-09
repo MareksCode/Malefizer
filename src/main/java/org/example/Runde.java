@@ -295,38 +295,55 @@ public class Runde implements Serializable {
             //ooooooder der ultimate bot zelegt ihn
 
 
-            int figurNummer=0;
-            int wuerfelErgebnis=0;
-            if(spieler instanceof Bot) {
-                if(spieler instanceof Niki_Bot) {
-                    wuerfelErgebnis = wuerfel.Roll();
-                    figurNummer = ((Niki_Bot)spieler).botZug();
-                } else if(spieler instanceof Smart_Bot) {
-                    wuerfelErgebnis = wuerfel.Roll();
-                    figurNummer = ((Smart_Bot)spieler).smartBotZug();
-                } else if(spieler instanceof Fight_Bot) {
-                    wuerfelErgebnis = wuerfel.Roll();
-                    figurNummer = ((Fight_Bot)spieler).fightBotZug();
-                }
-            } else {
+            int wuerfelErgebnis = (spieler instanceof Bot) ? wuerfel.Roll() : spielerWuerfel(wuerfel);
 
-                wuerfelErgebnis = spielerWuerfel(wuerfel);
+            if (!(spieler instanceof Bot))
+            {
                 System.out.println("you würfeled: " + wuerfelErgebnis);
-                figurNummer = spielerZug();
-
             }
 
+             int figurNummer = switch (spieler) {
+                    case Niki_Bot nikiBot -> nikiBot.botZug();
+                    case Smart_Bot smartBot -> smartBot.smartBotZug();
+                    case Fight_Bot fightBot -> fightBot.fightBotZug();
+                    default -> spielerZug();
+            };
 
             Spielstein figur = spieler.getFigur(figurNummer);
             Feld currentFeld = figur.getCurrentFeld();
-            if (currentFeld == null) {
+
+            if (currentFeld == null)
+            {
                 currentFeld = spieler.getSpawnFeld();
             }
 
             ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(currentFeld, wuerfelErgebnis);
             //
 
-            if (!moeglicheFelder.isEmpty()) {
+            while (moeglicheFelder.isEmpty()) {
+
+                    switch (spieler) {
+                        case Niki_Bot nikiBot -> figurNummer = nikiBot.botZug(figurNummer);
+                        case Smart_Bot smartBot -> figurNummer = smartBot.smartBotZug(figurNummer);
+                        case Fight_Bot fightBot -> figurNummer = fightBot.fightBotZug(figurNummer);
+                        default -> {
+                            System.out.println("you can't move with this figure.");
+                            figurNummer = spielerZug();
+                        }
+
+                    }
+
+                    figur = spieler.getFigur(figurNummer);
+                    currentFeld = figur.getCurrentFeld();
+                    if (currentFeld == null) {
+                        currentFeld = spieler.getSpawnFeld();
+                    }
+
+                    moeglicheFelder = findeMoegicheFelder(currentFeld, wuerfelErgebnis);
+            }
+
+            if (!moeglicheFelder.isEmpty())
+            {
                 Feld chosenFeld;
 
                 chosenFeld = switch (spieler) {
