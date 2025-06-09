@@ -5,17 +5,18 @@ import java.awt.*;
 
 public class IntInputDialog {
     private static int result = -1;
+    private static String resultString = null;
 
-    public static int show(String message) {
+    public static String getInputWithMessage(String message) {
         final JFrame frame = new JFrame("Eingabe");
         final JTextField inputField = new JTextField(10);
-        final JButton button = new JButton("Bestätigen");
+        final JButton button = new JButton("Go");
 
         final Object lock = new Object();
 
         button.addActionListener(e -> {
             try {
-                result = Integer.parseInt(inputField.getText());
+                resultString = inputField.getText();
                 synchronized (lock) {
                     lock.notify();
                 }
@@ -40,6 +41,16 @@ public class IntInputDialog {
             } catch (InterruptedException ignored) {}
         }
 
+        return resultString;
+    }
+
+    public static int show(String message) {
+        try {
+            result = Integer.parseInt(getInputWithMessage(message));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Bitte gültige Zahl eingeben.");
+            getInputWithMessage(message);
+        }
         return result;
     }
 }

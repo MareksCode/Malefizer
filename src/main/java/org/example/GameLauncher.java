@@ -43,14 +43,16 @@ public class GameLauncher extends JFrame implements ActionListener {
 
     private String userName = null;
     private String userPasswd = null;
+    private String hostAdress = null;
 
     RequestClient requestClient = null;
     LoginResponse loginResponse = null;
 
     GameLauncher gl = this;
 
-    public GameLauncher() {
+    public GameLauncher(String hostAdress) {
         super("Game Launcher");
+        this.hostAdress = hostAdress;
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 150);
         setLocationRelativeTo(null);
@@ -68,6 +70,7 @@ public class GameLauncher extends JFrame implements ActionListener {
 
         joinBtn.setEnabled(false);
         myGamesBtn.setEnabled(false);
+
     }
 
     @Override
@@ -158,7 +161,8 @@ public class GameLauncher extends JFrame implements ActionListener {
 
                 AuthClient loginService = new AuthClient();
                 try {
-                    loginResponse = loginService.logIntoServer(userName, userPasswd, "localhost", 8443);
+
+                    loginResponse = loginService.logIntoServer(userName, userPasswd, hostAdress, 8443);
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                     return;
@@ -172,7 +176,7 @@ public class GameLauncher extends JFrame implements ActionListener {
                     gl.setTitle("GL - " + userName);
                     joinBtn.setEnabled(true);
                     myGamesBtn.setEnabled(true);
-                    requestClient = new RequestClient(loginResponse, "https://localhost:8443");
+                    requestClient = new RequestClient(loginResponse, "https://" + hostAdress + ":" + "8443");
                 }
             } else {
                 dispose();
@@ -307,7 +311,8 @@ public class GameLauncher extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GameLauncher().setVisible(true));
+        String hostAdress = IntInputDialog.getInputWithMessage("die ip des servers: ");
+        SwingUtilities.invokeLater(() -> new GameLauncher(hostAdress).setVisible(true));
     }
 }
 

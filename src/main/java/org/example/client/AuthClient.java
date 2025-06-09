@@ -1,5 +1,7 @@
 package org.example.client;
 
+import org.example.IntInputDialog;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -13,14 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class AuthClient {
-
-    private LoginResponse logIntoServer(String username, String password) throws IOException {
-        return logIntoServer(username, password, "localhost", 8443);
-    }
-    public LoginResponse logIntoServer(String username, String password, String ip) throws IOException {
-        return logIntoServer(username, password, ip, 8443);
-    }
-
     /** zum einloggen beim server. andere methoden geben standartwerte mit (function overload) **/
     public LoginResponse logIntoServer(String username, String password, String ip, int port) throws IOException {
         disableSslVerification();
@@ -44,7 +38,7 @@ public class AuthClient {
         String setCookieHeader = loginConn.getHeaderField("Set-Cookie");
         String redirectLocation = loginConn.getHeaderField("Location");
 
-        LoginResponse lRep = new LoginResponse("localhost", 31415, setCookieHeader);
+        LoginResponse lRep = new LoginResponse(ip, 31415, setCookieHeader);
 
         if (redirectLocation.contains("error")) lRep.authIsFailed();
 
