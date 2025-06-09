@@ -114,7 +114,7 @@ public class Runde {
         //es werden inputs benötigt, die nachfolgend simuliert werden.
         //es wird davon ausgegangen, das jeder spieler aktuell mindestens einen zug amchen kann, sonst crashen wir!
 
-        figurInputNummer = 1;
+        figurInputNummer = 0; //range 0 bis 4
         //testen ob spielstein schon im feld sonst spawn
         Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
         //if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
@@ -162,12 +162,21 @@ public class Runde {
 
     public void setSpieler(String feldid, String playerId) {
         Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
-        gui.setPlayerId(Integer.parseInt(playerId));
-        spielerObjekt = new SpielerObjekt(spawn, Integer.parseInt(playerId), this);
-    }
+        int pid = Integer.parseInt(playerId);
 
-    public void bewegeSperrstein(String feldToId) {
-        socket.bewegeSperrstein(feldToId);
+        gui.setPlayerId(pid);
+        spielerObjekt = new SpielerObjekt(spawn, pid, this);
+
+        for(Feld feld : SpielfeldHeinz.feldMap.values()){
+            if(feld.getBesetzung() != null &&
+                    feld.getBesetzung() instanceof Spielstein &&
+                    ((Spielstein)feld.getBesetzung()).getSpielerId() == pid){
+                int steinId = ((Spielstein)feld.getBesetzung()).getId();
+                //feld.removeBesetzung();
+                //feld.setBesetzung(spielerObjekt.getFigur(steinId));
+                spielerObjekt.getFigur(steinId).setFeld(feld);
+            }
+        }
     }
 
     public void end() {

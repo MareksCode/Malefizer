@@ -107,7 +107,7 @@ public class SpielfeldHeinz {
                 feld.setBesetzung(newSperrstein);
                 newSperrstein.setFeld(feld);
             }else if(dataSplit[0].equals("Spielstein")){
-                feld.setBesetzung(new Spielstein(Integer.parseInt(dataSplit[1]), runde, -1));
+                feld.setBesetzung(new Spielstein(Integer.parseInt(dataSplit[2]), runde, Integer.parseInt(dataSplit[1])));
             }
         }
         return feld;

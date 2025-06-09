@@ -22,6 +22,8 @@ public class Spielstein extends Stein {
         return this.feld;
     }
 
+    public int getId() { return id; }
+
     public void setFeld(Feld neuesFeld) {
         if (this.feld != null) {
             this.feld.removeBesetzung();
