@@ -28,7 +28,7 @@ public class Runde {
         this.socket = socket;
         heinz = SpielfeldHeinz.getInstance(this, xmlStr);
         startFeld = SpielfeldHeinz.getStartfeld();
-        gui = new FeldGUI(startFeld);
+        gui = new FeldGUI(startFeld, -1);
         gui.update(startFeld);
     }
 
@@ -117,12 +117,12 @@ public class Runde {
         figurInputNummer = 1;
         //testen ob spielstein schon im feld sonst spawn
         Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
-        if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
-        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(sp.getCurrentFeld(), wurf);
+        //if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(sp.getCurrentFeld() == null ? spielerObjekt.getSpawnFeld() : sp.getCurrentFeld(), wurf);
 
         //select feld aus den möglichen feldern
-        if (sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
-        socket.spielerZiehe(sp.getCurrentFeld(), moeglicheFelder.getFirst().getId());
+        //if (sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+        socket.spielerZiehe((sp.getCurrentFeld() == null ? spielerObjekt.getSpawnFeld() : sp.getCurrentFeld()), moeglicheFelder.getFirst().getId());
     }
 
     public void createNewSpielsteinOnFeld(int spielerNummer, int figurNummer, int feldId) {
@@ -162,6 +162,7 @@ public class Runde {
 
     public void setSpieler(String feldid, String playerId) {
         Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
+        gui.setPlayerId(Integer.parseInt(playerId));
         spielerObjekt = new SpielerObjekt(spawn, Integer.parseInt(playerId), this);
     }
 

@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.stein.Sperrstein;
+import org.example.stein.Spielstein;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -8,8 +11,11 @@ class FeldPanel extends JPanel {
     private final int feldRadius = 40;      // Größe der Kreise
     private final int spacing = 70;        // Abstand zwischen Feldern
 
-    public FeldPanel(Feld startFeld) {
+    private int playerId;
+
+    public FeldPanel(Feld startFeld, int playerId) {
         this.felder = collectFelder(startFeld);
+        this.playerId = playerId;
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(Color.WHITE);
     }
@@ -17,6 +23,10 @@ class FeldPanel extends JPanel {
     public void repaintNewFields(Feld feld) {
         felder = collectFelder(feld);
         repaint();
+    }
+
+    public void setPlayerIdPanel(int playerId) {
+        this.playerId = playerId;
     }
 
     private Set<Feld> collectFelder(Feld start) {
@@ -87,8 +97,17 @@ class FeldPanel extends JPanel {
                 String content = feld.getBesetzung().toString();
                 FontMetrics fm = g2d.getFontMetrics();
                 int textWidth = fm.stringWidth(content);
-                g2d.setColor(Color.BLUE);
-                g2d.drawString(content, x + feldRadius/2 - textWidth/2, y + feldRadius/2 + 20);
+                if(feld.getBesetzung() instanceof Spielstein && ((Spielstein)feld.getBesetzung()).getSpielerId() == playerId){
+                    g2d.setColor(Color.getHSBColor(0.5f, 1f, 0.5f));
+                }else if(feld.getBesetzung() instanceof Sperrstein){
+                    g2d.setColor(Color.RED);
+                }
+                else {
+                    g2d.setColor(Color.BLUE);
+                }
+                //g2d.setStroke(new BasicStroke(3));
+                //g2d.setColor(Color.BLUE);
+                g2d.drawString(content, x + feldRadius/2 - textWidth/2, y + feldRadius/2 + 32);
             }
         }
     }

@@ -1,5 +1,11 @@
-00000
-0x0x0
-00S00
-0x0x0
-S0000
+/*
+        for(Feld spawn: SpielfeldHeinz.getSpawnFelder().values()) {
+            if(!spawnFelder.containsValue(spawn)) {
+                spawnFelder.put(playerId, spawn);
+                System.out.println("Spieler " + playerId + " ist im Spawn " + spawn.getId() + " mit runde id " + playerIndex);
+                spielerObjekt = new SpielerObjekt(spawn, playerIndex, this);
+                spieler.put(playerId, spielerObjekt);
+                channel.writeAndFlush("SETSPWN:"+spawn.getId()+":"+ playerIndex +"\n");
+                break;
+            }
+        }*/

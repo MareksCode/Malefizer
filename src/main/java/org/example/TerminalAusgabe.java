@@ -36,6 +36,8 @@ public class TerminalAusgabe implements GUIface {
         }
     }
 
+    public void setPlayerId(int i) {}
+
     private void searchNachbar(int x, int y, Feld feld){
         for(Feld nachbar: feld.getNachbarn()){
 
