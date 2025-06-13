@@ -21,19 +21,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-/**
- * A minimal desktop GUI that demonstrates:
- * - Login dialog (username + password)
- * - "Join" window that shows items from an XML file and lets the user accept one
- * - "My Games" window that shows a list from another XML file and lets the user
- * accept or delete an entry (persisting the change back to the XML)
- * <p>
- * XML **format** expected (example join.xml / mygames.xml):
- * <games>
- * <game name="Chess" />
- * <game name="Monopoly" />
- * </games>
- */
+
 public class GameLauncher extends JFrame implements ActionListener {
 
     private JButton loginBtn = new JButton("Login");
