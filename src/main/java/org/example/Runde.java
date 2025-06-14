@@ -188,7 +188,7 @@ public class Runde implements Serializable {
             chosenID = Integer.parseInt(s);
             if (chosenID == 1000) {
                 try {
-                    SERWorker.speichern(this, "Test.ser");
+                    SERWorker.speichern(this,gui, "Test.ser");
                     System.out.println("Spielstand gespeichert!");
                 } catch (IOException e) {
                     e.printStackTrace();
