@@ -13,5 +13,5 @@ public abstract class Stein implements Serializable {
     }
     public abstract boolean kannDrueber();
     public abstract void schlagen() throws Exception;
-
+    public abstract String getType();
 }

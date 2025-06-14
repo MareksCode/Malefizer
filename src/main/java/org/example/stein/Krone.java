@@ -23,6 +23,10 @@ public class Krone extends Stein implements Serializable {
         this.dazugehoerendeRunde.end();
     }
 
+    public String getType() {
+        return "Krone";
+    }
+
     @Override
     public String toString() {
         return "Krone:"+id;

@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.stein.Spielstein;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ public class SpielerObjekt implements Serializable {
     private Feld spawnFeld;
     public Spielstein[] Figuren;
     public int spielerId ;
-
+    private Color Color;
 
     public SpielerObjekt(Feld spawnFeld, int spielerId, Runde dazugehoerendeRunde) {
         this.spawnFeld = spawnFeld;
@@ -21,6 +22,13 @@ public class SpielerObjekt implements Serializable {
             Spielstein neueFigur = new Spielstein(figurNummer, dazugehoerendeRunde, spielerId);
             this.Figuren[figurNummer] = neueFigur;
         }
+    }
+
+    public Color getColor() {
+        return this.Color;
+    }
+    public void setColor(Color color) {
+        this.Color = color;
     }
 
     public Spielstein getFigur(int figurNummer) {

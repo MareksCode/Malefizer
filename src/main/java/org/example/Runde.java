@@ -9,7 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -59,8 +59,8 @@ public class Runde implements Serializable {
             NodeList spielers =  players.getElementsByTagName("player");
             spielerListe = new SpielerObjekt[spielers.getLength()];
             for (int i = 0; i < spielerAnzahl; i++) {
-
                 SpielerObjekt sp = new SpielerObjekt(spawns.get(i), i, this);
+                spawns.get(i).setSpielerSpawnInhaberId(i);
                 spielerListe[i] = sp;
                 System.out.println(spielerListe.length);
                 Element e = (Element) spielers.item(i);
@@ -76,6 +76,7 @@ public class Runde implements Serializable {
             for ( int i = spielerAnzahl; i < MAX_SPIELER+1; i++){
 
                 SpielerObjekt spBot = new SpielerObjekt(spawns.get(i), i, this);
+                spawns.get(i).setSpielerSpawnInhaberId(i);
                 spielerListe[i] = spBot;
                 Element e = (Element) spielers.item(i);
                 NodeList childs = e.getElementsByTagName("spielstein");
@@ -91,7 +92,7 @@ public class Runde implements Serializable {
             isStartAllowed = true;
             System.out.println(e);
         }
-        gui = new TerminalAusgabe();
+        gui = new FeldGUI(startFeld);
         this.spielGewonnen = false ;
     }
     public int getAmZug() {
@@ -238,7 +239,8 @@ public class Runde implements Serializable {
 
         spawns = SpielfeldHeinz.getSpawnFelder();
 
-        gui = new TerminalAusgabe();
+
+        gui = new FeldGUI(startFeld);
 
          //spielerliste erstellen
         spielerListe = new SpielerObjekt[MAX_SPIELER];
@@ -247,6 +249,7 @@ public class Runde implements Serializable {
             for (int spielerNum = 0; spielerNum < this.spielerAnzahl; spielerNum++) { //spielerspawns erstellen
                 //vielleicht in eine zeile packen
                 SpielerObjekt spieler = new SpielerObjekt(spawns.get(spielerNum), spielerNum, this);
+                spawns.get(spielerNum).setSpielerSpawnInhaberId(spielerNum);
                 spielerListe[spielerNum] = spieler; //in spawn array hinzufügen
             }
 
