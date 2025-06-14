@@ -6,8 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.util.Arrays;
 import javax.xml.parsers.*;
 
 import org.example.client.AuthClient;
@@ -26,8 +24,8 @@ public class GameLauncher extends JFrame implements ActionListener {
 
     private JButton loginBtn = new JButton("Login");
     private JButton joinBtn = new JButton("Join");
-    private JButton myGamesBtn = new JButton("My Games");
-    private JButton playBtn = new JButton("Spielen / tmp");
+    private JButton createBtn = new JButton("Create");
+    private JButton playBtn = new JButton("Play");
 
     private String userName = null;
     private String userPasswd = null;
@@ -48,16 +46,16 @@ public class GameLauncher extends JFrame implements ActionListener {
 
         add(loginBtn);
         add(joinBtn);
-        add(myGamesBtn);
+        add(createBtn);
         add(playBtn);
 
         loginBtn.addActionListener(this);
         joinBtn.addActionListener(this);
-        myGamesBtn.addActionListener(this);
+        createBtn.addActionListener(this);
         playBtn.addActionListener(this);
 
         joinBtn.setEnabled(false);
-        myGamesBtn.setEnabled(false);
+        createBtn.setEnabled(false);
 
     }
 
@@ -74,26 +72,37 @@ public class GameLauncher extends JFrame implements ActionListener {
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-            new XmlListFrame(this, "test.xml", false, doc).setVisible(true);
+            new XmlListFrame(this, 1, false, doc).setVisible(true);
 
-        } else if (e.getSource() == myGamesBtn) {
-            return;
-            //new XmlListFrame(this, "test.xml", false, null).setVisible(true);
-        } else if (e.getSource() == playBtn) {
-            /*try {
-                requestClient.sendJoinRequest(1);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }*/
-
+        } else if (e.getSource() == createBtn) {
+            Document doc = null;
             try {
-                dispose();
-                SocketService socketService = new SocketService(1);
-                socketService.connectAndListen(loginResponse);
-                Runtime.getRuntime().addShutdownHook(new Thread(socketService::onExit));
+                doc = requestClient.requestXml("/api/xml/allfields");
+                System.out.println(doc.getXmlVersion());
             } catch (Exception ex) {
-                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
+            new XmlListFrame(this, 0, false, doc).setVisible(true);
+        } else if (e.getSource() == playBtn) {
+            Document doc = null;
+            try {
+                doc = requestClient.requestXml("/api/xml/getopengames");
+                System.out.println(doc.getXmlVersion());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+            new XmlListFrame(this, 2, false, doc).setVisible(true);
+        }
+    }
+
+    private void playGameAfterBtn(){
+        try {
+            dispose();
+            SocketService socketService = new SocketService(1);
+            socketService.connectAndListen(loginResponse);
+            Runtime.getRuntime().addShutdownHook(new Thread(socketService::onExit));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -163,7 +172,7 @@ public class GameLauncher extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(GameLauncher.this, "Willkommen, " + userName + "!");
                     gl.setTitle("GL - " + userName);
                     joinBtn.setEnabled(true);
-                    myGamesBtn.setEnabled(true);
+                    createBtn.setEnabled(true);
                     requestClient = new RequestClient(loginResponse, "https://" + hostAdress + ":" + "8443");
                 }
             } else {
@@ -177,23 +186,21 @@ public class GameLauncher extends JFrame implements ActionListener {
      */
     private static class XmlListFrame extends JFrame implements ActionListener, ListSelectionListener {
 
-        private final DefaultListModel<String> model = new DefaultListModel<>();
-        private final JList<String> list = new JList<>(model);
+        private final DefaultListModel<SpielfeldEintrag> model = new DefaultListModel<>();
+        private final JList<SpielfeldEintrag> list = new JList<>(model);
         private final JButton accept = new JButton("Akzeptieren");
         private final JButton delete = new JButton("Löschen");
         private final JButton close = new JButton("Schließen");
         private Document d = null;
 
-        private final String filePath;
         private final boolean allowDelete;
 
-        XmlListFrame(JFrame parent, String filePath, boolean allowDelete, Document d) {
+        XmlListFrame(JFrame parent, int idSource, boolean allowDelete, Document d) {
             super(allowDelete ? "My Games" : "Join Spieleliste");
-            this.filePath = filePath;
             this.allowDelete = allowDelete;
             this.d = d;
 
-            loadXml();
+            loadXml(idSource);
 
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             list.addListSelectionListener(this);
@@ -220,53 +227,57 @@ public class GameLauncher extends JFrame implements ActionListener {
             setLocationRelativeTo(parent);
         }
 
-        private void loadXml() {
+        private void loadXml(int idSource) {
             model.clear();
-            File f = new File(filePath);
-            if (!f.exists()) return;
-            try {
-                DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                Document doc = db.parse(f);
-                for (Node node : iterable(d.getElementsByTagName("game"))) {
-                    Element el = (Element) node;
-                    model.addElement("Spiel von " + el.getElementsByTagName("owner").item(0).getTextContent() + " erstellt am " + el.getElementsByTagName("lastModified").item(0).getTextContent());
-                }
-            } catch (ParserConfigurationException | IOException | SAXException ex) {
-                ex.printStackTrace();
+            switch(idSource){
+                case 0:
+                    try {
+                        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                        for (Node node : iterable(d.getElementsByTagName("field"))) {
+                            Element el = (Element) node;
+                            String id = el.getElementsByTagName("uuid").item(0).getTextContent();
+                            String text = "'"
+                                    + el.getElementsByTagName("name").item(0).getTextContent()
+                                    + "' , "
+                                    + el.getElementsByTagName("playercount").item(0).getTextContent()
+                                    + " Spieler";
+                            model.addElement(new SpielfeldEintrag(text, id));
+                        }
+                    } catch (ParserConfigurationException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+
+                case 1:
+                    try {
+                        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                        for (Node node : iterable(d.getElementsByTagName("game"))) {
+                            Element el = (Element) node;
+                            String id = el.getElementsByTagName("id").item(0).getTextContent();
+                            String text = "Spiel von "
+                                    + el.getElementsByTagName("owner").item(0).getTextContent()
+                                    + " erstellt am"
+                                    + el.getElementsByTagName("lastModified").item(0).getTextContent();
+                            model.addElement(new SpielfeldEintrag(text, id));
+                        }
+                    } catch (ParserConfigurationException ex) {
+                        ex.printStackTrace();
+                    }
             }
+
         }
 
-        private void saveXml() {
-            try {
-                DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                Document doc = db.newDocument();
-                Element root = doc.createElement("games");
-                doc.appendChild(root);
-                for (int i = 0; i < model.size(); i++) {
-                    Element g = doc.createElement("game");
-                    g.setAttribute("name", model.get(i));
-                    root.appendChild(g);
-                }
-
-                Transformer t = TransformerFactory.newInstance().newTransformer();
-                t.setOutputProperty(OutputKeys.INDENT, "yes");
-                t.transform(new DOMSource(doc), new StreamResult(new File(filePath)));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
 
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == accept) {
-                String game = list.getSelectedValue();
+                String game = list.getSelectedValue().toString();
                 //todo: hier stuff machen
                 JOptionPane.showMessageDialog(this, (allowDelete ? "Spiel öffnen: " : "Beitreten zu: ") + game);
             } else if (e.getSource() == delete && allowDelete) {
                 int idx = list.getSelectedIndex();
                 if (idx >= 0) {
                     model.remove(idx);
-                    saveXml();
                 }
             }
         }
@@ -301,6 +312,21 @@ public class GameLauncher extends JFrame implements ActionListener {
     public static void main(String[] args) {
         String hostAdress = IntInputDialog.getInputWithMessage("die ip des servers: ");
         SwingUtilities.invokeLater(() -> new GameLauncher(hostAdress).setVisible(true));
+    }
+
+    private static class SpielfeldEintrag{
+        private final String text;
+        private final String id;
+        public SpielfeldEintrag(String text, String id){
+            this.text = text;
+            this.id = id;
+        }
+        public String getID(){return id;}
+        @Override
+        public String toString() {
+            return text;
+        }
+
     }
 }
 
