@@ -2,12 +2,14 @@ package org.example.stein;
 
 import org.example.Feld;
 import org.example.Runde;
+import org.example.bot.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+
 
 public class Sperrstein extends Stein implements Serializable {
     private Feld feld;
@@ -71,6 +73,21 @@ public class Sperrstein extends Stein implements Serializable {
         for (Feld feld : moeglicheFelder) {
             if (feld.getId() == chosenID) {
 
+                if(chosenID == 87 || chosenID == 83 || chosenID == 79 ||            //checken ob es ein span feld ist
+                        chosenID == 75 || chosenID == 9){
+                    System.out.println("invalid choose, the Sperrstein can`t be on the first line");
+                    return steinZiehe(moeglicheFelder, figur);
+                }
+                else {
+                    for (Feld moeglichesFeld : moeglicheFelder) {
+                        if (moeglichesFeld.getId() == chosenID) {
+                            if (moeglichesFeld.getBesetzung() == null) {
+                                chosenFeld = moeglichesFeld;
+                                return chosenFeld;
+                            }
+                        }
+                    }
+                }
                     chosenFeld = feld;
             }
         }
@@ -83,10 +100,22 @@ public class Sperrstein extends Stein implements Serializable {
     }
 
     public void schlagen() throws Exception {
+
         this.feld.removeBesetzung();
-        // hier gui printen vielleicht
-        Feld newFeld = steinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
-        this.setFeld(newFeld);
+        Feld newFeld;
+        newFeld = switch(dazugehoerendeRunde.spieler){
+            case Niki_Bot nikibot -> nikibot.nikiSperrsteinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
+            case Smart_Bot smartBot -> smartBot.smartSperrsteinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this,this.feld);
+            case Fight_Bot fightBot -> fightBot.fightSperrsteinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld),this, this.feld,dazugehoerendeRunde.spielerListe);
+            default -> steinZiehe(findeMoegicheFelder(this.dazugehoerendeRunde.startFeld), this);
+        };
+
+        try{
+            this.setFeld(newFeld);
+        }catch (NullPointerException e){
+            System.out.println("Spielstein ist Null");
+        }
+
         System.out.println("setFeld bei sperrstein hat geklappt");
     }
     @Override

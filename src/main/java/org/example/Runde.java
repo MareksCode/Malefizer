@@ -28,10 +28,10 @@ public class Runde implements Serializable {
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
     GUIface gui = null;
-    private final int MAX_SPIELER=4;
+    public final int MAX_SPIELER=4;
     private int spielerAnzahl;
     private int botSchwierigkeit;
-    SpielerObjekt[] spielerListe;
+    public SpielerObjekt[] spielerListe;
 
     public Runde(int spieler, int botSchwierigkeit) {
         this.spielGewonnen = false;
@@ -73,7 +73,7 @@ public class Runde implements Serializable {
                     } else {sp.setSpielstein((Spielstein) feldMap.get(Integer.toString(id)).getBesetzung());}
                 }
             }
-            for ( int i = spielerAnzahl; i < MAX_SPIELER+1; i++){//todo bitte überprüfen ob logic sinnvoll vieleicht mit menü koillierent
+            for ( int i = spielerAnzahl; i < MAX_SPIELER+1; i++){
 
                 SpielerObjekt spBot = new SpielerObjekt(spawns.get(i), i, this);
                 spielerListe[i] = spBot;
@@ -278,6 +278,8 @@ public class Runde implements Serializable {
         spielloop();
     }
 
+    public SpielerObjekt spieler;
+
     public void spielloop() throws Exception {
         Wuerfel wuerfel = new Wuerfel();
         while (!this.spielGewonnen) { //spiel loop, bis gewonnen wurde
@@ -287,7 +289,7 @@ public class Runde implements Serializable {
             //System.out.println(spielerAnzahl);
 
             this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
-            SpielerObjekt spieler = spielerListe[this.amZug];
+            spieler = spielerListe[this.amZug];
 
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
 

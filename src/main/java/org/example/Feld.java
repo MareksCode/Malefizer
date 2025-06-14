@@ -82,6 +82,7 @@ public class Feld implements Serializable {
         return this.besetzung.kannDrueber();
     }
 
+
     public void schlagen() throws Exception {
         if (this.besetzung == null) {return;}
 

@@ -3,6 +3,7 @@ package org.example.bot;
 
 import org.example.Feld;
 
+
 import java.util.*;
 
 
@@ -19,6 +20,7 @@ public class Tiefensuche {
         List<Integer> kuerzesterPfad = null;
         for (List<Integer> pfad : allePfade) {
             if (kuerzesterPfad == null || pfad.size() < kuerzesterPfad.size()) {    //wenn Pfad kürzer als kuerzesterPfad dann kuerzesterPfad=pfad
+
                 kuerzesterPfad = pfad;
             }
         }
@@ -31,15 +33,19 @@ public class Tiefensuche {
         besucht.add(aktueller);
         aktuellerPfad.add(aktueller);
 
-        if (aktueller == ziel) {                                    //Ziel kann krone oder Gegner bzw. Sperrstein sein
+        if (aktueller == ziel) {
+                                                                    //Ziel kann krone oder Gegner bzw. Sperrstein sein
             allePfade.add(new ArrayList<>(aktuellerPfad));          //wenn Ziel erreicht füge den Pfad zu allen hinzu
 
         } else {
+
             List<Feld> nachbarn = graph.get(String.valueOf(aktueller)) != null ?
-                    graph.get(String.valueOf(aktueller)).getNachbarn() :
-                    new ArrayList<>();
+                        graph.get(String.valueOf(aktueller)).getNachbarn() :
+                        new ArrayList<>();
+
             for (Feld nachbar : nachbarn) {
                 if (!besucht.contains(nachbar.getId())) {
+
                     dfs(graph, nachbar.getId(), ziel, besucht, aktuellerPfad, allePfade);
                 }
             }
@@ -48,4 +54,7 @@ public class Tiefensuche {
         besucht.remove(aktueller);
         aktuellerPfad.remove(aktuellerPfad.size() - 1);
     }
+
+
+
 }

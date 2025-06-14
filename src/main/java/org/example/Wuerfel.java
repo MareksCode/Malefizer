@@ -6,7 +6,6 @@ public class Wuerfel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final int MAX = 5;
-    private final int MIN = 1;
     private Random rand = new Random();
 
     public int Roll() {

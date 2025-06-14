@@ -1,14 +1,13 @@
 package org.example.bot;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.example.*;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.example.stein.Sperrstein;
 import org.example.stein.Spielstein;
 import org.example.Runde;
+import org.example.Feld;
 
 public class Niki_Bot extends Bot{
 
@@ -53,17 +52,17 @@ public class Niki_Bot extends Bot{
         for (Feld feld : moeglicheFelder) {     //niki wählt immer die größte feldzahl aus
             int temp = feld.getId();
 
-            if(temp < chosenID){
+            if(temp > chosenID){
                 chosenID=temp;
             }
 
         }
 
-        System.out.println("Bot has chosen: "+chosenID);
         Feld chosenFeld = null;
 
         for (Feld feld : moeglicheFelder) {
             if (feld.getId() == chosenID) {
+
                 chosenFeld = feld;
             }
         }
@@ -76,4 +75,15 @@ public class Niki_Bot extends Bot{
         return chosenFeld;
     }
 
+    public Feld nikiSperrsteinZiehe(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
+
+        Feld chosenFeld = randomNeuesFeld(moeglicheFelder);
+
+        if (chosenFeld == null) {
+            return nikiSperrsteinZiehe(moeglicheFelder, figur);
+        }
+
+        return chosenFeld;
+
+    }
 }
