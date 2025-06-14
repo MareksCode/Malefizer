@@ -5,6 +5,6 @@ import java.io.Serializable;
 public interface GUIface extends Serializable {
     static final long serialVersionUID = 1L;
     void update(Feld startFeld);
-    
+    Feld selectFeld() throws InterruptedException;
     void showMessage(String message);
 }

@@ -4,16 +4,20 @@ import org.example.stein.Spielstein;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
-class FeldPanel extends JPanel {
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.*;
+
+class FeldPanel extends JPanel implements MouseListener {
+    private FeldGUI feldGUI;
+
     private Set<Feld> felder;
-    private final int feldRadius = 40;      // Größe der Kreise
-    private final int spacing = 70;        // Abstand zwischen Feldern
+    private final int feldRadius = 40;
+    private final int spacing = 70;
     private Color[] playerBackgroundColors = {new Color(150,150,255), new Color(255,150,150), new Color(150,255,150), new Color(255,165,100)};
     private Color[] playerColors = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE};
+
+    private Graphics2D debugG;
 
     private int spielerKopfRadius = 15;
     private int spielerKoerperBreite = 25;
@@ -24,18 +28,53 @@ class FeldPanel extends JPanel {
 
     private final boolean DEBUG_MODE = true;
 
-    public FeldPanel(Feld startFeld) {
+    public FeldPanel(Feld startFeld, FeldGUI feldGUI) {
+        this.feldGUI = feldGUI;
         this.felder = collectFelder(startFeld);
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(Color.WHITE);
+
+        addMouseListener(this);
     }
 
+    //Spielfeld Actions
     public void repaintNewFields(Feld feld) {
         felder = collectFelder(feld);
         repaint();
     }
 
-    private Set<Feld> collectFelder(Feld start) { //taktische breitensuche
+    public Feld selectFeld(int x, int y) {
+        Iterator<Feld> feldIterator = felder.iterator();
+        double closestNum = Double.MAX_VALUE;
+        Feld closestFeld = null;
+
+        while (feldIterator.hasNext()) {
+            Feld feldToCheck = feldIterator.next();
+            Position feldPosition = feldToCheck.getPosition();
+
+            Position umgerechneteFeldPosition = new Position(feldPosition.x * spacing + feldRadius/2, feldPosition.y * spacing + feldRadius/2);
+            Position mausPosition = new Position(x, y);
+
+            double distance = Position.getDistanz(mausPosition, umgerechneteFeldPosition);
+            //System.out.println(feldToCheck.toString()  + " dist " + mausPosition.toString() + " = " + distance);
+
+            if (distance < closestNum) {
+                closestNum = distance;
+                closestFeld = feldToCheck;
+            }
+        }
+        //System.out.println("gefunden: "+closestFeld);
+        if (closestFeld != null && closestNum < feldRadius) { //Spieler hat aimbot genutzt und das feld getroffen!
+           // System.out.println("neues feld gefunden");
+            return closestFeld;
+        } else {
+            //System.out.println("nix gefunden");
+            return null;
+        }
+    }
+
+    //taktische breitensuche
+    private Set<Feld> collectFelder(Feld start) {
         Set<Feld> besucht = new HashSet<>();
         Queue<Feld> queue = new LinkedList<>();
         queue.add(start);
@@ -54,6 +93,37 @@ class FeldPanel extends JPanel {
         return besucht;
     }
 
+    //maus funktionen
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Feld angeklickt = selectFeld(e.getX(), e.getY());
+        if (angeklickt != null) {
+            //System.out.println("gefunden");
+            feldGUI.feldWurdeGewaehlt(angeklickt); // Rückgabe an GUI
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    //Icons
     private void drawPlayer(Graphics g, Position pos, int playerId) {
         Color playerColor = playerColors[playerId];
         Graphics2D g2d = (Graphics2D) g;
@@ -110,6 +180,7 @@ class FeldPanel extends JPanel {
         g2d.drawLine(x1, y1, x2, y2);
     }
 
+    //spielfeld zeichnen
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

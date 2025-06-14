@@ -18,6 +18,11 @@ public class TerminalAusgabe implements GUIface {
         repaint(startFeld);
     }
 
+    @Override
+    public Feld selectFeld() throws InterruptedException {
+        return null;
+    }
+
     public void showMessage(String message){}
 
     private void repaint (Feld startFeld){

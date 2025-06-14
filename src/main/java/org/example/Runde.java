@@ -288,6 +288,12 @@ public class Runde implements Serializable {
         while (!this.spielGewonnen) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);
+            try {
+                System.out.println("select feld NOWWWW");
+                gui.selectFeld();
+            } catch (InterruptedException ie) {
+                System.err.println(ie.getMessage());
+            }
 
             //System.out.println(spielerAnzahl);
 
