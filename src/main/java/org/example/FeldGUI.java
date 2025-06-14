@@ -58,3 +58,10 @@ public class FeldGUI implements GUIface {
     }
 
 }
+
+//try {
+//        System.out.println("select feld NOWWWW");
+//                gui.selectFeld();
+//            } catch (InterruptedException ie) {
+//        System.err.println(ie.getMessage());
+//        }
