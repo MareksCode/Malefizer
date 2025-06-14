@@ -82,6 +82,10 @@ public class Sperrstein extends Stein implements Serializable {
         return chosenFeld;
     }
 
+    public String getType() {
+        return "Sperrstein";
+    }
+
     public void schlagen() throws Exception {
         this.feld.removeBesetzung();
         // hier gui printen vielleicht

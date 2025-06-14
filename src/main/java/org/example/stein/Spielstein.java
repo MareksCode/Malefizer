@@ -35,6 +35,10 @@ public class Spielstein extends Stein implements Serializable {
         neuesFeld.setBesetzung(this);
     }
 
+    public String getType() {
+        return "Spielstein";
+    }
+
     public void schlagen() throws Exception {
         if (this.feld != null) {
             this.feld.removeBesetzung();

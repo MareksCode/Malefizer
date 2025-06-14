@@ -13,6 +13,7 @@ public class Feld implements Serializable {
     private int id = -1;
     private boolean spielerSpawn;
     private Position position;
+    private int spawnInhaber;
 
     private boolean tempGefaerbt;
     private int tiefe;
@@ -24,6 +25,7 @@ public class Feld implements Serializable {
         this.tempGefaerbt = false;
         this.tiefe = 0;
         this.position = new Position(-1,-1);
+        this.spawnInhaber = 0;
         //this.besetzung = besetzung;
     }
 
@@ -54,6 +56,13 @@ public class Feld implements Serializable {
     }
     public boolean istSpielerSpawn() {
         return this.spielerSpawn;
+    }
+    public void setSpielerSpawnInhaberId(int spielerid) {
+        System.out.println("set spielfeldinhaber to " + spielerid);
+        this.spawnInhaber = spielerid;
+    }
+    public int getSpielerSpawnInhaberId() {
+        return this.spawnInhaber;
     }
 
     public void setBesetzung(Stein besetzung) {
