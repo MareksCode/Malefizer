@@ -30,7 +30,7 @@ public class XMLWorker {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         System.out.println(System.getProperty("user.dir"));
 
-        transformer.transform(new DOMSource(doc), new StreamResult(new File(System.getProperty("user.dir") + filename)));
+        transformer.transform(new DOMSource(doc), new StreamResult(new File(filename)));
         System.out.println("XML gespeichert unter: " + filename);
     }
 

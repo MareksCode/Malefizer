@@ -455,11 +455,13 @@ public class Runde implements Serializable {
         this.spielGewonnen = true;
     }
 
-    public void saveAsXml() {
+    public void saveAsXml(String absolutePath) throws Exception{
+        XMLWorker.toXML(startFeld, this, absolutePath);
         System.out.println("Gespeichert!");
     }
 
-    public void saveAsSer(String absolutePath) {
+    public void saveAsSer(String absolutePath) throws Exception{
+        SERWorker.speichern(this, gui, absolutePath);
         System.out.println("Gespeichert! 2");
     }
 }
