@@ -93,7 +93,11 @@ public class GameLauncher extends JFrame implements ActionListener {
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-            new XmlListFrame(this, 1, false, doc).setVisible(true);
+            XmlListFrame frame =new XmlListFrame(this, 1, false, doc);
+            frame.setVisible(true);
+
+            String selectedId=frame.getOwned();
+            System.out.println("Ausgewähltes Spiel: "+selectedId);
 
         } else if (e.getSource() == createBtn) {
             Document doc = null;
@@ -206,6 +210,8 @@ public class GameLauncher extends JFrame implements ActionListener {
      * Generic frame that shows the contents of an XML file (<games><game name="..."/></games>)
      */
     private static class XmlListFrame extends JFrame implements ActionListener, ListSelectionListener {
+        private final GameLauncher parent;
+        private String selectedGameId = null;
 
         private final DefaultListModel<SpielfeldEintrag> model = new DefaultListModel<>();
         private final JList<SpielfeldEintrag> list = new JList<>(model);
@@ -216,10 +222,18 @@ public class GameLauncher extends JFrame implements ActionListener {
 
         private final boolean allowDelete;
 
+
+        public String getOwned() {
+            return selectedGameId;
+        }
+
+
+
         XmlListFrame(JFrame parent, int idSource, boolean allowDelete, Document d) {
             super(allowDelete ? "My Games" : "Join Spieleliste");
             this.allowDelete = allowDelete;
             this.d = d;
+            this.parent=(GameLauncher)parent;
 
             loadXml(idSource);
 
@@ -295,16 +309,32 @@ public class GameLauncher extends JFrame implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == accept) {
                 SpielfeldEintrag selected = list.getSelectedValue();
+
                 if (selected != null) {
                     String gameId = selected.getID();
-                    try {
+                    selectedGameId = gameId;
+
+                   /* try {
                         //Anfrage an den Server zum Beitreten senden
                         Document joinResponse = ((GameLauncher) getOwner()).requestClient.requestXml("/api/xml/joingame/" + gameId);
+
                         JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
                         dispose();// fenster schließne
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());*/
+                    GameLauncher launcher = (GameLauncher) getOwner();
+                    if (launcher != null && launcher.requestClient != null) {
+                        try {
+                            Document joinResponse = launcher.requestClient.requestXml("/api/xml/joingame/" + gameId);
+                            JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
+                            dispose(); // Fenster schließen
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Fehler: Kein gültiger Besitzer oder RequestClient vorhanden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
+
                 }
             } else if (e.getSource() == delete && allowDelete) {
                 int idx = list.getSelectedIndex();
