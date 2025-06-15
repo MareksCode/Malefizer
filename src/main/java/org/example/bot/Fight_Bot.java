@@ -74,6 +74,8 @@ public class Fight_Bot extends Bot{
         // Letzte Fallback-Option
         return fallbackFeldWahl(moeglicheFelder);
     }
+
+
     private Feld fallbackFeldWahl(ArrayList<Feld> moeglicheFelder) {
         int chosenID = 0;
         for (Feld feld : moeglicheFelder) {
@@ -105,6 +107,7 @@ public class Fight_Bot extends Bot{
             kleisntefeld = feldvaledirung(scannStein(spielerliste,skipsterine,moeglicheFelder).getId(), moeglicheFelder);
         }
         skipsterine.clear();
+
         return kleisntefeld;
 
     }
