@@ -11,4 +11,5 @@ public interface GUIface extends Serializable {
     void showMessage(String message);
     void zeigeWurfDialog(int Wuerfelergebnis);
     void showNotification(String msg, int dauer);
+    void geschlagenNotification(String msg, int dauer);
 }

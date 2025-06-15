@@ -64,6 +64,7 @@ class FeldPanel extends JPanel implements MouseListener {
            // System.out.println("neues feld gefunden");
             return closestFeld;
         } else {
+            feldGUI.showNotification("Bitte auf ein Feld klicken.", 2000);
             //System.out.println("nix gefunden");
             return null;
         }

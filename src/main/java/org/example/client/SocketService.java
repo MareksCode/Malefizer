@@ -81,7 +81,7 @@ public class SocketService {
                         runde.bewege(args[1], args[2]);
                         break;
                     case "TURN":
-                        runde.macheZug();
+                        runde.macheZug(args[1]);
                         break;
                     case "FAIL":
                         System.out.println("Fehler gesendet vom server: " + serverMsg);

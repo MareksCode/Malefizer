@@ -82,7 +82,12 @@ public class Runde {
         return ergebnis;
     }
 
-    public void macheZug() {
+    public void macheZug(String id) {
+        gui.setCurrentlyAmZug(Integer.parseInt(id));
+        if(Integer.parseInt(id) != spielerObjekt.getId()) {
+            gui.setObjective("Warte auf Gegner...");
+            return;
+        }
         //würfeln
         // 1.  Würfel anfordern
         socket.requestRoll(spielerObjekt.getId())
@@ -93,7 +98,7 @@ public class Runde {
                         if (wurf == -1 && tempCountOverflow < 3) {
                             tempCountOverflow++;
                             sleep(100); //buffer neue anfrage um 100ms
-                            macheZug();
+                            macheZug(id);
                         } else if (tempCountOverflow >= 3 && wurf == -1) {
                             System.out.println("Zug abgelehnt, das sollte nciht mehr passieren das ist explizit nicht gut");
                             gui.update(startFeld);
@@ -150,11 +155,9 @@ public class Runde {
 
         gui.zeigeWurfDialog(wurf);
 
-        gui.setObjective("Du bist am Zug!");
-
         gui.setObjective("Wähle eine deiner Figuren aus. Klicke auf deinen Spawn um eine neue rauszuholen.");
 
-        int figurnummer = 0;
+        int figurnummer;
 
         figurnummer = spielerZug();
 
@@ -245,7 +248,7 @@ public class Runde {
                 if (chosenFeld.getId() == spieler.getSpawnFeld().getId()) {
                     //find not used spielstein
                     Spielstein[] spielerSpielsteine = spieler.getFiguren();
-                    for (int i = 0; i < spielerSpielsteine.length; i++) {
+                    for(int i = 0; i < spielerSpielsteine.length; i++) {
                         if (spielerSpielsteine[i].getCurrentFeld() == null) {
                             return i;
                         }
