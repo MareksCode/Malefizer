@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.*;
 
+import org.apache.hc.client5.http.fluent.Request;
 import org.example.client.AuthClient;
 import org.example.client.LoginResponse;
 import org.example.client.RequestClient;
@@ -31,10 +32,18 @@ public class GameLauncher extends JFrame implements ActionListener {
     private String userPasswd = null;
     private String hostAdress = null;
 
-    RequestClient requestClient = null;
+
+    //RequestClient requestClient = null;
     LoginResponse loginResponse = null;
 
     GameLauncher gl = this;
+
+    public RequestClient getRequestClient() {
+        return requestClient;
+    }
+
+    private RequestClient requestClient;
+
 
     public GameLauncher(String hostAdress) {
         super("Game Launcher");
@@ -109,12 +118,21 @@ public class GameLauncher extends JFrame implements ActionListener {
             }
             new XmlListFrame(this, 0, false, doc).setVisible(true);
         } else if (e.getSource() == playBtn) {
+            if(requestClient==null) {
+                JOptionPane.showMessageDialog(this, "Zuerst einloggen!");
+                return;
+            }
             Document doc = null;
             try {
-                doc = requestClient.requestXml("/api/xml/getopengames");
-                System.out.println(doc.getXmlVersion());
+                doc = requestClient.requestXml("/api/xml/mygames");
+                if(doc==null) {
+                    JOptionPane.showMessageDialog(this, "Fehler beim Laden der Spiele: Serverantwort war leer");
+                    return;
+                }
+                System.out.println("XML geladen für Play-Button");
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Fehler beim Laden der Spiele"+ex.getMessage());
+                return;
             }
             new XmlListFrame(this, 2, false, doc).setVisible(true);
         }
@@ -300,6 +318,21 @@ public class GameLauncher extends JFrame implements ActionListener {
                     } catch (ParserConfigurationException ex) {
                         ex.printStackTrace();
                     }
+                case 2:
+                    try {
+                        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                        for (Node node : iterable(d.getElementsByTagName("game"))) {
+                            Element el = (Element) node;
+                            String id = el.getElementsByTagName("id").item(0).getTextContent();
+                            String status = el.getElementsByTagName("status").item(0).getTextContent();
+                            String modified = el.getElementsByTagName("lastModified").item(0).getTextContent();
+                            String text = "Spiel #" + id + " - Status: " + status + " - Letzte Änderung: " + modified;
+                            model.addElement(new SpielfeldEintrag(text, id));
+                        }
+                    } catch (ParserConfigurationException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
             }
 
         }
@@ -323,9 +356,11 @@ public class GameLauncher extends JFrame implements ActionListener {
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());*/
                     GameLauncher launcher = (GameLauncher) getOwner();
-                    if (launcher != null && launcher.requestClient != null) {
+                   //RequestClient client = (launcher != null) ? launcher.getRequestClient() : null;
+                    RequestClient client= parent.getRequestClient();
+                    if (client != null) {
                         try {
-                            Document joinResponse = launcher.requestClient.requestXml("/api/xml/joingame/" + gameId);
+                            Document joinResponse = client.requestXml("/api/xml/joingame/" + gameId);
                             JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
                             dispose(); // Fenster schließen
                         } catch (Exception ex) {
