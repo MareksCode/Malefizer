@@ -105,6 +105,16 @@ public class Fight_Bot extends Bot{
         if (kleisntefeld == null) {
             skipsterine.add(kleisntefeldid);
             kleisntefeld = feldvaledirung(scannStein(spielerliste,skipsterine,moeglicheFelder).getId(), moeglicheFelder);
+            int i = kleisntefeldid;
+            while (kleisntefeld == null) {
+                if (i <= 65){
+                    i = --i;
+                } else if (i > 65) {
+                    i = ++i;
+                }
+
+                kleisntefeld = feldvaledirung(i, moeglicheFelder);
+            }
         }
         skipsterine.clear();
 
@@ -176,16 +186,8 @@ public class Fight_Bot extends Bot{
         if (nachbarn != null && !nachbarn.isEmpty()) {
             int tmp2 = 0;
             for (var tmp : nachbarn) {
-                if (start < 8) { // 8 weil feld (╯°□°)╯︵ ┻━┻
-                    if (tmp.getId() < tmp2) {
-                        tmp2 = tmp.getId();
-                    }
-                } else {
-                    if(tmp.getId()!=0) {
-                        if (tmp.getId() > tmp2) {
-                            tmp2 = tmp.getId();
-                        }
-                    }
+                if (tmp.getId() < tmp2 || tmp2 == 0) {
+                    tmp2 = tmp.getId();
                 }
             }
             kleisntefeldid = tmp2;
