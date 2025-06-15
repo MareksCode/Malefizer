@@ -326,21 +326,21 @@ public class Runde implements Serializable {
 
                 case 1:
                     for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) { //spielerspawns für Bots erstellen
-
+                        spawns.get(spielerNum).setSpielerSpawnInhaberId(spielerNum);
                         spielerListe[spielerNum] = new Niki_Bot(spawns.get(spielerNum), spielerNum, this);
                     }
                     break;
 
                 case 2:
                     for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) {
-
+                        spawns.get(spielerNum).setSpielerSpawnInhaberId(spielerNum);
                         spielerListe[spielerNum] = new Smart_Bot(spawns.get(spielerNum), spielerNum, this);
                     }
                     break;
 
                 case 3:
                     for (int spielerNum = this.spielerAnzahl; spielerNum < MAX_SPIELER; spielerNum++) {
-
+                        spawns.get(spielerNum).setSpielerSpawnInhaberId(spielerNum);
                         spielerListe[spielerNum] = new Fight_Bot(spawns.get(spielerNum), spielerNum, this);
                     }
                     break;
