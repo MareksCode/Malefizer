@@ -46,6 +46,10 @@ public class Spielstein extends Stein implements Serializable {
         }
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     @Override
     public String toString() {
         return "Spielstein:"+id;

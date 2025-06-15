@@ -58,7 +58,6 @@ public class Feld implements Serializable {
         return this.spielerSpawn;
     }
     public void setSpielerSpawnInhaberId(int spielerid) {
-        System.out.println("set spielfeldinhaber to " + spielerid);
         this.spawnInhaber = spielerid;
     }
     public int getSpielerSpawnInhaberId() {
