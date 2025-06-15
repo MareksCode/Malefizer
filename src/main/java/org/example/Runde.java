@@ -19,7 +19,6 @@ public class Runde {
 
     private SpielerObjekt spielerObjekt;
     GUIface gui = null;
-    int figurInputNummer = 1;
 
     private int tempCountOverflow = 0;
 
@@ -285,7 +284,7 @@ public class Runde {
 
         //wenn eigener spielstein, bewege stein aus dem spielerobjekt heraus mit eigener id, sonst übernheme id des servers auf neue figur
         if(spielerObjekt.getId() == spielerNummer) {
-            Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
+            Spielstein sp = spielerObjekt.getFigur(figurNummer);
             sp.setFeld(feldObjekt);
             feldObjekt.setBesetzung(sp);
 
