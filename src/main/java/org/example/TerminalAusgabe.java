@@ -18,7 +18,32 @@ public class TerminalAusgabe implements GUIface {
         repaint(startFeld);
     }
 
+    @Override
+    public Feld selectFeld() throws InterruptedException {
+        return null;
+    }
+
+    @Override
+    public void setObjective(String objective) {
+
+    }
+
+    @Override
+    public void setCurrentlyAmZug(int amZug) {
+
+    }
+
     public void showMessage(String message){}
+
+    @Override
+    public void zeigeWurfDialog(int WuerfelErgebnis) {
+
+    }
+
+    @Override
+    public void showNotification(String msg, int dauer) {
+
+    }
 
     private void repaint (Feld startFeld){
         int x =0;
@@ -36,8 +61,6 @@ public class TerminalAusgabe implements GUIface {
         }
     }
 
-    public void setPlayerId(int i) {}
-
     private void searchNachbar(int x, int y, Feld feld){
         for(Feld nachbar: feld.getNachbarn()){
 
@@ -53,7 +76,7 @@ public class TerminalAusgabe implements GUIface {
                 case "Krone" -> spielfeld[1][1] = " K  ";
                 case "Sperrstein" -> spielfeld[1][1] = " S  ";
                 case "Spielstein" -> {
-                    spielfeld[1][1] = "P" + (((Spielstein) feld.getBesetzung()).getSpielerId()) + "." + (Integer.parseInt(split[1]));
+                    spielfeld[1][1] = "P" + (((Spielstein) feld.getBesetzung()).getSpielerId()+1) + "." + (Integer.parseInt(split[1])+1);
                 }
                 default -> spielfeld[1][1] = "    ";
             }
@@ -99,8 +122,5 @@ public class TerminalAusgabe implements GUIface {
             }
         }
     }
-    public void zeigeWurfDialog(int Wuerfelergebnis){};
-    public void setCurrentlyAmZug(int amZug){};
-    public void setObjective(String objective){};
-    public Feld selectFeld() throws InterruptedException {return null;}
+
 }
