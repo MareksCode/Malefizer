@@ -163,6 +163,10 @@ public class SocketService {
         return fut;
     }
 
+    public void skipTurn(){
+        out.println("SKIP\n");
+    }
+
     public void bewegeSperrstein(String feldIdTo){
         out.printf("BLOCKER_MOVE:"+feldIdTo+"\n");
     }
