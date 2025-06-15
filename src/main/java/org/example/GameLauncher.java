@@ -57,6 +57,27 @@ public class GameLauncher extends JFrame implements ActionListener {
         joinBtn.setEnabled(false);
         createBtn.setEnabled(false);
 
+        JRootPane rootPane = getRootPane();
+
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = rootPane.getActionMap();
+
+        KeyStroke secretKey = KeyStroke.getKeyStroke("control shift S");
+
+        inputMap.put(secretKey, "secretAction");
+        actionMap.put("secretAction", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SocketService socketService = new SocketService(1);
+                try {
+                    socketService.connectAndListen(loginResponse);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+                Runtime.getRuntime().addShutdownHook(new Thread(socketService::onExit));
+            }
+        });
+
     }
 
     @Override
@@ -225,6 +246,8 @@ public class GameLauncher extends JFrame implements ActionListener {
 
             setSize(300, 300);
             setLocationRelativeTo(parent);
+
+
         }
 
         private void loadXml(int idSource) {
