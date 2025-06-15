@@ -22,9 +22,10 @@ class FeldPanel extends JPanel implements MouseListener {
 
     private int sperrsteinEinrueckung = 8;
 
-    private final boolean DEBUG_MODE = true;
+    private boolean DEBUG_MODE;
 
-    public FeldPanel(Feld startFeld, FeldGUI feldGUI) {
+    public FeldPanel(Feld startFeld, FeldGUI feldGUI, boolean DEBUG_MODE) {
+        this.DEBUG_MODE = DEBUG_MODE;
         this.feldGUI = feldGUI;
         this.felder = collectFelder(startFeld);
         setPreferredSize(new Dimension(1000, 1000));

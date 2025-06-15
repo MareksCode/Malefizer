@@ -24,13 +24,33 @@ public class FeldGUI implements GUIface {
     private Feld selectedFeld = null;
     private final Object feldLock = new Object(); // für synchronisierten Zugriff
     private Runde dazugehoerigeRunde;
+    private boolean debugMode;
 
     public FeldGUI(Feld startFeld, Runde dazugehoerigeRunde) {
         this.dazugehoerigeRunde = dazugehoerigeRunde;
-        //hauptfenster
+
+        // DEBUG AKTIVIEREN FENSTER
+        JFrame invisibleFrame = new JFrame();
+        invisibleFrame.setAlwaysOnTop(true);
+        invisibleFrame.setUndecorated(true);
+        invisibleFrame.setType(JFrame.Type.UTILITY);
+        invisibleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        invisibleFrame.setLocationRelativeTo(null); //zentriert
+        invisibleFrame.setVisible(true);
+
+        int result = JOptionPane.showConfirmDialog(
+                invisibleFrame,
+                "Debug-Modus aktivieren?",
+                "Starteinstellungen",
+                JOptionPane.YES_NO_OPTION);
+
+        debugMode = (result == JOptionPane.YES_OPTION);
+        invisibleFrame.dispose();
+
+        // MAIN FENSTER
         frame = new JFrame("Spielbrett");
 
-        //hauptfenster body:
+        //mainfenster body:
         //oben
         objectivePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         objectiveLabel = new JLabel("Aufgabe: ???", SwingConstants.CENTER);
@@ -50,7 +70,7 @@ public class FeldGUI implements GUIface {
         bottomPanel.add(wurfLabel);
 
         //center
-        feldPanel = new FeldPanel(startFeld, this);
+        feldPanel = new FeldPanel(startFeld, this, debugMode);
         centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(feldPanel, BorderLayout.CENTER);
         centerPanel.add(bottomPanel, BorderLayout.SOUTH);
@@ -60,7 +80,7 @@ public class FeldGUI implements GUIface {
         mainPanel.add(objectivePanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        //Header
+        //mainfenster head
         JMenuBar menuBar = new JMenuBar();
         JMenu dateiMenu = new JMenu("Datei");
 
