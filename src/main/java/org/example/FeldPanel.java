@@ -14,8 +14,6 @@ class FeldPanel extends JPanel implements MouseListener {
     private Set<Feld> felder;
     private final int feldRadius = 40;
     private final int spacing = 70;
-    private Color[] playerBackgroundColors = {new Color(150,150,255), new Color(255,150,150), new Color(150,255,150), new Color(255,165,100)};
-    private Color[] playerColors = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE};
 
     private Graphics2D debugG;
 
@@ -125,7 +123,7 @@ class FeldPanel extends JPanel implements MouseListener {
 
     //Icons
     private void drawPlayer(Graphics g, Position pos, int playerId) {
-        Color playerColor = playerColors[playerId];
+        Color playerColor = FeldGUI.playerColors[playerId];
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -212,7 +210,7 @@ class FeldPanel extends JPanel implements MouseListener {
             // Field background
             if (feld.istSpielerSpawn()) {
                 int feldInhaber = feld.getSpielerSpawnInhaberId();
-                Color inhaberColor = playerBackgroundColors[feldInhaber];
+                Color inhaberColor = FeldGUI.playerBackgroundColors[feldInhaber];
 
                 g2d.setColor(inhaberColor);
 

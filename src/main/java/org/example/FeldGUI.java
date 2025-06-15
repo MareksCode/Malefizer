@@ -4,39 +4,56 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FeldGUI implements GUIface {
+    public static final Color[] playerBackgroundColors = {new Color(150,150,255), new Color(255,150,150), new Color(150,255,150), new Color(255,165,100)};
+    public static final Color[] playerColors = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE};
+
     private FeldPanel feldPanel;
+    private JPanel objectivePanel;
     private JFrame frame;
     private JLabel objectiveLabel;
     private JLabel amZugLabel;
+    private JLabel wurfLabel;
 
     private Font objectiveFont = new Font("Arial", Font.BOLD, 25);
-    private Font amZugFont = new Font("Arial", Font.ITALIC, 18);
+    private Font amZugFont = new Font("Arial", Font.BOLD, 25);
+    private Font wurfFont = new Font("Arial", Font.BOLD, 25);
 
     private Feld selectedFeld = null;
     private final Object feldLock = new Object(); // für synchronisierten Zugriff
 
     public FeldGUI(Feld startFeld) {
-        feldPanel = new FeldPanel(startFeld, this);
         frame = new JFrame("Spielbrett");
 
-        //top panel mit labels
-        JPanel topPanel = new JPanel(new GridLayout(1, 2));
-        objectiveLabel = new JLabel("Aufgabe: AAAAAAAAAAAAAAAAAAAAAA", SwingConstants.LEFT);
+        //objective panel
+        objectivePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        objectiveLabel = new JLabel("Aufgabe: ???", SwingConstants.CENTER);
         objectiveLabel.setFont(objectiveFont);
-        amZugLabel = new JLabel("Am Zug: Spieler ?", SwingConstants.RIGHT);
+        objectivePanel.add(objectiveLabel);
+        objectivePanel.setOpaque(true);
+
+        //bottom panel
+        JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
+        amZugLabel = new JLabel("Am Zug: Spieler ?", SwingConstants.CENTER);
         amZugLabel.setFont(amZugFont);
 
-        topPanel.add(objectiveLabel);
-        topPanel.add(amZugLabel);
+        wurfLabel = new JLabel("Würfelergebnis: ?", SwingConstants.CENTER);
+        wurfLabel.setFont(wurfFont);
 
-        //Hauptlayout
+        bottomPanel.add(amZugLabel);
+        bottomPanel.add(wurfLabel);
+
+        //spiel
+        feldPanel = new FeldPanel(startFeld, this);
+
+        //fenster
         frame.setLayout(new BorderLayout());
-        frame.add(topPanel, BorderLayout.NORTH);
-        frame.add(feldPanel, BorderLayout.CENTER);
+        frame.add(objectivePanel, BorderLayout.NORTH);
+        frame.add(bottomPanel, BorderLayout.CENTER);
+        frame.add(feldPanel, BorderLayout.SOUTH);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
-        frame.pack(); // schwarze magie
+        frame.pack();
         frame.setVisible(true);
     }
 
@@ -71,6 +88,7 @@ public class FeldGUI implements GUIface {
             dialog.dispose(); //tschau erstes popup
 
             JOptionPane.showMessageDialog(frame, "Du hast eine " + WuerfelErgebnis + " gewürfelt!", "Wurfergebnis", JOptionPane.INFORMATION_MESSAGE);
+            setWuerfelErgebnis(WuerfelErgebnis);
         });
 
         dialog.setVisible(true);
@@ -81,9 +99,24 @@ public class FeldGUI implements GUIface {
         SwingUtilities.invokeLater(() -> objectiveLabel.setText("Aufgabe: " + objective));
     }
 
+    private String toHex(Color color) {
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
     @Override
     public void setCurrentlyAmZug(int amZug) {
-        SwingUtilities.invokeLater(() -> amZugLabel.setText("Am Zug: Spieler " + amZug));
+        SwingUtilities.invokeLater(() -> {
+            String HexSpielerFarbe = toHex(playerColors[amZug]);
+            amZugLabel.setText("<html>Am Zug: <span style='color:" + HexSpielerFarbe + "; font-weight:bold;'>Spieler " + amZug + "</span></html>");
+
+            objectivePanel.setBackground(playerBackgroundColors[amZug]);
+            objectivePanel.setBorder(BorderFactory.createLineBorder(playerColors[amZug], 4));
+            objectivePanel.setOpaque(true);
+            objectivePanel.repaint();
+        });
+    }
+
+    public void setWuerfelErgebnis(int erg) {
+        SwingUtilities.invokeLater(() -> wurfLabel.setText("Würfelergebnis: " + erg));
     }
 
     //wird vom FeldPanel aufgerufen, wenn ein feld ausgewaehlt wurde
@@ -106,10 +139,3 @@ public class FeldGUI implements GUIface {
     }
 
 }
-
-//try {
-//        System.out.println("select feld NOWWWW");
-//                gui.selectFeld();
-//            } catch (InterruptedException ie) {
-//        System.err.println(ie.getMessage());
-//        }
