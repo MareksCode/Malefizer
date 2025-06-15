@@ -371,7 +371,7 @@ public class Runde implements Serializable {
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
             //ooooooder der ultimate bot zelegt ihn
 
-            gui.setObjective("Spieler "+this.amZug+" würfelt.");
+            gui.setObjective("Spieler "+(this.amZug+1)+" würfelt.");
             int wuerfelErgebnis = (spieler instanceof Bot) ? wuerfel.Roll() : spielerWuerfel(wuerfel);
 
             if (!(spieler instanceof Bot))
