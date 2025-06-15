@@ -14,9 +14,9 @@ public class FeldGUI implements GUIface {
     private JLabel amZugLabel;
     private JLabel wurfLabel;
 
-    private Font objectiveFont = new Font("Arial", Font.BOLD, 25);
-    private Font amZugFont = new Font("Arial", Font.BOLD, 25);
-    private Font wurfFont = new Font("Arial", Font.BOLD, 25);
+    private Font objectiveFont = new Font("Arial", Font.BOLD, 20);
+    private Font amZugFont = new Font("Arial", Font.PLAIN, 20);
+    private Font wurfFont = new Font("Arial", Font.PLAIN, 20);
 
     private Feld selectedFeld = null;
     private final Object feldLock = new Object(); // für synchronisierten Zugriff
@@ -106,7 +106,7 @@ public class FeldGUI implements GUIface {
     public void setCurrentlyAmZug(int amZug) {
         SwingUtilities.invokeLater(() -> {
             String HexSpielerFarbe = toHex(playerColors[amZug]);
-            amZugLabel.setText("<html>Am Zug: <span style='color:" + HexSpielerFarbe + "; font-weight:bold;'>Spieler " + amZug + "</span></html>");
+            amZugLabel.setText("<html>Am Zug: <span style='color:" + HexSpielerFarbe + "; font-weight:bold;'>Spieler " + amZug+1 + "</span></html>");
 
             objectivePanel.setBackground(playerBackgroundColors[amZug]);
             objectivePanel.setBorder(BorderFactory.createLineBorder(playerColors[amZug], 4));

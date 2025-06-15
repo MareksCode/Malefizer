@@ -174,23 +174,24 @@ public class Runde implements Serializable {
         }
         Stein besetzung = chosenFeld.getBesetzung();
 
-        if (besetzung == null) {
-            if (chosenFeld.istSpielerSpawn()) {
-                if (chosenFeld.getSpielerSpawnInhaberId() == spielerNummer) {
-                    //find not used spielstein
-                    Spielstein[] spielerSpielsteine = spieler.getSpielsteinListe();
-                    for (int i = 0; i < spielerSpielsteine.length; i++) {
-                        if (spielerSpielsteine[i].getCurrentFeld() == null) {
-                            return i;
-                        }
+        if (chosenFeld.istSpielerSpawn()) {
+            if (chosenFeld.getSpielerSpawnInhaberId() == spielerNummer) {
+                //find not used spielstein
+                Spielstein[] spielerSpielsteine = spieler.getSpielsteinListe();
+                for (int i = 0; i < spielerSpielsteine.length; i++) {
+                    if (spielerSpielsteine[i].getCurrentFeld() == null) {
+                        return i;
                     }
-                    gui.showMessage("Bitte versuche es erneut.");
-                    return spielerZug(spieler); //spieler hat keinen spielstein den er sich ausm arsch ziehen kann :(
                 }
+                gui.showMessage("Bitte versuche es erneut.");
+                return spielerZug(spieler); //spieler hat keinen spielstein den er sich ausm arsch ziehen kann :(
             }
+        }
+        if (chosenFeld.getBesetzung() == null) {
             gui.showMessage("Bitte versuche es erneut.");
             return spielerZug(spieler);
         }
+
         if (Objects.equals(besetzung.getType(), "Spielstein")) {
             Spielstein selectedBesetzung = (Spielstein) besetzung;
             if (selectedBesetzung.getSpielerId() == spielerNummer) {
@@ -356,6 +357,8 @@ public class Runde implements Serializable {
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);
             gui.setObjective("");
+
+            System.out.println("Bitte oeffne die Gui um zu spielen.");
 
             //System.out.println(spielerAnzahl);
 
