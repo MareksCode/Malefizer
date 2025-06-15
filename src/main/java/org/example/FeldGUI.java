@@ -99,7 +99,6 @@ public class FeldGUI implements GUIface {
             if (!fileToSave.getName().toLowerCase().endsWith(".ser")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".ser");
             }
-            // Hier dein Serialisierungs-Code
             System.out.println("Speichern als .ser: " + fileToSave.getAbsolutePath());
 
             try {
@@ -110,6 +109,7 @@ public class FeldGUI implements GUIface {
             }
         }
     }
+
     private void saveXmlDialog() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Als .xml speichern");
@@ -119,7 +119,6 @@ public class FeldGUI implements GUIface {
             if (!fileToSave.getName().toLowerCase().endsWith(".xml")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".xml");
             }
-            // Hier dein Serialisierungs-Code
             System.out.println("Speichern als .xml: " + fileToSave.getAbsolutePath());
 
             try {
@@ -133,48 +132,63 @@ public class FeldGUI implements GUIface {
 
     public Feld selectFeld() throws InterruptedException {
         synchronized (feldLock) {
-            selectedFeld = null; // zurücksetzen
+            selectedFeld = null;
             System.out.println("starting ui input");
             while (selectedFeld == null) {
-                feldLock.wait(); // warte auf Benutzereingabe
+                feldLock.wait();
             }
-            //System.out.println("ended");
             System.out.println("Selected: "+selectedFeld.toString());
             return selectedFeld;
         }
     }
 
-    public void zeigeWurfDialog(int WuerfelErgebnis) {
-        //popup 1
-        JButton wuerfelnButton = new JButton("Würfeln");
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Ein neuer Spieler ist am Zug. Bitte würfeln!"));
-        panel.add(wuerfelnButton);
+    private String toHex(Color color) {
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
 
-        JDialog dialog = new JDialog(frame, "Würfeln", true); // modal
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        dialog.getContentPane().add(panel);
-        dialog.pack();
-        dialog.setLocationRelativeTo(frame);
+    public void setWuerfelErgebnis(int erg) {
+        SwingUtilities.invokeLater(() -> wurfLabel.setText("Würfelergebnis: " + erg));
+    }
 
-        //popup 2
-        wuerfelnButton.addActionListener(e -> {
-            dialog.dispose(); //tschau popup
-
-            showNotification("Es wurde eine " + WuerfelErgebnis + " gewürfelt! Wähle eine der Figuren aus, um sie zu bewegen.", 4000);
-            setWuerfelErgebnis(WuerfelErgebnis);
-        });
-
-        dialog.setVisible(true);
+    //wird vom FeldPanel aufgerufen, wenn ein feld ausgewaehlt wurde
+    public void feldWurdeGewaehlt(Feld feld) {
+        //System.out.println("wurde gewaehlt");
+        synchronized (feldLock) {
+            selectedFeld = feld;
+            feldLock.notifyAll();
+        }
     }
 
     @Override
-    public void setObjective(String objective) {
-        SwingUtilities.invokeLater(() -> objectiveLabel.setText("Aufgabe: " + objective));
+    public void update(Feld feld) {
+        feldPanel.repaintNewFields(feld);  // Neuzeichnen
     }
+    @Override
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(frame, msg);
+    }
+    @Override
+    public void geschlagenNotification(String msg, int dauer) {
+        JWindow noti = new JWindow(frame);
 
-    private String toHex(Color color) {
-        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+        JLabel label = new JLabel(msg);
+        label.setOpaque(true);
+        label.setBackground(new Color(255, 0, 0, 140));
+        label.setForeground(Color.WHITE);
+        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        label.setFont(new Font("", Font.PLAIN, 20));
+
+        noti.getContentPane().add(label);
+        noti.pack();
+
+        int x = frame.getX() + frame.getWidth() / 2 - noti.getWidth() / 2;
+        int y = frame.getY() + frame.getHeight() - noti.getHeight() - 100;
+        noti.setLocation(x, y);
+
+        noti.setAlwaysOnTop(true);
+        noti.setVisible(true);
+
+        new Timer(dauer, e -> noti.dispose()).start();
     }
     @Override
     public void setCurrentlyAmZug(int amZug) {
@@ -211,51 +225,32 @@ public class FeldGUI implements GUIface {
 
         new Timer(dauer, e -> noti.dispose()).start();
     }
-
     @Override
-    public void geschlagenNotification(String msg, int dauer) {
-        JWindow noti = new JWindow(frame);
-
-        JLabel label = new JLabel(msg);
-        label.setOpaque(true);
-        label.setBackground(new Color(255, 0, 0, 140));
-        label.setForeground(Color.WHITE);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        label.setFont(new Font("", Font.PLAIN, 20));
-
-        noti.getContentPane().add(label);
-        noti.pack();
-
-        int x = frame.getX() + frame.getWidth() / 2 - noti.getWidth() / 2;
-        int y = frame.getY() + frame.getHeight() - noti.getHeight() - 100;
-        noti.setLocation(x, y);
-
-        noti.setAlwaysOnTop(true);
-        noti.setVisible(true);
-
-        new Timer(dauer, e -> noti.dispose()).start();
+    public void setObjective(String objective) {
+        SwingUtilities.invokeLater(() -> objectiveLabel.setText("Aufgabe: " + objective));
     }
-
-    public void setWuerfelErgebnis(int erg) {
-        SwingUtilities.invokeLater(() -> wurfLabel.setText("Würfelergebnis: " + erg));
-    }
-
-    //wird vom FeldPanel aufgerufen, wenn ein feld ausgewaehlt wurde
-    public void feldWurdeGewaehlt(Feld feld) {
-        //System.out.println("wurde gewaehlt");
-        synchronized (feldLock) {
-            selectedFeld = feld;
-            feldLock.notifyAll();
-        }
-    }
-
     @Override
-    public void update(Feld feld) {
-        feldPanel.repaintNewFields(feld);  // Neuzeichnen
-    }
+    public void zeigeWurfDialog(int WuerfelErgebnis) {
+        //popup 1
+        JButton wuerfelnButton = new JButton("Würfeln");
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Ein neuer Spieler ist am Zug. Bitte würfeln!"));
+        panel.add(wuerfelnButton);
 
-    @Override
-    public void showMessage(String msg) {
-        JOptionPane.showMessageDialog(frame, msg);
+        JDialog dialog = new JDialog(frame, "Würfeln", true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.getContentPane().add(panel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(frame);
+
+        //popup 2
+        wuerfelnButton.addActionListener(e -> {
+            dialog.dispose(); //tschau popup
+
+            showNotification("Es wurde eine " + WuerfelErgebnis + " gewürfelt! Wähle eine der Figuren aus, um sie zu bewegen.", 4000);
+            setWuerfelErgebnis(WuerfelErgebnis);
+        });
+
+        dialog.setVisible(true);
     }
 }
