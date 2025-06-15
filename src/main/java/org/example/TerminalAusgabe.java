@@ -40,6 +40,11 @@ public class TerminalAusgabe implements GUIface {
 
     }
 
+    @Override
+    public void showNotification(String msg, int dauer) {
+
+    }
+
     private void repaint (Feld startFeld){
         int x =0;
         int y=0;

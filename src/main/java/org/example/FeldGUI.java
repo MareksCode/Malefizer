@@ -114,6 +114,29 @@ public class FeldGUI implements GUIface {
             objectivePanel.repaint();
         });
     }
+    @Override
+    public void showNotification(String msg, int dauer) {
+        JWindow toast = new JWindow(frame);
+
+        JLabel label = new JLabel(msg);
+        label.setOpaque(true);
+        label.setBackground(new Color(0, 0, 0, 170));
+        label.setForeground(Color.WHITE);
+        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        label.setFont(new Font("Arial", Font.PLAIN, 20));
+
+        toast.getContentPane().add(label);
+        toast.pack();
+
+        int x = frame.getX() + frame.getWidth() / 2 - toast.getWidth() / 2;
+        int y = frame.getY() + frame.getHeight() - toast.getHeight() - 50;
+        toast.setLocation(x, y);
+
+        toast.setAlwaysOnTop(true);
+        toast.setVisible(true);
+
+        new Timer(dauer, e -> toast.dispose()).start();
+    }
 
     public void setWuerfelErgebnis(int erg) {
         SwingUtilities.invokeLater(() -> wurfLabel.setText("Würfelergebnis: " + erg));
@@ -137,5 +160,4 @@ public class FeldGUI implements GUIface {
     public void showMessage(String msg) {
         JOptionPane.showMessageDialog(frame, msg);
     }
-
 }
