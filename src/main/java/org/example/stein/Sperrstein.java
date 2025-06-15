@@ -134,6 +134,8 @@ public class Sperrstein extends Stein implements Serializable {
     }
 
     public void schlagen() throws Exception {
+        this.dazugehoerendeRunde.gui.geschlagenNotification("Sperrstein geschlagen!", 4000);
+        this.dazugehoerendeRunde.gui.showNotification("Wähle ein neues Feld um den Sperrstein zu verschieben.", 4000);
         this.dazugehoerendeRunde.gui.setObjective("Wähle das Feld auf das der Sperrstein verschoben werden soll.");
         this.feld.removeBesetzung();
         Feld newFeld;

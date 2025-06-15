@@ -35,6 +35,7 @@ public class FeldGUI implements GUIface {
         JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
         amZugLabel = new JLabel("Am Zug: Spieler ?", SwingConstants.CENTER);
         amZugLabel.setFont(amZugFont);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(4, 2, 6, 2));
 
         wurfLabel = new JLabel("Würfelergebnis: ?", SwingConstants.CENTER);
         wurfLabel.setFont(wurfFont);
@@ -74,7 +75,7 @@ public class FeldGUI implements GUIface {
         //popup 1
         JButton wuerfelnButton = new JButton("Würfeln");
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Bitte würfeln!"));
+        panel.add(new JLabel("Ein neuer Spieler ist am Zug. Bitte würfeln!"));
         panel.add(wuerfelnButton);
 
         JDialog dialog = new JDialog(frame, "Würfeln", true); // modal
@@ -85,9 +86,9 @@ public class FeldGUI implements GUIface {
 
         //popup 2
         wuerfelnButton.addActionListener(e -> {
-            dialog.dispose(); //tschau erstes popup
+            dialog.dispose(); //tschau popup
 
-            JOptionPane.showMessageDialog(frame, "Du hast eine " + WuerfelErgebnis + " gewürfelt!", "Wurfergebnis", JOptionPane.INFORMATION_MESSAGE);
+            showNotification("Es wurde eine " + WuerfelErgebnis + " gewürfelt! Wähle eine der Figuren aus, um sie zu bewegen.", 4000);
             setWuerfelErgebnis(WuerfelErgebnis);
         });
 
@@ -116,7 +117,7 @@ public class FeldGUI implements GUIface {
     }
     @Override
     public void showNotification(String msg, int dauer) {
-        JWindow toast = new JWindow(frame);
+        JWindow noti = new JWindow(frame);
 
         JLabel label = new JLabel(msg);
         label.setOpaque(true);
@@ -125,17 +126,41 @@ public class FeldGUI implements GUIface {
         label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         label.setFont(new Font("Arial", Font.PLAIN, 20));
 
-        toast.getContentPane().add(label);
-        toast.pack();
+        noti.getContentPane().add(label);
+        noti.pack();
 
-        int x = frame.getX() + frame.getWidth() / 2 - toast.getWidth() / 2;
-        int y = frame.getY() + frame.getHeight() - toast.getHeight() - 50;
-        toast.setLocation(x, y);
+        int x = frame.getX() + frame.getWidth() / 2 - noti.getWidth() / 2;
+        int y = frame.getY() + frame.getHeight() - noti.getHeight() - 50;
+        noti.setLocation(x, y);
 
-        toast.setAlwaysOnTop(true);
-        toast.setVisible(true);
+        noti.setAlwaysOnTop(true);
+        noti.setVisible(true);
 
-        new Timer(dauer, e -> toast.dispose()).start();
+        new Timer(dauer, e -> noti.dispose()).start();
+    }
+
+    @Override
+    public void geschlagenNotification(String msg, int dauer) {
+        JWindow noti = new JWindow(frame);
+
+        JLabel label = new JLabel(msg);
+        label.setOpaque(true);
+        label.setBackground(new Color(255, 0, 0, 140));
+        label.setForeground(Color.WHITE);
+        label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        label.setFont(new Font("", Font.PLAIN, 20));
+
+        noti.getContentPane().add(label);
+        noti.pack();
+
+        int x = frame.getX() + frame.getWidth() / 2 - noti.getWidth() / 2;
+        int y = frame.getY() + frame.getHeight() - noti.getHeight() - 100;
+        noti.setLocation(x, y);
+
+        noti.setAlwaysOnTop(true);
+        noti.setVisible(true);
+
+        new Timer(dauer, e -> noti.dispose()).start();
     }
 
     public void setWuerfelErgebnis(int erg) {

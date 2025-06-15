@@ -169,7 +169,7 @@ public class Runde implements Serializable {
             chosenFeld = gui.selectFeld();
         } catch (InterruptedException ie) {
             System.err.println(ie.getMessage());
-            gui.showMessage("Bitte versuche es erneut.");
+            gui.showNotification("Etwas ist schiefgelaufen. Probiere es erneut.", 2000);
             return spielerZug(spieler);
         }
         Stein besetzung = chosenFeld.getBesetzung();
@@ -183,12 +183,12 @@ public class Runde implements Serializable {
                         return i;
                     }
                 }
-                gui.showMessage("Bitte versuche es erneut.");
+                gui.showNotification("Es sind keine Spielsteine im Spawn übrig. Wähle einen auf dem Feld.", 2000);
                 return spielerZug(spieler); //spieler hat keinen spielstein den er sich ausm arsch ziehen kann :(
             }
         }
         if (chosenFeld.getBesetzung() == null) {
-            gui.showMessage("Bitte versuche es erneut.");
+            gui.showNotification("Auf dem Feld steht kein Spielstein, der gewählt werden kann.", 2000);
             return spielerZug(spieler);
         }
 
@@ -199,7 +199,7 @@ public class Runde implements Serializable {
             }
         }
 
-        gui.showMessage("Bitte versuche es erneut.");
+        gui.showNotification("Dieser Spielstein ist nicht auswählbar. Wähle einen der eigenen.", 2000);
         return spielerZug(spieler);
     }
 
@@ -272,12 +272,12 @@ public class Runde implements Serializable {
             chosenFeld = gui.selectFeld();
         } catch (InterruptedException ie) {
             System.err.println(ie.getMessage());
-            gui.showMessage("Bitte versuche es erneut.");
+            gui.showNotification("Etwas ist schiefgelaufen. Probiere es erneut.", 2000);
             return spielerZiehe(moeglicheFelder, figur);
         }
 
         if (chosenFeld == null) {
-            gui.showMessage("Bitte versuche es erneut.");
+            gui.showNotification("Etwas ist schiefgelaufen. Probiere es erneut.", 2000);
             return spielerZiehe(moeglicheFelder, figur);
         }
 
@@ -289,7 +289,7 @@ public class Runde implements Serializable {
         }
 
         if (!feldIstImArray) {
-            gui.showMessage("Bitte versuche es erneut.");
+            gui.showNotification("Dieser Zug ist nicht möglich. Probiere es erneut", 2000);
             return spielerZiehe(moeglicheFelder, figur);
         }
 
@@ -365,6 +365,7 @@ public class Runde implements Serializable {
             this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
             spieler = spielerListe[this.amZug];
 
+            gui.showNotification("Spieler " + (this.amZug + 1) + " ist nun am Zug", 4000);
             gui.setCurrentlyAmZug(this.amZug);
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
 
@@ -398,7 +399,6 @@ public class Runde implements Serializable {
             }
 
             ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(currentFeld, wuerfelErgebnis);
-            //
 
             while (moeglicheFelder.isEmpty()) {
 
@@ -425,6 +425,7 @@ public class Runde implements Serializable {
             {
                 Feld chosenFeld;
 
+                gui.showNotification("Wähle ein Feld, auf das die ausgewählte Figur ziehen soll.", 4000);
                 gui.setObjective("Wähle ein Feld, auf das die ausgewählte Figur ziehen soll.");
 
                 chosenFeld = switch (spieler) {
