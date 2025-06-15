@@ -61,35 +61,20 @@ public class Sperrstein extends Stein implements Serializable {
         return ergebnis;
     }
 
-    private Feld steinZieheOld(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
-        System.out.println("Please choose what Spielfeld you want to bewegen zhe Sperrstein on (using the ID)");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
-
-        String s = r.readLine();
-        int chosenID = Integer.parseInt(s);
+    private Feld feldvaledirung(ArrayList<Feld> moeglicheFelder, Sperrstein figur,Feld selectfeld ) throws IOException {
         Feld chosenFeld = null;
-
         for (Feld feld : moeglicheFelder) {
-            if (feld.getId() == chosenID) {
-
-                if(chosenID == 87 || chosenID == 83 || chosenID == 79 ||            //checken ob es ein span feld ist
-                        chosenID == 75 || chosenID == 9){
+            if (feld.getId() == selectfeld.getId()) {
+                if (feld.getBesetzung() == null || !feld.istSpielerSpawn() || selectfeld.getId() != 9) {
+                    chosenFeld = feld;
+                    return chosenFeld;
+                }
+                else{
                     System.out.println("invalid choose, the Sperrstein can`t be on the first line");
                     return steinZiehe(moeglicheFelder, figur);
                 }
-                else {
-                    for (Feld moeglichesFeld : moeglicheFelder) {
-                        if (moeglichesFeld.getId() == chosenID) {
-                            if (moeglichesFeld.getBesetzung() == null) {
-                                chosenFeld = moeglichesFeld;
-                                return chosenFeld;
-                            }
-                        }
-                    }
-                }
-                    chosenFeld = feld;
             }
+            chosenFeld = feld;
         }
 
         if (chosenFeld == null) {
@@ -98,6 +83,7 @@ public class Sperrstein extends Stein implements Serializable {
 
         return chosenFeld;
     }
+
     private Feld steinZiehe(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
         Feld chosenFeld;
 
@@ -125,6 +111,8 @@ public class Sperrstein extends Stein implements Serializable {
             this.dazugehoerendeRunde.gui.showMessage("Bitte versuche es erneut.");
             return steinZiehe(moeglicheFelder, figur);
         }
+
+        chosenFeld = feldvaledirung(moeglicheFelder,figur,chosenFeld);
 
         return chosenFeld;
     }
