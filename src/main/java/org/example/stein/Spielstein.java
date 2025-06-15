@@ -40,7 +40,7 @@ public class Spielstein extends Stein implements Serializable {
     }
 
     public void schlagen() throws Exception {
-        this.dazugehoerendeRunde.gui.geschlagenNotification("Spielstein von Spieler"+ this.spielerId+1 +" geschlagen!", 4000);
+        this.dazugehoerendeRunde.gui.geschlagenNotification("Spielstein von Spieler"+ (this.spielerId+1) +" geschlagen!", 4000);
         if (this.feld != null) {
             this.feld.removeBesetzung();
             this.feld = null;

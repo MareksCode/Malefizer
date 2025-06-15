@@ -107,7 +107,7 @@ public class FeldGUI implements GUIface {
     public void setCurrentlyAmZug(int amZug) {
         SwingUtilities.invokeLater(() -> {
             String HexSpielerFarbe = toHex(playerColors[amZug]);
-            amZugLabel.setText("<html>Am Zug: <span style='color:" + HexSpielerFarbe + "; font-weight:bold;'>Spieler " + amZug+1 + "</span></html>");
+            amZugLabel.setText("<html>Am Zug: <span style='color:" + HexSpielerFarbe + "; font-weight:bold;'>Spieler " + (amZug+1) + "</span></html>");
 
             objectivePanel.setBackground(playerBackgroundColors[amZug]);
             objectivePanel.setBorder(BorderFactory.createLineBorder(playerColors[amZug], 4));
