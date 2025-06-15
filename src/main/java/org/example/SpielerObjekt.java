@@ -66,6 +66,9 @@ public class SpielerObjekt implements Serializable {
                 }
             }
         }
+        if (chosenFeld == null){
+            chosenFeld = feldvaledirung(feldval+1, moeglicheFelder);
+        }
         return chosenFeld;
     }
 }
