@@ -20,6 +20,7 @@ public class Krone extends Stein implements Serializable {
     }
 
     public void schlagen() throws Exception {
+        this.dazugehoerendeRunde.gui.geschlagenNotification("Krone eingesammelt!", 4000);
         this.dazugehoerendeRunde.end();
     }
 
