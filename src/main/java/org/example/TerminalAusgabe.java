@@ -18,7 +18,27 @@ public class TerminalAusgabe implements GUIface {
         repaint(startFeld);
     }
 
+    @Override
+    public Feld selectFeld() throws InterruptedException {
+        return null;
+    }
+
+    @Override
+    public void setObjective(String objective) {
+
+    }
+
+    @Override
+    public void setCurrentlyAmZug(int amZug) {
+
+    }
+
     public void showMessage(String message){}
+
+    @Override
+    public void zeigeWurfDialog(int WuerfelErgebnis) {
+
+    }
 
     private void repaint (Feld startFeld){
         int x =0;

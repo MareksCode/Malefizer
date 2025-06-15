@@ -61,7 +61,7 @@ public class Sperrstein extends Stein implements Serializable {
         return ergebnis;
     }
 
-    private Feld steinZiehe(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
+    private Feld steinZieheOld(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
         System.out.println("Please choose what Spielfeld you want to bewegen zhe Sperrstein on (using the ID)");
         BufferedReader r = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -98,13 +98,43 @@ public class Sperrstein extends Stein implements Serializable {
 
         return chosenFeld;
     }
+    private Feld steinZiehe(ArrayList<Feld> moeglicheFelder, Sperrstein figur) throws IOException {
+        Feld chosenFeld;
+
+        try {
+            chosenFeld = this.dazugehoerendeRunde.gui.selectFeld();
+        } catch (InterruptedException ie) {
+            System.err.println(ie.getMessage());
+            this.dazugehoerendeRunde.gui.showMessage("Bitte versuche es erneut.");
+            return steinZiehe(moeglicheFelder, figur);
+        }
+
+        if (chosenFeld == null) {
+            this.dazugehoerendeRunde.gui.showMessage("Bitte versuche es erneut.");
+            return steinZiehe(moeglicheFelder, figur);
+        }
+
+        boolean feldIstImArray = false;
+        for (Feld feld : moeglicheFelder) {
+            if (feld.getId() == chosenFeld.getId()) {
+                feldIstImArray = true;
+            }
+        }
+
+        if (!feldIstImArray) {
+            this.dazugehoerendeRunde.gui.showMessage("Bitte versuche es erneut.");
+            return steinZiehe(moeglicheFelder, figur);
+        }
+
+        return chosenFeld;
+    }
 
     public String getType() {
         return "Sperrstein";
     }
 
     public void schlagen() throws Exception {
-
+        this.dazugehoerendeRunde.gui.setObjective("Wähle das Feld auf das der Sperrstein verschoben werden soll.");
         this.feld.removeBesetzung();
         Feld newFeld;
         newFeld = switch(dazugehoerendeRunde.spieler){

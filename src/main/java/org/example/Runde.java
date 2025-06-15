@@ -16,8 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
-
-
+import java.util.Objects;
 
 
 public class Runde implements Serializable {
@@ -27,7 +26,7 @@ public class Runde implements Serializable {
     private boolean isStartAllowed = true;
     public Feld startFeld; //ToDo: pfusch ändern
     private int amZug;
-    GUIface gui = null;
+    public GUIface gui = null;
     public final int MAX_SPIELER=4;
     private int spielerAnzahl;
     private int botSchwierigkeit;
@@ -141,7 +140,7 @@ public class Runde implements Serializable {
         return ergebnis;
     }
 
-    private int spielerZug() throws IOException {
+    private int spielerZugAlt() throws IOException {
         System.out.println("Please choose a Spielstein (Type 1-5)");
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
@@ -151,30 +150,68 @@ public class Runde implements Serializable {
         try {
             chosenNumber = Integer.parseInt(s);
             if(chosenNumber<1 || chosenNumber>5) { //kein Spielabbruch bei falscher Zahleingabe
-                return spielerZug();
+                return spielerZugAlt();
             }
         }
         catch (NumberFormatException e) {
-            return spielerZug(); //wenn eingabe falsch ist, neu prompten
+            return spielerZugAlt(); //wenn eingabe falsch ist, neu prompten
         }
 
         chosenNumber -= 1; //von leslicher menschlicher 1 zur gigachad array 0 😎
 
         return chosenNumber;
     }
+    private int spielerZug(SpielerObjekt spieler) throws IOException {
+        Feld chosenFeld;
+        int spielerNummer = spieler.spielerId;
+
+        try {
+            chosenFeld = gui.selectFeld();
+        } catch (InterruptedException ie) {
+            System.err.println(ie.getMessage());
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZug(spieler);
+        }
+        Stein besetzung = chosenFeld.getBesetzung();
+
+        if (besetzung == null) {
+            if (chosenFeld.istSpielerSpawn()) {
+                if (chosenFeld.getSpielerSpawnInhaberId() == spielerNummer) {
+                    //find not used spielstein
+                    Spielstein[] spielerSpielsteine = spieler.getSpielsteinListe();
+                    for (int i = 0; i < spielerSpielsteine.length; i++) {
+                        if (spielerSpielsteine[i].getCurrentFeld() == null) {
+                            return i;
+                        }
+                    }
+                    gui.showMessage("Bitte versuche es erneut.");
+                    return spielerZug(spieler); //spieler hat keinen spielstein den er sich ausm arsch ziehen kann :(
+                }
+            }
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZug(spieler);
+        }
+        if (Objects.equals(besetzung.getType(), "Spielstein")) {
+            Spielstein selectedBesetzung = (Spielstein) besetzung;
+            if (selectedBesetzung.getSpielerId() == spielerNummer) {
+                return selectedBesetzung.getId();
+            }
+        }
+
+        gui.showMessage("Bitte versuche es erneut.");
+        return spielerZug(spieler);
+    }
 
     private int spielerWuerfel(Wuerfel wuerfel) throws IOException {
-        System.out.println("Press any key to würfel your würfel");
-        BufferedReader r = new BufferedReader(
-                new InputStreamReader(System.in));
+        int ergebnis = wuerfel.Roll();
 
-        r.readLine();
+        gui.zeigeWurfDialog(ergebnis);
 
-        return wuerfel.Roll();
+        return ergebnis;
     }
 
 
-    private Feld spielerZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {
+    private Feld spielerZieheAlt(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {
         System.out.println("Please choose what Spielfeld you want to bewegen on (using the ID)");
         BufferedReader r = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -225,6 +262,36 @@ public class Runde implements Serializable {
         }
 
         System.out.println("You have chosen: "+chosenFeld.getId());
+        return chosenFeld;
+    }
+    private Feld spielerZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {
+        Feld chosenFeld;
+
+        try {
+            chosenFeld = gui.selectFeld();
+        } catch (InterruptedException ie) {
+            System.err.println(ie.getMessage());
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZiehe(moeglicheFelder, figur);
+        }
+
+        if (chosenFeld == null) {
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZiehe(moeglicheFelder, figur);
+        }
+
+        boolean feldIstImArray = false;
+        for (Feld feld : moeglicheFelder) {
+            if (feld.getId() == chosenFeld.getId()) {
+                feldIstImArray = true;
+            }
+        }
+
+        if (!feldIstImArray) {
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZiehe(moeglicheFelder, figur);
+        }
+
         return chosenFeld;
     }
 
@@ -288,30 +355,35 @@ public class Runde implements Serializable {
         while (!this.spielGewonnen) { //spiel loop, bis gewonnen wurde
             System.out.println("\n\n\n\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n\n");
             gui.update(startFeld);
+            gui.setObjective("");
 
             //System.out.println(spielerAnzahl);
 
             this.amZug = (this.amZug + 1) % this.MAX_SPIELER;
             spieler = spielerListe[this.amZug];
 
+            gui.setCurrentlyAmZug(this.amZug);
             System.out.println("Spieler " + (this.amZug + 1) + " ist am Zug");
 
             //spieler tätigt sinnvolle eingaben um das spiel meisterhaft zu gewinnen!!
             //ooooooder der ultimate bot zelegt ihn
 
-
+            gui.setObjective("Spieler "+this.amZug+" würfelt.");
             int wuerfelErgebnis = (spieler instanceof Bot) ? wuerfel.Roll() : spielerWuerfel(wuerfel);
 
             if (!(spieler instanceof Bot))
             {
+                //gui.showMessage("Zhe Bot würfeled: "+wuerfelErgebnis);
                 System.out.println("you würfeled: " + wuerfelErgebnis);
             }
+
+            gui.setObjective("Wähle eine deiner Figuren aus. Klicke auf deinen Spawn um eine neue rauszuholen.");
 
              int figurNummer = switch (spieler) {
                     case Niki_Bot nikiBot -> nikiBot.botZug();
                     case Smart_Bot smartBot -> smartBot.smartBotZug();
                     case Fight_Bot fightBot -> fightBot.fightBotZug();
-                    default -> spielerZug();
+                    default -> spielerZug(spieler);
             };
 
             Spielstein figur = spieler.getFigur(figurNummer);
@@ -332,10 +404,9 @@ public class Runde implements Serializable {
                         case Smart_Bot smartBot -> figurNummer = smartBot.smartBotZug(figurNummer);
                         case Fight_Bot fightBot -> figurNummer = fightBot.fightBotZug(figurNummer);
                         default -> {
-                            System.out.println("you can't move with this figure.");
-                            figurNummer = spielerZug();
+                            gui.showMessage("Diese Figur kann nicht bewegt werden. Wähle eine neue.");
+                            figurNummer = spielerZug(spieler);
                         }
-
                     }
 
                     figur = spieler.getFigur(figurNummer);
@@ -350,6 +421,8 @@ public class Runde implements Serializable {
             if (!moeglicheFelder.isEmpty())
             {
                 Feld chosenFeld;
+
+                gui.setObjective("Wähle ein Feld, auf das die ausgewählte Figur ziehen soll.");
 
                 chosenFeld = switch (spieler) {
                         case Niki_Bot nikiBot -> nikiBot.nikiBotZiehe(moeglicheFelder, figur);
@@ -370,7 +443,9 @@ public class Runde implements Serializable {
                 gui.update(chosenFeld);
             }
         }
-        System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
+
+        gui.showMessage("spiel gewonnen von spieler " + (this.amZug));
+        //System.out.println("spiel gewonnen von spieler " + (this.amZug+1));
     }
 
     public void end() {
