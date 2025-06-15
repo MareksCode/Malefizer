@@ -3,7 +3,9 @@ package org.example;
 import org.example.client.SocketService;
 import org.example.stein.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static java.lang.Thread.sleep;
 
@@ -101,7 +103,11 @@ public class Runde {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    verarbeiteWurf(spielerObjekt.getId(), wurf);
+                    try {
+                        verarbeiteWurf(spielerObjekt.getId(), wurf);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 })
                 .exceptionally(e -> {
                     System.out.println("Fehler beim Würfeln: " + e.getMessage());
@@ -109,20 +115,154 @@ public class Runde {
                 });
     }
 
-    private void verarbeiteWurf(int spielerId, int wurf)  {
+    private boolean checkMovesPossible(SpielerObjekt spieler, int wuerfelErgebnis) {
+        Feld figurFeld = spieler.getSpawnFeld();
+        for(Spielstein spielstein : spieler.getFiguren()) {
+
+            if(spielstein.getCurrentFeld() != null){
+                figurFeld = spielstein.getCurrentFeld();
+            }
+
+            ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(figurFeld, wuerfelErgebnis);
+
+            if(!moeglicheFelder.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void verarbeiteWurf(int spielerId, int wurf) throws Exception {
         //dieser berecich muss angepasst werden, sobald die gui da ist.
         //es werden inputs benötigt, die nachfolgend simuliert werden.
         //es wird davon ausgegangen, das jeder spieler aktuell mindestens einen zug amchen kann, sonst crashen wir!
 
-        figurInputNummer = 0; //range 0 bis 4
-        //testen ob spielstein schon im feld sonst spawn
-        Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
-        //if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
-        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(sp.getCurrentFeld() == null ? spielerObjekt.getSpawnFeld() : sp.getCurrentFeld(), wurf);
+        //zug validieren, prüfen ob bewegung möglich ist
+        if(!checkMovesPossible(spielerObjekt, wurf)) {
+            socket.skipTurn();
+            return;
+        }
+        //hier passiert gui magie oder so, obacht!
 
-        //select feld aus den möglichen feldern
-        //if (sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
-        socket.spielerZiehe((sp.getCurrentFeld() == null ? spielerObjekt.getSpawnFeld() : sp.getCurrentFeld()), moeglicheFelder.getFirst().getId());
+        gui.update(startFeld);
+
+        gui.setCurrentlyAmZug(spielerObjekt.getId());
+
+        gui.setObjective("Du bist am Zug!");
+
+        gui.setObjective("Wähle eine deiner Figuren aus. Klicke auf deinen Spawn um eine neue rauszuholen.");
+
+        int figurnummer = 0;
+
+        figurnummer = spielerZug();
+
+
+        Spielstein figur = spielerObjekt.getFigur(figurnummer);
+        Feld currentFeld = figur.getCurrentFeld();
+
+        if (currentFeld == null)
+        {
+            currentFeld = spielerObjekt.getSpawnFeld();
+        }
+
+        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(currentFeld, wurf);
+        while(moeglicheFelder.isEmpty()) {
+            gui.showMessage("Diese Figur kann nicht bewegt werden. Wähle eine neue.");
+
+            figurnummer = spielerZug();
+
+            figur = spielerObjekt.getFigur(figurnummer);
+            currentFeld = figur.getCurrentFeld();
+            if (currentFeld == null) {
+                currentFeld = spielerObjekt.getSpawnFeld();
+            }
+
+            moeglicheFelder = findeMoegicheFelder(currentFeld, wurf);
+        }
+
+        socket.spielerZiehe(currentFeld, spielerZiehe(moeglicheFelder, figur).getId());
+
+//        figurInputNummer = 0; //range 0 bis 4
+//        //testen ob spielstein schon im feld sonst spawn
+//        Spielstein sp = spielerObjekt.getFigur(figurInputNummer);
+//        //if(sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+//        ArrayList<Feld> moeglicheFelder = findeMoegicheFelder(sp.getCurrentFeld() == null ? spielerObjekt.getSpawnFeld() : sp.getCurrentFeld(), wurf);
+//
+//        //select feld aus den möglichen feldern
+//        //if (sp.getCurrentFeld() == null) sp.setFeld(spielerObjekt.getSpawnFeld());
+//        socket.spielerZiehe((sp.getCurrentFeld() == null ? spielerObjekt.getSpawnFeld() : sp.getCurrentFeld()), moeglicheFelder.getFirst().getId());
+    }
+
+    private Feld spielerZiehe(ArrayList<Feld> moeglicheFelder, Spielstein figur) throws IOException {
+        Feld chosenFeld;
+
+        try {
+            chosenFeld = gui.selectFeld();
+        } catch (InterruptedException ie) {
+            System.err.println(ie.getMessage());
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZiehe(moeglicheFelder, figur);
+        }
+
+        if (chosenFeld == null) {
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZiehe(moeglicheFelder, figur);
+        }
+
+        boolean feldIstImArray = false;
+        for (Feld feld : moeglicheFelder) {
+            if (feld.getId() == chosenFeld.getId()) {
+                feldIstImArray = true;
+            }
+        }
+
+        if (!feldIstImArray) {
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZiehe(moeglicheFelder, figur);
+        }
+
+        return chosenFeld;
+    }
+    private int spielerZug() throws IOException {
+        Feld chosenFeld;
+        int spielerNummer = spielerObjekt.getId();
+        SpielerObjekt spieler = spielerObjekt;
+
+        try {
+            chosenFeld = gui.selectFeld();
+        } catch (InterruptedException ie) {
+            System.err.println(ie.getMessage());
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZug();
+        }
+        Stein besetzung = chosenFeld.getBesetzung();
+
+        if (besetzung == null) {
+            if (chosenFeld.istSpielerSpawn()) {
+                if (chosenFeld.getSpielerSpawnInhaberId() == spielerNummer) {
+                    //find not used spielstein
+                    Spielstein[] spielerSpielsteine = spieler.getFiguren();
+                    for (int i = 0; i < spielerSpielsteine.length; i++) {
+                        if (spielerSpielsteine[i].getCurrentFeld() == null) {
+                            return i;
+                        }
+                    }
+                    gui.showMessage("Bitte versuche es erneut.");
+                    return spielerZug(); //spieler hat keinen spielstein den er sich ausm arsch ziehen kann :(
+                }
+            }
+            gui.showMessage("Bitte versuche es erneut.");
+            return spielerZug();
+        }
+        if (Objects.equals(besetzung.getType(), "Spielstein")) {
+            Spielstein selectedBesetzung = (Spielstein) besetzung;
+            if (selectedBesetzung.getSpielerId() == spielerNummer) {
+                return selectedBesetzung.getId();
+            }
+        }
+
+        gui.showMessage("Bitte versuche es erneut.");
+        return spielerZug();
     }
 
     public void createNewSpielsteinOnFeld(int spielerNummer, int figurNummer, int feldId) {
@@ -148,7 +288,6 @@ public class Runde {
 
         gui.update(startFeld);
     }
-
 
     public void bewege(String feldIdFrom, String feldIdTo) {
         Feld sourceField = SpielfeldHeinz.feldMap.get(feldIdFrom);

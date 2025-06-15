@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.stein.Spielstein;
 
+import java.util.ArrayList;
+
 public class SpielerObjekt {
     private Feld spawnFeld;
     private Spielstein[] Figuren;
@@ -22,6 +24,7 @@ public class SpielerObjekt {
     public Spielstein getFigur(int figurNummer) {
         return this.Figuren[figurNummer];
     }
+    public Spielstein[] getFiguren() {return this.Figuren;}
 
     public int getId() {
         return this.id;
