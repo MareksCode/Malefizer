@@ -13,9 +13,7 @@ class FeldPanel extends JPanel implements MouseListener {
 
     private Set<Feld> felder;
     private final int feldRadius = 40;
-    private final int spacing = 70;
-
-    private Graphics2D debugG;
+    private final int spacing = 55;
 
     private int spielerKopfRadius = 15;
     private int spielerKoerperBreite = 25;

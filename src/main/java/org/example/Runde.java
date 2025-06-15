@@ -148,6 +148,8 @@ public class Runde {
 
         gui.setCurrentlyAmZug(spielerObjekt.getId());
 
+        gui.zeigeWurfDialog(wurf);
+
         gui.setObjective("Du bist am Zug!");
 
         gui.setObjective("Wähle eine deiner Figuren aus. Klicke auf deinen Spawn um eine neue rauszuholen.");
@@ -156,6 +158,7 @@ public class Runde {
 
         figurnummer = spielerZug();
 
+        gui.setObjective("Wohin willst du die Figur bewegen?");
 
         Spielstein figur = spielerObjekt.getFigur(figurnummer);
         Feld currentFeld = figur.getCurrentFeld();
@@ -239,7 +242,7 @@ public class Runde {
 
         if (besetzung == null) {
             if (chosenFeld.istSpielerSpawn()) {
-                if (chosenFeld.getSpielerSpawnInhaberId() == spielerNummer) {
+                if (chosenFeld.getId() == spieler.getSpawnFeld().getId()) {
                     //find not used spielstein
                     Spielstein[] spielerSpielsteine = spieler.getFiguren();
                     for (int i = 0; i < spielerSpielsteine.length; i++) {
