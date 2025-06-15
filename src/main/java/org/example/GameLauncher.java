@@ -64,7 +64,7 @@ public class GameLauncher extends JFrame implements ActionListener {
         if (e.getSource() == loginBtn) {
             new LoginDialog(this).setVisible(true);
 
-        } else if (e.getSource() == joinBtn) { //zeigt offene Spiele an
+        } else if (e.getSource() == joinBtn) {//zeigt offene Spiele an
             Document doc = null;
             try {
                 doc = requestClient.requestXml("/api/xml/getopengames");
@@ -271,16 +271,27 @@ public class GameLauncher extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == accept) {
-                String game = list.getSelectedValue().toString();
-                //todo: hier stuff machen
-                JOptionPane.showMessageDialog(this, (allowDelete ? "Spiel öffnen: " : "Beitreten zu: ") + game);
+                SpielfeldEintrag selected = list.getSelectedValue();
+                if (selected != null) {
+                    String gameId = selected.getID();
+                    try {
+                        //Anfrage an den Server zum Beitreten senden
+                        Document joinResponse = ((GameLauncher) getOwner()).requestClient.requestXml("/api/xml/joingame/" + gameId);
+                        JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
+                        dispose();// fenster schließne
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());
+                    }
+                }
             } else if (e.getSource() == delete && allowDelete) {
                 int idx = list.getSelectedIndex();
                 if (idx >= 0) {
                     model.remove(idx);
                 }
             }
+            //JOptionPane.showMessageDialog(this, (allowDelete ? "Spiel öffnen: " : "Beitreten zu: ") + game);
         }
+
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -288,6 +299,8 @@ public class GameLauncher extends JFrame implements ActionListener {
             accept.setEnabled(sel);
             if (allowDelete) delete.setEnabled(sel);
         }
+    }
+
 
         /**
          * Helper to iterate NodeList with foreach
@@ -307,7 +320,7 @@ public class GameLauncher extends JFrame implements ActionListener {
                 }
             };
         }
-    }
+
 
     public static void main(String[] args) {
         String hostAdress = IntInputDialog.getInputWithMessage("die ip des servers: ");
