@@ -58,10 +58,14 @@ public class FeldGUI implements GUIface {
 
         frame.setContentPane(mainPanel);
 
+        //frame auf screensize setzen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setSize(screenSize);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
-        frame.pack();  // Größe automatisch anpassen
-        frame.setVisible(true); // Fenster anzeigen
+        frame.setVisible(true);
     }
 
     public Feld selectFeld() throws InterruptedException {
