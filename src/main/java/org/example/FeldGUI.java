@@ -81,10 +81,13 @@ public class FeldGUI implements GUIface {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setAutoRequestFocus(true);
+        frame.setAlwaysOnTop(true);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setVisible(true);
+        frame.setAlwaysOnTop(false); //fenster wieder "schließbar" machen
     }
 
     private void saveSerDialog() {
@@ -99,7 +102,12 @@ public class FeldGUI implements GUIface {
             // Hier dein Serialisierungs-Code
             System.out.println("Speichern als .ser: " + fileToSave.getAbsolutePath());
 
-            this.dazugehoerigeRunde.saveAsSer(fileToSave.getAbsolutePath());
+            try {
+                this.dazugehoerigeRunde.saveAsSer(fileToSave.getAbsolutePath());
+                this.showNotification("Datei als .ser gespeichert!", 4000);
+            } catch (Exception e) {
+                this.showNotification("Etwas ist schiefgelaufen. Bitte probiere es erneut.", 4000);
+            }
         }
     }
     private void saveXmlDialog() {
@@ -114,7 +122,12 @@ public class FeldGUI implements GUIface {
             // Hier dein Serialisierungs-Code
             System.out.println("Speichern als .xml: " + fileToSave.getAbsolutePath());
 
-            this.dazugehoerigeRunde.saveAsSer(fileToSave.getAbsolutePath());
+            try {
+                this.dazugehoerigeRunde.saveAsXml(fileToSave.getAbsolutePath());
+                this.showNotification("Datei als .xml gespeichert!", 4000);
+            } catch (Exception e) {
+                this.showNotification("Etwas ist schiefgelaufen. Bitte probiere es erneut.", 4000);
+            }
         }
     }
 
