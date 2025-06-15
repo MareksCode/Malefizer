@@ -9,7 +9,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -24,7 +23,7 @@ public class Runde implements Serializable {
     private boolean spielGewonnen;
     Map<Integer, Feld> spawns;
     private boolean isStartAllowed = true;
-    public Feld startFeld; //ToDo: pfusch ändern
+    public Feld startFeld;
     private int amZug;
     public GUIface gui = null;
     public final int MAX_SPIELER=4;
@@ -91,7 +90,7 @@ public class Runde implements Serializable {
             isStartAllowed = true;
             System.out.println(e);
         }
-        gui = new FeldGUI(startFeld);
+        gui = new FeldGUI(startFeld, this);
         this.spielGewonnen = false ;
     }
     public int getAmZug() {
@@ -308,7 +307,7 @@ public class Runde implements Serializable {
         spawns = SpielfeldHeinz.getSpawnFelder();
 
 
-        gui = new FeldGUI(startFeld);
+        gui = new FeldGUI(startFeld, this);
 
          //spielerliste erstellen
         spielerListe = new SpielerObjekt[MAX_SPIELER];
@@ -454,5 +453,13 @@ public class Runde implements Serializable {
 
     public void end() {
         this.spielGewonnen = true;
+    }
+
+    public void saveAsXml() {
+        System.out.println("Gespeichert!");
+    }
+
+    public void saveAsSer(String absolutePath) {
+        System.out.println("Gespeichert! 2");
     }
 }

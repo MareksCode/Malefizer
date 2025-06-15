@@ -2,6 +2,7 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class FeldGUI implements GUIface {
     public static final Color[] playerBackgroundColors = {new Color(150,150,255), new Color(255,150,150), new Color(150,255,150), new Color(255,165,100)};
@@ -22,11 +23,14 @@ public class FeldGUI implements GUIface {
 
     private Feld selectedFeld = null;
     private final Object feldLock = new Object(); // für synchronisierten Zugriff
+    private Runde dazugehoerigeRunde;
 
-    public FeldGUI(Feld startFeld) {
+    public FeldGUI(Feld startFeld, Runde dazugehoerigeRunde) {
+        this.dazugehoerigeRunde = dazugehoerigeRunde;
         //hauptfenster
         frame = new JFrame("Spielbrett");
 
+        //hauptfenster body:
         //oben
         objectivePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         objectiveLabel = new JLabel("Aufgabe: ???", SwingConstants.CENTER);
@@ -56,9 +60,24 @@ public class FeldGUI implements GUIface {
         mainPanel.add(objectivePanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
+        //Header
+        JMenuBar menuBar = new JMenuBar();
+        JMenu dateiMenu = new JMenu("Datei");
+
+        JMenuItem saveXmlItem = new JMenuItem("Als .xml speichern");
+        JMenuItem saveSerItem = new JMenuItem("Als .ser speichern");
+
+        saveXmlItem.addActionListener(e -> saveXmlDialog());
+        saveSerItem.addActionListener(e -> saveSerDialog());
+
+        dateiMenu.add(saveXmlItem);
+        dateiMenu.add(saveSerItem);
+        menuBar.add(dateiMenu);
+
+        //alles zusammenfügen und ab geht er
+        frame.setJMenuBar(menuBar);
         frame.setContentPane(mainPanel);
 
-        //frame auf screensize setzen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -66,6 +85,37 @@ public class FeldGUI implements GUIface {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setVisible(true);
+    }
+
+    private void saveSerDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Als .ser speichern");
+        int userSelection = fileChooser.showSaveDialog(frame);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            if (!fileToSave.getName().toLowerCase().endsWith(".ser")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".ser");
+            }
+            // Hier dein Serialisierungs-Code
+            System.out.println("Speichern als .ser: " + fileToSave.getAbsolutePath());
+
+            this.dazugehoerigeRunde.saveAsSer(fileToSave.getAbsolutePath());
+        }
+    }
+    private void saveXmlDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Als .xml speichern");
+        int userSelection = fileChooser.showSaveDialog(frame);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            if (!fileToSave.getName().toLowerCase().endsWith(".xml")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".xml");
+            }
+            // Hier dein Serialisierungs-Code
+            System.out.println("Speichern als .xml: " + fileToSave.getAbsolutePath());
+
+            this.dazugehoerigeRunde.saveAsSer(fileToSave.getAbsolutePath());
+        }
     }
 
     public Feld selectFeld() throws InterruptedException {

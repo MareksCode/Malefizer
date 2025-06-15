@@ -6,7 +6,7 @@ public class SERWorker {
     public static Runde readSER (String filename)throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             Runde runde = (Runde) ois.readObject();
-            runde.gui = new FeldGUI(runde.startFeld); // Create new GUI instance
+            runde.gui = new FeldGUI(runde.startFeld, runde); // Create new GUI instance
             return runde;
         }
     }
