@@ -9,10 +9,12 @@ public class FeldGUI implements GUIface {
 
     private FeldPanel feldPanel;
     private JPanel objectivePanel;
+    private JPanel centerPanel;
     private JFrame frame;
     private JLabel objectiveLabel;
     private JLabel amZugLabel;
     private JLabel wurfLabel;
+    private JPanel mainPanel;
 
     private Font objectiveFont = new Font("Arial", Font.BOLD, 20);
     private Font amZugFont = new Font("Arial", Font.PLAIN, 20);
@@ -22,16 +24,17 @@ public class FeldGUI implements GUIface {
     private final Object feldLock = new Object(); // für synchronisierten Zugriff
 
     public FeldGUI(Feld startFeld) {
+        //hauptfenster
         frame = new JFrame("Spielbrett");
 
-        //objective panel
+        //oben
         objectivePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         objectiveLabel = new JLabel("Aufgabe: ???", SwingConstants.CENTER);
         objectiveLabel.setFont(objectiveFont);
         objectivePanel.add(objectiveLabel);
         objectivePanel.setOpaque(true);
 
-        //bottom panel
+        //unten
         JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
         amZugLabel = new JLabel("Am Zug: Spieler ?", SwingConstants.CENTER);
         amZugLabel.setFont(amZugFont);
@@ -39,23 +42,26 @@ public class FeldGUI implements GUIface {
 
         wurfLabel = new JLabel("Würfelergebnis: ?", SwingConstants.CENTER);
         wurfLabel.setFont(wurfFont);
-
         bottomPanel.add(amZugLabel);
         bottomPanel.add(wurfLabel);
 
-        //spiel
+        //center
         feldPanel = new FeldPanel(startFeld, this);
+        centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(feldPanel, BorderLayout.CENTER);
+        centerPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        //fenster
-        frame.setLayout(new BorderLayout());
-        frame.add(objectivePanel, BorderLayout.NORTH);
-        frame.add(bottomPanel, BorderLayout.CENTER);
-        frame.add(feldPanel, BorderLayout.SOUTH);
+        //main panel mit allem
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(objectivePanel, BorderLayout.NORTH);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        frame.setContentPane(mainPanel);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
-        frame.pack();
-        frame.setVisible(true);
+        frame.pack();  // Größe automatisch anpassen
+        frame.setVisible(true); // Fenster anzeigen
     }
 
     public Feld selectFeld() throws InterruptedException {
