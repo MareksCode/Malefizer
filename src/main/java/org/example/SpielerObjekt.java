@@ -49,13 +49,23 @@ public class SpielerObjekt implements Serializable {
     public Feld getSpawnFeld() {
         return this.spawnFeld;
     }
+    private boolean istFeldKrone(Feld moeglichesFeld){
+
+        if (moeglichesFeld.getBesetzung() != null) {
+            String feldType = moeglichesFeld.getBesetzung().getType();
+            if (feldType == "Krone") {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Feld feldvaledirung(int feldval, ArrayList<Feld> moeglicheFelder){
         Feld chosenFeld = null;
 
         for (Feld moeglichesFeld : moeglicheFelder) {
             if (moeglichesFeld.getId() == feldval) {
-                if (moeglichesFeld.getBesetzung() == null || !moeglichesFeld.istSpielerSpawn() || feldval != 9) {
+                if (moeglichesFeld.getBesetzung() == null && !moeglichesFeld.istSpielerSpawn() && !istFeldKrone(moeglichesFeld)&& !moeglichesFeld.getErsteZeile()) {
                     chosenFeld = moeglichesFeld;
                     return chosenFeld;
                 }

@@ -14,6 +14,7 @@ public class Feld implements Serializable {
     private boolean spielerSpawn;
     private Position position;
     private int spawnInhaber;
+    private int[] ersteZeile;
 
     private boolean tempGefaerbt;
     private int tiefe;
@@ -26,6 +27,7 @@ public class Feld implements Serializable {
         this.tiefe = 0;
         this.position = new Position(-1,-1);
         this.spawnInhaber = 0;
+        this.ersteZeile = new int[]{89,88,86,85,84,82,81,80,78,77,76,110,109};
         //this.besetzung = besetzung;
     }
 
@@ -57,6 +59,15 @@ public class Feld implements Serializable {
     public boolean istSpielerSpawn() {
         return this.spielerSpawn;
     }
+    public boolean getErsteZeile() {
+        for (int i : this.ersteZeile) {
+            if (this.id == i) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setSpielerSpawnInhaberId(int spielerid) {
         this.spawnInhaber = spielerid;
     }

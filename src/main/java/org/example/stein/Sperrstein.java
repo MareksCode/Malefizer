@@ -60,17 +60,27 @@ public class Sperrstein extends Stein implements Serializable {
 
         return ergebnis;
     }
+    private boolean istFeldKrone(Feld moeglichesFeld){
 
+        if (moeglichesFeld.getBesetzung() != null) {
+            String feldType = moeglichesFeld.getBesetzung().getType();
+            if (feldType == "Krone") {
+                return true;
+            }
+        }
+        return false;
+    }
     private Feld feldvaledirung(ArrayList<Feld> moeglicheFelder, Sperrstein figur,Feld selectfeld ) throws IOException {
         Feld chosenFeld = null;
         for (Feld feld : moeglicheFelder) {
             if (feld.getId() == selectfeld.getId()) {
-                if (feld.getBesetzung() == null || !feld.istSpielerSpawn() || selectfeld.getId() != 9) {
+                if (feld.getBesetzung() == null && !feld.istSpielerSpawn() && !istFeldKrone(feld)&& !feld.getErsteZeile()) {
                     chosenFeld = feld;
                     return chosenFeld;
                 }
                 else{
-                    System.out.println("invalid choose, the Sperrstein can`t be on the first line");
+                    this.dazugehoerendeRunde.gui.showNotification("Wähle ein neues Feld um den Sperrstein zu verschieben",4000);
+                    //System.out.println("invalid choose, the Sperrstein can`t be on the first line");
                     return steinZiehe(moeglicheFelder, figur);
                 }
             }
