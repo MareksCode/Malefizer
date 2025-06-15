@@ -52,23 +52,19 @@ public class SpielerObjekt implements Serializable {
 
     public Feld feldvaledirung(int feldval, ArrayList<Feld> moeglicheFelder){
         Feld chosenFeld = null;
-        if(feldval == 87 || feldval == 83 || feldval == 79 ||            //checken ob es ein span feld ist
-                feldval == 75 || feldval == 9){
-            return null;
-        }
-        else {
-            for (Feld moeglichesFeld : moeglicheFelder) {
-                if (moeglichesFeld.getId() == feldval) {
-                    if (moeglichesFeld.getBesetzung() == null) {
-                        chosenFeld = moeglichesFeld;
-                        return chosenFeld;
-                    }
+
+        for (Feld moeglichesFeld : moeglicheFelder) {
+            if (moeglichesFeld.getId() == feldval) {
+                if (moeglichesFeld.getBesetzung() == null || !moeglichesFeld.istSpielerSpawn() || feldval != 9) {
+                    chosenFeld = moeglichesFeld;
+                    return chosenFeld;
+                }
+                else{
+                    return  null;
                 }
             }
         }
-        if (chosenFeld == null){
-            chosenFeld = feldvaledirung(feldval+1, moeglicheFelder);
-        }
+
         return chosenFeld;
     }
 }
