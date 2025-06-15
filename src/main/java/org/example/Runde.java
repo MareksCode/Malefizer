@@ -28,7 +28,7 @@ public class Runde {
         this.socket = socket;
         heinz = SpielfeldHeinz.getInstance(this, xmlStr);
         startFeld = SpielfeldHeinz.getStartfeld();
-        gui = new FeldGUI(startFeld, -1);
+        gui = new FeldGUI(startFeld);
         gui.update(startFeld);
     }
 
@@ -164,7 +164,7 @@ public class Runde {
         Feld spawn = SpielfeldHeinz.feldMap.get(feldid);
         int pid = Integer.parseInt(playerId);
 
-        gui.setPlayerId(pid);
+        //gui.setPlayerId(pid);
         spielerObjekt = new SpielerObjekt(spawn, pid, this);
 
         for(Feld feld : SpielfeldHeinz.feldMap.values()){

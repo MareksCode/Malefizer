@@ -99,5 +99,8 @@ public class TerminalAusgabe implements GUIface {
             }
         }
     }
-
+    public void zeigeWurfDialog(int Wuerfelergebnis){};
+    public void setCurrentlyAmZug(int amZug){};
+    public void setObjective(String objective){};
+    public Feld selectFeld() throws InterruptedException {return null;}
 }

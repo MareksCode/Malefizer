@@ -2,15 +2,18 @@ package org.example;
 
 import org.example.stein.Stein;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Feld {
+public class Feld implements Serializable {
+    private static final long serialVersionUID = 1L;
     //private int faerbung;
     private ArrayList<Feld> nachbarn;
     private Stein besetzung;
     private int id = -1;
     private boolean spielerSpawn;
     private Position position;
+    private int spawnInhaber;
 
     private boolean tempGefaerbt;
     private int tiefe;
@@ -22,6 +25,7 @@ public class Feld {
         this.tempGefaerbt = false;
         this.tiefe = 0;
         this.position = new Position(-1,-1);
+        this.spawnInhaber = 0;
         //this.besetzung = besetzung;
     }
 
@@ -53,6 +57,12 @@ public class Feld {
     public boolean istSpielerSpawn() {
         return this.spielerSpawn;
     }
+    public void setSpielerSpawnInhaberId(int spielerid) {
+        this.spawnInhaber = spielerid;
+    }
+    public int getSpielerSpawnInhaberId() {
+        return this.spawnInhaber;
+    }
 
     public void setBesetzung(Stein besetzung) {
         this.besetzung = besetzung;
@@ -79,6 +89,7 @@ public class Feld {
 
         return this.besetzung.kannDrueber();
     }
+
 
     public void schlagen() throws Exception {
         if (this.besetzung == null) {return;}

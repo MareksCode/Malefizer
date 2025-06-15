@@ -78,6 +78,11 @@ public class Sperrstein extends Stein {
 
         return chosenFeld;
     }
+
+    public String getType() {
+        return "Sperrstein";
+    }
+
     public void schlagen() throws Exception {
         if (this.feld != null) {
             this.feld.removeBesetzung();

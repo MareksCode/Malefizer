@@ -3,10 +3,13 @@ package org.example.stein;
 import org.example.Feld;
 import org.example.Runde;
 
-public class Krone extends Stein {
+import java.io.Serializable;
+
+public class Krone extends Stein implements Serializable {
     public Krone(int id, Runde dazugehoerendeRunde) {
         super(id, dazugehoerendeRunde);
     }
+
 
     public boolean kannDrueber() {
         return false;
@@ -16,8 +19,12 @@ public class Krone extends Stein {
         this.dazugehoerendeRunde.end();
     }
 
-    public void setFeld(Feld neuesFeld) {
+    public String getType() {
+        return "Krone";
+    }
 
+    @Override
+    public void setFeld(Feld neuesFeld) {
     }
 
     @Override
