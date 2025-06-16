@@ -34,7 +34,7 @@ public class GameLauncher extends JFrame implements ActionListener {
 
 
     //RequestClient requestClient = null;
-    LoginResponse loginResponse = null;
+    static LoginResponse loginResponse = null;
 
     GameLauncher gl = this;
 
@@ -124,7 +124,7 @@ public class GameLauncher extends JFrame implements ActionListener {
             }
             Document doc = null;
             try {
-                doc = requestClient.requestXml("/api/xml/mygames");
+                doc = requestClient.requestXml("/api/mygames");
                 if(doc==null) {
                     JOptionPane.showMessageDialog(this, "Fehler beim Laden der Spiele: Serverantwort war leer");
                     return;
@@ -238,6 +238,8 @@ public class GameLauncher extends JFrame implements ActionListener {
         private final JButton close = new JButton("Schließen");
         private Document d = null;
 
+        private int idSource = -1;
+
         private final boolean allowDelete;
 
 
@@ -252,6 +254,7 @@ public class GameLauncher extends JFrame implements ActionListener {
             this.allowDelete = allowDelete;
             this.d = d;
             this.parent=(GameLauncher)parent;
+            this.idSource = idSource;
 
             loadXml(idSource);
 
@@ -342,35 +345,71 @@ public class GameLauncher extends JFrame implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == accept) {
                 SpielfeldEintrag selected = list.getSelectedValue();
+                RequestClient client= parent.getRequestClient();
 
-                if (selected != null) {
-                    String gameId = selected.getID();
-                    selectedGameId = gameId;
+                if (selected == null) {
+                    return;
+                }
 
-                   /* try {
-                        //Anfrage an den Server zum Beitreten senden
-                        Document joinResponse = ((GameLauncher) getOwner()).requestClient.requestXml("/api/xml/joingame/" + gameId);
-
-                        JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
-                        dispose();// fenster schließne
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());*/
-                    GameLauncher launcher = (GameLauncher) getOwner();
-                   //RequestClient client = (launcher != null) ? launcher.getRequestClient() : null;
-                    RequestClient client= parent.getRequestClient();
-                    if (client != null) {
+                switch(idSource){
+                    case 0: //create, anfrage an server auf /api/newgame?id=
                         try {
-                            Document joinResponse = client.requestXml("/api/xml/joingame/" + gameId);
-                            JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
-                            dispose(); // Fenster schließen
+                            client.postRequest("/api/newgame?spielfeld=" + selected.getID());
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Fehler: Kein gültiger Besitzer oder RequestClient vorhanden.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                    }
+                        break;
+                    case 1: // join auf /api/join?id=
+                        try {
+                            client.postRequest("/api/join?id=" + selected.getID());
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());
+                        }
+                        break;
+                    case 2: // play, öffnet spiel über id
+                        String gameId = selected.getID();
+                        System.out.println(gameId);
+                        SocketService socketService = new SocketService(Integer.parseInt(gameId));
+                        try {
+                            socketService.connectAndListen(loginResponse);
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        Runtime.getRuntime().addShutdownHook(new Thread(socketService::onExit));
+                        break;
 
                 }
+
+                //hier die daten aus dem element auslesen & an die url schicken!
+
+//                if (selected != null) {
+//                    String gameId = selected.getID();
+//                    selectedGameId = gameId;
+//
+//                   /* try {
+//                        //Anfrage an den Server zum Beitreten senden
+//                        Document joinResponse = ((GameLauncher) getOwner()).requestClient.requestXml("/api/xml/joingame/" + gameId);
+//
+//                        JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
+//                        dispose();// fenster schließne
+//                    } catch (Exception ex) {
+//                        JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());*/
+//                    GameLauncher launcher = (GameLauncher) getOwner();
+//                   //RequestClient client = (launcher != null) ? launcher.getRequestClient() : null;
+//                    RequestClient client= parent.getRequestClient();
+//                    if (client != null) {
+//                        try {
+//                            Document joinResponse = client.requestXml("/api/xml/joingame/" + gameId);
+//                            JOptionPane.showMessageDialog(this, "Beigetreten zu Spiel #" + gameId);
+//                            dispose(); // Fenster schließen
+//                        } catch (Exception ex) {
+//                            JOptionPane.showMessageDialog(this, "Fehler beim Beitreten: " + ex.getMessage());
+//                        }
+//                    } else {
+//                        JOptionPane.showMessageDialog(this, "Fehler: Kein gültiger Besitzer oder RequestClient vorhanden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+//                    }
+//
+//                }
             } else if (e.getSource() == delete && allowDelete) {
                 int idx = list.getSelectedIndex();
                 if (idx >= 0) {

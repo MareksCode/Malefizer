@@ -81,6 +81,23 @@ public class RequestClient {
         return d;
     }
 
+    public void postRequest(String relativePath) throws Exception{
+        disableSslVerification();
+        try{
+            URL url = new URL(baseUrl + relativePath);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            // Cookie setzen
+            conn.setRequestProperty("Cookie", "JSESSIONID=" + login.getToken());
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            int status = conn.getResponseCode();
+            System.out.println("Status: " + status);
+        } catch (Exception e){}
+    }
+
     public void sendJoinRequest(int gameId) throws Exception {
         disableSslVerification();
 

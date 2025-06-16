@@ -84,7 +84,7 @@ public class Runde {
     public void macheZug(String id) {
         gui.setCurrentlyAmZug(Integer.parseInt(id));
         if(Integer.parseInt(id) != spielerObjekt.getId()) {
-            gui.setObjective("Warte auf Gegner...");
+            gui.setObjective("Warte auf Gegner " + id + " ...");
             return;
         }
         //würfeln
@@ -242,7 +242,7 @@ public class Runde {
         }
         Stein besetzung = chosenFeld.getBesetzung();
 
-        if (besetzung == null) {
+        if (besetzung == null || ( besetzung instanceof Spielstein && ((Spielstein) besetzung).getSpielerId() != spielerNummer)) {
             if (chosenFeld.istSpielerSpawn()) {
                 if (chosenFeld.getId() == spieler.getSpawnFeld().getId()) {
                     //find not used spielstein
