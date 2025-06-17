@@ -9,18 +9,19 @@ import java.awt.event.MouseListener;
 import java.util.*;
 
 class FeldPanel extends JPanel implements MouseListener {
+    private final double scale = 1; //multiplikator für die skalierung
     private FeldGUI feldGUI;
 
     private Set<Feld> felder;
-    private final int feldRadius = 40;
-    private final int spacing = 55;
+    private final int feldRadius = (int) (40*scale);
+    private final int spacing = (int) (55*scale);
 
-    private int spielerKopfRadius = 15;
-    private int spielerKoerperBreite = 25;
-    private int spielerKoerperRundung = 13;
-    private int spielerKoerperGroessse = 20;
+    private int spielerKopfRadius = (int) (15*scale);
+    private int spielerKoerperBreite = (int) (25*scale);
+    private int spielerKoerperRundung = (int) (13*scale);
+    private int spielerKoerperGroessse = (int) (20*scale);
 
-    private int sperrsteinEinrueckung = 8;
+    private int sperrsteinEinrueckung = (int) (8*scale);
 
     private boolean DEBUG_MODE;
 
